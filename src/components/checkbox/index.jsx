@@ -7,6 +7,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import CommentIcon from '@mui/icons-material/Comment';
+import Slider from '@mui/material/Slider';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 export function DatasetCheckbox({ dataProducts, selectedDataProductId, setSelectedDataProductId }) {
     const [checked, setChecked] = useState([]);
@@ -47,7 +49,9 @@ export function DatasetCheckbox({ dataProducts, selectedDataProductId, setSelect
                         inputProps={{ 'aria-labelledby': labelId }}
                         />
                     </ListItemIcon>
-                    <ListItemText id={labelId} primary={name} />
+                    <ListItemText sx={{width: "50%"}} id={labelId} primary={name} />
+                    <PlayArrowIcon sx={{width: "20%"}}/>
+                    <Slider sx={{width: "30%"}} defaultValue={100} aria-label="Disabled slider" />
                 </ListItemButton>
             </ListItem>
             );
