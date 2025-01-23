@@ -31,7 +31,7 @@ export function dataTransformationCyclone(data: STACItem[][], satelliteName: str
         const cycloneDataset: CycloneDataset = {
             id: dataProductName+"-cyclone-"+cycloneName,
             satellite: dataProductName,
-            representationalAsset: sortedData[0],
+            representationalAsset: sortedData[(0)],
             location: [lon, lat],
             startDate: sortedData[0].properties.datetime,
             endDate: sortedData[sortedData.length - 1].properties.datetime,

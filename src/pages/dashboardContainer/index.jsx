@@ -13,6 +13,8 @@ export function DashboardContainer() {
     const [ zoomLevel, setZoomLevel ] = useState (searchParams.get('zoom-level') || null); // let default zoom level be controlled by map component
 
     const dataTree = useRef(null);
+    const dataTreeCyclone = useRef(null);
+
     const [ plumeMetaData, setPlumeMetaData ] = useState({});
 
     const [ loadingData, setLoadingData ] = useState(true);
@@ -95,7 +97,7 @@ export function DashboardContainer() {
                 // const jsonData = Object.fromEntries(data)
 
                 const cycloneDictionary = dataTransformationCyclone(data)
-                // dataTree.current = cycloneDictionary;
+                dataTreeCyclone.current = cycloneDictionary;
 
                 // remove loading
                 setLoadingData(false);
@@ -114,6 +116,7 @@ export function DashboardContainer() {
             setZoomLocation={setZoomLocation}
             setZoomLevel={setZoomLevel}
             dataTree={dataTree}
+            dataTreeCyclone={dataTreeCyclone}
             plumeMetaData={plumeMetaData}
             cyclones={CYCLONES}
             dataProducts={DATAPRODUCTS}

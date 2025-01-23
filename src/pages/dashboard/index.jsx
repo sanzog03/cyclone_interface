@@ -35,10 +35,10 @@ const scaleUnits = {
   MILES: "mi",
 };
 
-export function Dashboard({ dataTree, plumeMetaData, cyclones, dataProducts, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
+export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, dataProducts, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
   // states for data
   const [ selectedCycloneId, setSelectedCycloneId ] = useState(cyclones[Object.keys(cyclones)[0]].id);
-  const [ selectedDataProductId, setSelectedDataProductId ] = useState({});
+  const [ selectedDataProductId, setSelectedDataProductId ] = useState([]);
 
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
   const [ selectedRegionId, setSelectedRegionId ] = useState(""); // region_id of the selected region (marker)
@@ -187,16 +187,14 @@ export function Dashboard({ dataTree, plumeMetaData, cyclones, dataProducts, zoo
               <PlumeAnimation plumes={plumesForAnimation} />
             </HorizontalLayout>
           </Title>
-          {/* <MarkerFeature
-            regions={filteredRegions}
-            setSelectedRegionId={handleSelectedRegion}
-          ></MarkerFeature> */}
           <MapLayers
-            showPlumeLayers={showPlumeLayers}
-            plumes={filteredSelectedPlumes}
-            handleLayerClick={handleSelectedPlume}
-            hoveredPlumeId={hoveredPlumeId}
-            setHoveredPlumeId={setHoveredPlumeId}
+            // plumes={filteredSelectedPlumes}
+            // handleLayerClick={handleSelectedPlume}
+            // hoveredPlumeId={hoveredPlumeId}
+            // setHoveredPlumeId={setHoveredPlumeId}
+            dataTreeCyclone={dataTreeCyclone}
+            selectedCycloneId={selectedCycloneId}
+            selectedDataProductId={selectedDataProductId}
           />
           <MapControls
             openDrawer={openDrawer}

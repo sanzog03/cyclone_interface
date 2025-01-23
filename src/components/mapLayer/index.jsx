@@ -18,11 +18,11 @@ export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId, set
         addSourcePolygonToMap(map, feature, polygonSourceId, polygonLayerId);
 
         const onClickHandler = (e) => {
-            handleLayerClick(plumeId);
+            // handleLayerClick(plumeId);
         }
 
         const onHoverHandler = (e) => {
-            setHoveredPlumeId(plumeId);
+            // setHoveredPlumeId(plumeId);
         }
 
         map.setLayoutProperty(rasterLayerId, 'visibility', 'visible');
@@ -74,12 +74,28 @@ export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId, set
 }
 
 
-export const MapLayers = ({ plumes, hoveredPlumeId, showPlumeLayers, handleLayerClick, setHoveredPlumeId }) => {
+export const MapLayers = ({ dataTreeCyclone, plumes, hoveredPlumeId, showPlumeLayers, handleLayerClick, setHoveredPlumeId, selectedCycloneId, selectedDataProductId }) => {
     const { map } = useMapbox();
-    if (!map || !plumes.length) return;
+    if (!map || !dataTreeCyclone) return;
+
+    // return (<>
+    //     {true && plumes && plumes.length && plumes.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick} hoveredPlumeId={hoveredPlumeId} setHoveredPlumeId={setHoveredPlumeId}></MapLayer>)}
+    //     </>
+    // );
+    // plumes == CycloneDataset in this context
+
+    let plumes1 = selectedDataProductId.length && selectedDataProductId.map(productId => {
+        try {
+            let temp = dataTreeCyclone["current"][selectedCycloneId]["dataProducts"][productId]["dataset"];
+            return temp;
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+    }).filter(elem => elem);
 
     return (<>
-        {showPlumeLayers && plumes && plumes.length && plumes.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick} hoveredPlumeId={hoveredPlumeId} setHoveredPlumeId={setHoveredPlumeId}></MapLayer>)}
+        {plumes1 && plumes1.length && plumes1.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalAsset} handleLayerClick={handleLayerClick} hoveredPlumeId={hoveredPlumeId} setHoveredPlumeId={setHoveredPlumeId}></MapLayer>)}
         </>
     );
 }
