@@ -217,6 +217,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
             dataTreeCyclone={dataTreeCyclone}
             selectedCycloneId={selectedCycloneId}
             selectedDataProductId={selectedDataProductId}
+            startDate={startDate}
           />
           <MapControls
             openDrawer={openDrawer}

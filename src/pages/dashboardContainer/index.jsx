@@ -34,7 +34,7 @@ export function DashboardContainer() {
             name: "CYGNSS"
         },
         "GOES": {
-            id: "goes",
+            id: "goes-16-l1b",
             name: "GOES-16 (2, 8, 13)"
         },
         "MODIS": {
@@ -48,7 +48,8 @@ export function DashboardContainer() {
             id: "beryl",
             name: "Beryl (2024)",
             dataProducts: [DATAPRODUCTS["IMERG"], DATAPRODUCTS["SPORT"], DATAPRODUCTS["CYGNSS"], 
-                // DATAPRODUCTS["GOES"], DATAPRODUCTS["MODIS"]
+                DATAPRODUCTS["GOES"],
+                //  DATAPRODUCTS["MODIS"]
             ]
         },
         "MILTON": {
@@ -110,6 +111,7 @@ export function DashboardContainer() {
                     else if (d[0].type === "Feature") collectionItemData.push(d)
                 });
                 const cycloneDictionary = dataTransformationCyclone(collectionData, collectionItemData)
+                console.log(cycloneDictionary)
                 dataTreeCyclone.current = cycloneDictionary;
                 // remove loading
                 setLoadingData(false);

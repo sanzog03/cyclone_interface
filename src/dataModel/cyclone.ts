@@ -8,6 +8,8 @@ export interface CycloneDataset {
     startDate: DateTime;
     endDate: DateTime;
     subDailyAssets: SubDailyAsset[];
+    // getAsset: (dateTime: string) => SubDailyAsset;
+    getAsset: (dateTime: string) => SubDailyAsset;
 }
 
 export type SatelliteSystem = DataProduct;

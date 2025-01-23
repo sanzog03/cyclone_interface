@@ -50,7 +50,10 @@ export function dataTransformationCyclone(collections: STACCollection[][], items
             startDate: sortedData[0].properties.datetime,
             endDate: sortedData[sortedData.length - 1].properties.datetime,
             subDailyAssets: [...sortedData],
-
+            getAsset: (dateTime: string) => {
+                const result: STACItem = cycloneDataset.subDailyAssets[cycloneDataset.subDailyAssets.length - 1];
+                return result;
+            },
         };
         
         // create DataProduct

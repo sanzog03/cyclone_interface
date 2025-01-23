@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMapbox } from "../../context/mapContext";
 import { addSourceLayerToMap, addSourcePolygonToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
 
-export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId }) => {
+export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId, startDate }) => {
     const { map } = useMapbox();
     const [VMIN, VMAX] = rescale[0];
 
@@ -69,32 +69,44 @@ export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plu
         }
     }, [hoveredPlumeId, map, plumeId]);
 
-    // console.log("layers>", map.getStyle().layers)
-
     return null;
 }
 
 
-export const MapLayers = ({ dataTreeCyclone, plumes, hoveredPlumeId, showPlumeLayers, handleLayerClick, setHoveredPlumeId, selectedCycloneId, selectedDataProductId }) => {
+export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, showPlumeLayers, handleLayerClick, setHoveredPlumeId, selectedCycloneId, selectedDataProductId }) => {
     const { map } = useMapbox();
-    if (!map || !dataTreeCyclone) return;
+    const [ dataProducts, setDataProducts ] = useState();
 
-    let dataProducts = selectedDataProductId.length && selectedDataProductId.map(productId => {
-        try {
-            let temp = dataTreeCyclone["current"][selectedCycloneId]["dataProducts"][productId];
-            return temp;
-        } catch (err) {
-            console.error(err);
-            return null;
-        }
-    }).filter(elem => elem);
+    useEffect(() => {
+        if (!map || !dataTreeCyclone) return
+
+        let dataProducts = selectedDataProductId.length && selectedDataProductId.map(productId => {
+            try {
+                let temp = dataTreeCyclone["current"][selectedCycloneId]["dataProducts"][productId];
+
+                // *** can change the asset to be shown wrt date time here
+                const STACItemBasedOnDate = temp.dataset.getAsset();
+
+                return temp;
+            } catch (err) {
+                console.error(err);
+                return null;
+            }
+        }).filter(elem => elem);
+
+        setDataProducts(dataProducts);
+    }, [startDate, map, dataTreeCyclone, selectedDataProductId, selectedCycloneId])
 
     return (<>
         {dataProducts && dataProducts.length && dataProducts.map((dataProduct) =>
             <MapLayer
                 key={dataProduct.dataset.id}
                 plumeId={dataProduct.dataset.id}
-                dataProduct={dataProduct.dataset.representationalAsset}
+                // dataProduct={dataProduct.dataset.representationalAsset}
+
+                // *** can change the asset to be shown wrt date time here
+                dataProduct={dataProduct.dataset.getAsset(startDate) || dataProduct.dataset.representationalAsset}
+
                 rescale={dataProduct.rescale}
                 colormap={dataProduct.colormap}
                 handleLayerClick={handleLayerClick}
