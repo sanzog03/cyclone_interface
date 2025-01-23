@@ -35,9 +35,10 @@ const scaleUnits = {
   MILES: "mi",
 };
 
-export function Dashboard({ dataTree, plumeMetaData, cyclones, dataproducts, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
+export function Dashboard({ dataTree, plumeMetaData, cyclones, dataProducts, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
   // states for data
-  const [ selectedCycloneId, handleSelectedCycloneId ] = useState(cyclones[Object.keys(cyclones)[0]].id);
+  const [ selectedCycloneId, setSelectedCycloneId ] = useState(cyclones[Object.keys(cyclones)[0]].id);
+  const [ selectedDataProductId, setSelectedDataProductId ] = useState({});
 
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
   const [ selectedRegionId, setSelectedRegionId ] = useState(""); // region_id of the selected region (marker)
@@ -172,7 +173,7 @@ export function Dashboard({ dataTree, plumeMetaData, cyclones, dataproducts, zoo
               </Typography>
             </HorizontalLayout>
             <HorizontalLayout>
-              <SelectCyclone cyclones={cyclones} selectedCycloneId={selectedCycloneId} handleSelectedCycloneId={handleSelectedCycloneId}></SelectCyclone>
+              <SelectCyclone cyclones={cyclones} selectedCycloneId={selectedCycloneId} setSelectedCycloneId={setSelectedCycloneId}></SelectCyclone>
             </HorizontalLayout>
             <HorizontalLayout>
               <Typography>
@@ -180,7 +181,7 @@ export function Dashboard({ dataTree, plumeMetaData, cyclones, dataproducts, zoo
               </Typography>
             </HorizontalLayout>
             <HorizontalLayout>
-              <DatasetCheckbox></DatasetCheckbox>
+              {<DatasetCheckbox dataProducts={dataProducts} selectedDataProductId={selectedDataProductId} setSelectedDataProductId={setSelectedDataProductId}></DatasetCheckbox> }
             </HorizontalLayout>
             <HorizontalLayout>
               <PlumeAnimation plumes={plumesForAnimation} />

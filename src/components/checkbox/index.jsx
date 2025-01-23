@@ -8,8 +8,8 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import CommentIcon from '@mui/icons-material/Comment';
 
-export function DatasetCheckbox({ ids, handleSelectedPlumeSearch }) {
-    const [checked, setChecked] = useState([0]);
+export function DatasetCheckbox({ dataProducts, selectedDataProductId, setSelectedDataProductId }) {
+    const [checked, setChecked] = useState([]);
 
     const handleToggle = (value) => () => {
       const currentIndex = checked.indexOf(value);
@@ -22,37 +22,32 @@ export function DatasetCheckbox({ ids, handleSelectedPlumeSearch }) {
       }
   
       setChecked(newChecked);
+      setSelectedDataProductId(newChecked);
     };
-  
-    const DATASETS = [
-        "GOES-16 (2, 8, 13)",
-        "IMERG",
-        "SPoRT SST",
-        "MODIS IR/VIRS IR",
-        "CYGNSS"
-    ];
 
     return (
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-        {DATASETS.map((value) => {
-            const labelId = `checkbox-list-label-${value}`;
+        {Object.keys(dataProducts).map((dataProduct) => {
+            const name = dataProducts[dataProduct].name;
+            const id = dataProducts[dataProduct].id;
+            const labelId = `checkbox-list-label-${id}`;
 
             return (
             <ListItem
-                key={value}
+                key={labelId}
                 disablePadding
             >
-                <ListItemButton role={undefined} onClick={handleToggle(value)} dense>
-                <ListItemIcon>
-                    <Checkbox
-                    edge="start"
-                    checked={checked.includes(value)}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ 'aria-labelledby': labelId }}
-                    />
-                </ListItemIcon>
-                <ListItemText id={labelId} primary={value} />
+                <ListItemButton role={undefined} onClick={handleToggle(id)} dense>
+                    <ListItemIcon>
+                        <Checkbox
+                        edge="start"
+                        checked={checked.includes(id)}
+                        tabIndex={-1}
+                        disableRipple
+                        inputProps={{ 'aria-labelledby': labelId }}
+                        />
+                    </ListItemIcon>
+                    <ListItemText id={labelId} primary={name} />
                 </ListItemButton>
             </ListItem>
             );

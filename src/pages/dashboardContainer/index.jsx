@@ -32,11 +32,11 @@ export function DashboardContainer() {
             name: "CYGNSS"
         },
         "GOES": {
-            id: "",
+            id: "goes",
             name: "GOES-16 (2, 8, 13)"
         },
         "MODIS": {
-            id: "",
+            id: "modis",
             name: "MODIS IR/VIRS IR"
         },
     }
