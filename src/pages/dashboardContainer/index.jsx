@@ -17,44 +17,70 @@ export function DashboardContainer() {
 
     const [ loadingData, setLoadingData ] = useState(true);
 
+    // constants
+    const DATAPRODUCTS = {
+        "IMERG": {
+            id: "gpm-imerg",
+            name: "IMERG"
+        },
+        "SPORT": {
+            id: "sst",
+            name: "SPoRT SST"
+        },
+        "CYGNSS": {
+            id: "cygnss",
+            name: "CYGNSS"
+        },
+        "GOES": {
+            id: "",
+            name: "GOES-16 (2, 8, 13)"
+        },
+        "MODIS": {
+            id: "",
+            name: "MODIS IR/VIRS IR"
+        },
+    }
+
+    const CYCLONES = {
+        "beryl": {
+            id: "beryl",
+            name: "Beryl (2024)",
+            dataProducts: [DATAPRODUCTS["IMERG"], DATAPRODUCTS["SPORT"], DATAPRODUCTS["CYGNSS"], 
+                // DATAPRODUCTS["GOES"], DATAPRODUCTS["MODIS"]
+            ]
+        },
+        "milton": {
+            id: "milton",
+            name: "Milton (2024)",
+            dataProducts: []
+        },
+        "ian": {
+            id: "ian",
+            name: "Ian (2022)",
+            dataProducts: []
+        },
+        "nicole": {
+            id: "nicole",
+            name: "Nicole (2022)",
+            dataProducts: []
+        },
+        "ida": {
+            id: "ida",
+            name: "Ida (2021)",
+            dataProducts: []
+        }
+    }
+
     useEffect(() => {
         setLoadingData(true);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        const DATAPRODUCT = {
-            "IMERG": {
-                id: "gpm-imerg",
-                name: "IMERG"
-            },
-            "SPORT": {
-                id: "sst",
-                name: "SPoRT SST"
-            },
-            "CYGNSS": {
-                id: "cygnss",
-                name: "CYGNSS"
-            },
-            "GOES": {
-                id: "",
-                name: "GOES-16 (2, 8, 13)"
-            },
-            "MODIS": {
-                id: "",
-                name: "MODIS IR/VIRS IR"
-            },
-        }
-
-        const CYCLONES = {
-            "beryl": [DATAPRODUCT["IMERG"], DATAPRODUCT["SPORT"], DATAPRODUCT["CYGNSS"], 
-                // DATAPRODUCT["GOES"], DATAPRODUCT["MODIS"]
-            ]            
-        }
 
         const fetchData = async () => {
             try {
                 const dataProductsFetchPromises = [];
                 // const dataProductsFetchPromises = {};
                 Object.keys(CYCLONES).forEach((cycloneName => {
-                    const dataProducts = CYCLONES[cycloneName];
+                    const { dataProducts } = CYCLONES[cycloneName];
                     dataProducts.forEach(dataProduct => {
                         const collectionId = dataProduct.id + "-cyclone-" + cycloneName;
                         // get all the collection items
@@ -89,6 +115,8 @@ export function DashboardContainer() {
             setZoomLevel={setZoomLevel}
             dataTree={dataTree}
             plumeMetaData={plumeMetaData}
+            cyclones={CYCLONES}
+            dataProducts={DATAPRODUCTS}
             loadingData={loadingData}
         />
     );
