@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { useMapbox } from "../../context/mapContext";
 import { addSourceLayerToMap, addSourcePolygonToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
 
-export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId }) => {
+export const MapLayer = ({ plume, rescale, colormap, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId }) => {
     const { map } = useMapbox();
+    const [VMIN, VMAX] = rescale[0];
 
     useEffect(() => {
         if (!map || !plume) return;
@@ -14,7 +15,7 @@ export const MapLayer = ({ plume, handleLayerClick, plumeId, hoveredPlumeId, set
         const polygonSourceId = getSourceId("polygon"+plumeId);
         const polygonLayerId = getLayerId("polygon"+plumeId);
 
-        addSourceLayerToMap(map, feature, rasterSourceId, rasterLayerId);
+        addSourceLayerToMap(map, feature, rasterSourceId, rasterLayerId, VMIN, VMAX, colormap);
         addSourcePolygonToMap(map, feature, polygonSourceId, polygonLayerId);
 
         const onClickHandler = (e) => {
@@ -78,15 +79,9 @@ export const MapLayers = ({ dataTreeCyclone, plumes, hoveredPlumeId, showPlumeLa
     const { map } = useMapbox();
     if (!map || !dataTreeCyclone) return;
 
-    // return (<>
-    //     {true && plumes && plumes.length && plumes.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalPlume} handleLayerClick={handleLayerClick} hoveredPlumeId={hoveredPlumeId} setHoveredPlumeId={setHoveredPlumeId}></MapLayer>)}
-    //     </>
-    // );
-    // plumes == CycloneDataset in this context
-
     let plumes1 = selectedDataProductId.length && selectedDataProductId.map(productId => {
         try {
-            let temp = dataTreeCyclone["current"][selectedCycloneId]["dataProducts"][productId]["dataset"];
+            let temp = dataTreeCyclone["current"][selectedCycloneId]["dataProducts"][productId];
             return temp;
         } catch (err) {
             console.error(err);
@@ -94,8 +89,22 @@ export const MapLayers = ({ dataTreeCyclone, plumes, hoveredPlumeId, showPlumeLa
         }
     }).filter(elem => elem);
 
+    console.log(plumes1)
+
     return (<>
-        {plumes1 && plumes1.length && plumes1.map((plume) => <MapLayer key={plume.id} plumeId={plume.id} plume={plume.representationalAsset} handleLayerClick={handleLayerClick} hoveredPlumeId={hoveredPlumeId} setHoveredPlumeId={setHoveredPlumeId}></MapLayer>)}
+        {plumes1 && plumes1.length && plumes1.map((plume) =>
+            <MapLayer
+                key={plume.dataset.id}
+                plumeId={plume.dataset.id}
+                plume={plume.dataset.representationalAsset}
+                rescale={plume.rescale}
+                colormap={plume.colormap}
+                handleLayerClick={handleLayerClick}
+                hoveredPlumeId={hoveredPlumeId}
+                setHoveredPlumeId={setHoveredPlumeId}
+            >
+            </MapLayer>
+        )}
         </>
     );
 }
