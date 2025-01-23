@@ -85,20 +85,32 @@ export function DashboardContainer() {
                     const { dataProducts, id: cycloneId } = CYCLONES[cyclone];
                     dataProducts.forEach(dataProduct => {
                         const collectionId = dataProduct.id + "-cyclone-" + cycloneId;
+                        const collectionUrl = `${process.env.REACT_APP_STAC_API_URL}/collections/${collectionId}`;
+                        const collectionItemUrl = `${collectionUrl}/items`;
+
+                        // get the collection details
+                        const collectionPromise = fetch(collectionUrl).then(async metaData => metaData.json()).then(result => [result])
+                                                    .catch(err => console.error("Error fetching data: ", err));
+                        dataProductsFetchPromises.push(collectionPromise);
+                        
                         // get all the collection items
-                        const collectionItemUrl = `${process.env.REACT_APP_STAC_API_URL}/collections/${collectionId}/items`;
-                        const promise = fetchAllFromSTACAPI(collectionItemUrl);
-                        dataProductsFetchPromises.push(promise);
+                        const itemPromise = fetchAllFromSTACAPI(collectionItemUrl);
+                        dataProductsFetchPromises.push(itemPromise);
                         // dataProductsFetchPromises[cycloneName+"-"+dataProduct.id] = promise;
                     });
                 }));
                 const data = await Promise.all(dataProductsFetchPromises);
+                const collectionData = [];
+                const collectionItemData = [];
                 // const data = await Promise.all(Object.entries(dataProductsFetchPromises).map(([key, promise]) => promise.then(value => [key, value])));
                 // const jsonData = Object.fromEntries(data)
-
-                const cycloneDictionary = dataTransformationCyclone(data)
+                data.forEach(d => {
+                    if (!d.length) return;
+                    if (d[0].type === "Collection") collectionData.push(d)
+                    else if (d[0].type === "Feature") collectionItemData.push(d)
+                });
+                const cycloneDictionary = dataTransformationCyclone(collectionData, collectionItemData)
                 dataTreeCyclone.current = cycloneDictionary;
-
                 // remove loading
                 setLoadingData(false);
             } catch (error) {

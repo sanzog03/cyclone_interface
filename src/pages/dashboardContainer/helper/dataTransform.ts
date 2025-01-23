@@ -1,16 +1,30 @@
-import { PlumeRegion, Plume, SubDailyPlume, STACItem, PlumeMeta, PlumeRegionMeta } from "../../../dataModel";
+import { PlumeRegion, Plume, SubDailyPlume, PlumeMeta, PlumeRegionMeta } from "../../../dataModel";
+import { STACItem, STACCollection } from "../../../dataModel";
 
 import { SubDailyAsset, CycloneDataset, SatelliteSystem, DataProduct, Cyclone, CycloneMap } from "../../../dataModel"
 
 // NEW!!!
 
-type DataTreeCyclone = CycloneMap;
+interface CollectionDictionary {
+    [key: string]: STACCollection
+}
 
-export function dataTransformationCyclone(data: STACItem[][], satelliteName: string="GOES", cycloneName: string="Beryl") {
+export function dataTransformationCyclone(collections: STACCollection[][], items: STACItem[][], satelliteName: string="GOES", cycloneName: string="Beryl") {
     // transforms the data from STAC api to Cyclone models.
     const cycloneDictionary: CycloneMap = {};
+    
+    const collectionDictionary: CollectionDictionary = {};     
 
-    data.forEach((items: STACItem[]) => {
+    collections.forEach((collectionArr: STACCollection[]) => {
+        collectionArr.forEach((collection: STACCollection) => {
+            const collectionId = collection.id
+            if (!(collectionId in collectionDictionary)) {
+                collectionDictionary[collectionId] = collection;
+            }
+        });
+    });
+
+    items.forEach((items: STACItem[]) => {
         const collectionName = items[0].collection; // <satellite/data_product>-cyclone-<cyclone_name>
         const acc = collectionName.split("-");
         const lenAcc = acc.length;
@@ -43,7 +57,11 @@ export function dataTransformationCyclone(data: STACItem[][], satelliteName: str
         const dataProduct:DataProduct = {
             id: dataProductName+"-cyclone-"+cycloneName,
             name: dataProductName,
-            dataset: cycloneDataset
+            dataset: cycloneDataset,
+            description: collectionDictionary[collectionName].description,
+            datetimes: collectionDictionary[collectionName].summaries.datetime,
+            rescale: collectionDictionary[collectionName].renders.dashboard.rescale,
+            colormap: collectionDictionary[collectionName].renders.dashboard.colormap_name,
         }
 
         if (!(cycloneName in cycloneDictionary)) {

@@ -15,7 +15,11 @@ export type SatelliteSystem = DataProduct;
 export interface DataProduct { // ~ Collection
     id: string;
     name: string; // e.g. GOES-16, IMERG, SPoRT-SST, MODIS-IR, CYGNSS
-    dataset: CycloneDataset
+    dataset: CycloneDataset;
+    description: string;
+    datetimes: string[];
+    rescale: [number, number]; // [min, max]
+    colormap: string;
 }
 
 export interface Cyclone {
@@ -30,13 +34,73 @@ export interface CycloneMap {
     [key: string]: Cyclone;
 }
 
-
-
 // helpers
 
 export type DateTime = string;
 export type Lon = string;
 export type Lat = string;
+
+// Stac collection defination
+
+export interface STACCollection {
+    type: 'Collection';
+    stac_version: string;
+    id: string;
+    description: string;
+    license: string;
+    extent: {
+        spatial: {
+        bbox: number[][];
+        };
+        temporal: {
+            interval: [string | null, string | null][];
+        };
+    };
+    links: Array<{
+        rel: string;
+        href: string;
+        type?: string;
+        title?: string;
+    }>;
+    title?: string;
+    stac_extensions?: string[];
+    keywords?: string[];
+    providers?: Array<{
+        name: string;
+        description?: string;
+        roles?: string[];
+        url?: string;
+    }>;
+    renders: {
+        dashboard: {
+            assets: string[];
+            colormap_name: string;
+            rescale: [number, number]; //[min, max]
+        }
+    }
+    summaries: {
+        datetime: string[];
+        [key: string]: any;
+    };
+    assets?: {
+        [key: string]: {
+        href: string;
+        title?: string;
+        description?: string;
+        type?: string;
+        roles?: string[];
+        };
+    };
+    item_assets?: {
+        [key: string]: {
+        title?: string;
+        description?: string;
+        type?: string;
+        roles?: string[];
+        };
+    };
+}
+
 
 // Stac Item defination
 export interface STACItem {

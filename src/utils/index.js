@@ -2,11 +2,12 @@ export const addSourceLayerToMap = (map, feature, sourceId, layerId) => {
     if (!map || (sourceExists(map, sourceId) && layerExists(map, layerId))) return;
 
     const collection = feature.collection; // feature.collection
+
     // const assets = "rad"; // first element in the asset json object. i.e. Object.keys(features.assets)[0]
     const assets = "cog_default"; // first element in the asset json object. i.e. Object.keys(features.assets)[0]
-    let VMIN = 0;
-    let VMAX = 0.4;
-    let colorMap = "plasma";
+    let VMIN = 250;
+    let VMAX = 300;
+    let colorMap = "magma";
     let itemId = feature.id;
 
     const TILE_URL =
