@@ -2,14 +2,14 @@ import { useEffect } from "react";
 import { useMapbox } from "../../context/mapContext";
 import { addSourceLayerToMap, addSourcePolygonToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
 
-export const MapLayer = ({ plume, rescale, colormap, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId }) => {
+export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId }) => {
     const { map } = useMapbox();
     const [VMIN, VMAX] = rescale[0];
 
     useEffect(() => {
-        if (!map || !plume) return;
+        if (!map || !dataProduct) return;
 
-        const feature = plume;
+        const feature = dataProduct;
         const rasterSourceId = getSourceId("raster"+plumeId);
         const rasterLayerId = getLayerId("raster"+plumeId);
         const polygonSourceId = getSourceId("polygon"+plumeId);
@@ -40,7 +40,7 @@ export const MapLayer = ({ plume, rescale, colormap, handleLayerClick, plumeId, 
                 map.off("click", "clusters", onClickHandler);
             }
         }
-    }, [plume, map, handleLayerClick, plumeId, setHoveredPlumeId]);
+    }, [dataProduct, map, handleLayerClick, plumeId, setHoveredPlumeId]);
 
     useEffect(() => {
         if (!map || !hoveredPlumeId || !plumeId ) return;
@@ -79,7 +79,7 @@ export const MapLayers = ({ dataTreeCyclone, plumes, hoveredPlumeId, showPlumeLa
     const { map } = useMapbox();
     if (!map || !dataTreeCyclone) return;
 
-    let plumes1 = selectedDataProductId.length && selectedDataProductId.map(productId => {
+    let dataProducts = selectedDataProductId.length && selectedDataProductId.map(productId => {
         try {
             let temp = dataTreeCyclone["current"][selectedCycloneId]["dataProducts"][productId];
             return temp;
@@ -89,16 +89,14 @@ export const MapLayers = ({ dataTreeCyclone, plumes, hoveredPlumeId, showPlumeLa
         }
     }).filter(elem => elem);
 
-    console.log(plumes1)
-
     return (<>
-        {plumes1 && plumes1.length && plumes1.map((plume) =>
+        {dataProducts && dataProducts.length && dataProducts.map((dataProduct) =>
             <MapLayer
-                key={plume.dataset.id}
-                plumeId={plume.dataset.id}
-                plume={plume.dataset.representationalAsset}
-                rescale={plume.rescale}
-                colormap={plume.colormap}
+                key={dataProduct.dataset.id}
+                plumeId={dataProduct.dataset.id}
+                dataProduct={dataProduct.dataset.representationalAsset}
+                rescale={dataProduct.rescale}
+                colormap={dataProduct.colormap}
                 handleLayerClick={handleLayerClick}
                 hoveredPlumeId={hoveredPlumeId}
                 setHoveredPlumeId={setHoveredPlumeId}

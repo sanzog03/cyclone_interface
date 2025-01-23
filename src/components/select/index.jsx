@@ -18,7 +18,14 @@ export function SelectCyclone({ cyclones, selectedCycloneId, setSelectedCycloneI
           label="Cyclones"
           style={{width: "100%"}}
         >
-         { cycloneNames.map(cycloneName => <MenuItem value={cyclones[cycloneName].id}>{cyclones[cycloneName].name}</MenuItem>) } 
+          { cycloneNames.map(cycloneName =>
+              <MenuItem
+                key={cyclones[cycloneName].id}
+                value={cyclones[cycloneName].id}
+              >
+                {cyclones[cycloneName].name}
+              </MenuItem>)
+          }
         </Select>
     );
 }
