@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import styled from "styled-components";
+import moment from "moment";
 
 import MainMap from '../../components/mainMap';
 import { MarkerFeature } from '../../components/mapMarker';
@@ -17,6 +18,7 @@ import { SelectCyclone } from '../../components/select';
 import { DatasetCheckbox } from "../../components/checkbox";
 import { FilterByDate } from '../../components/filter';
 import { Divider, Typography } from "@mui/material";
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 import "./index.css";
 import { MeasurementLayer } from '../../components/measurementLayer';
@@ -39,6 +41,8 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
   // states for data
   const [ selectedCycloneId, setSelectedCycloneId ] = useState(cyclones[Object.keys(cyclones)[0]].id);
   const [ selectedDataProductId, setSelectedDataProductId ] = useState([]);
+
+  const [startDate, setStartDate] = useState(moment("2018-01-01"));
 
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
   const [ selectedRegionId, setSelectedRegionId ] = useState(""); // region_id of the selected region (marker)
@@ -175,6 +179,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
             <HorizontalLayout>
               <SelectCyclone cyclones={cyclones} selectedCycloneId={selectedCycloneId} setSelectedCycloneId={setSelectedCycloneId}></SelectCyclone>
             </HorizontalLayout>
+
             <HorizontalLayout>
               <Typography>
                 Datasets
@@ -183,6 +188,23 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
             <HorizontalLayout>
               {<DatasetCheckbox dataProducts={dataProducts} selectedDataProductId={selectedDataProductId} setSelectedDataProductId={setSelectedDataProductId}></DatasetCheckbox> }
             </HorizontalLayout>
+
+            <HorizontalLayout>
+              <Typography>
+                Start Datetime
+              </Typography>
+            </HorizontalLayout>
+            <HorizontalLayout>
+              <DateTimePicker
+                sx={{width: "100%"}}
+                label="Start Datetime"
+                value={startDate}
+                onChange={(newValue) => {
+                    setStartDate(newValue)
+                  }}
+              />
+            </HorizontalLayout>
+
             <HorizontalLayout>
               <PlumeAnimation plumes={plumesForAnimation} />
             </HorizontalLayout>
