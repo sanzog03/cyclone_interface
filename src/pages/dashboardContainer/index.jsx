@@ -42,29 +42,29 @@ export function DashboardContainer() {
     }
 
     const CYCLONES = {
-        "beryl": {
+        "BERYL": {
             id: "beryl",
             name: "Beryl (2024)",
             dataProducts: [DATAPRODUCTS["IMERG"], DATAPRODUCTS["SPORT"], DATAPRODUCTS["CYGNSS"], 
                 // DATAPRODUCTS["GOES"], DATAPRODUCTS["MODIS"]
             ]
         },
-        "milton": {
+        "MILTON": {
             id: "milton",
             name: "Milton (2024)",
             dataProducts: []
         },
-        "ian": {
+        "IAN": {
             id: "ian",
             name: "Ian (2022)",
             dataProducts: []
         },
-        "nicole": {
+        "NICOLE": {
             id: "nicole",
             name: "Nicole (2022)",
             dataProducts: []
         },
-        "ida": {
+        "IDA": {
             id: "ida",
             name: "Ida (2021)",
             dataProducts: []
@@ -79,10 +79,10 @@ export function DashboardContainer() {
             try {
                 const dataProductsFetchPromises = [];
                 // const dataProductsFetchPromises = {};
-                Object.keys(CYCLONES).forEach((cycloneName => {
-                    const { dataProducts } = CYCLONES[cycloneName];
+                Object.keys(CYCLONES).forEach((cyclone => {
+                    const { dataProducts, id: cycloneId } = CYCLONES[cyclone];
                     dataProducts.forEach(dataProduct => {
-                        const collectionId = dataProduct.id + "-cyclone-" + cycloneName;
+                        const collectionId = dataProduct.id + "-cyclone-" + cycloneId;
                         // get all the collection items
                         const collectionItemUrl = `${process.env.REACT_APP_STAC_API_URL}/collections/${collectionId}/items`;
                         const promise = fetchAllFromSTACAPI(collectionItemUrl);

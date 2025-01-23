@@ -2,9 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
-export function SelectCyclone({ cyclones, selectedCyclone, handleSelectedCyclone }) {
+export function SelectCyclone({ cyclones, selectedCycloneId, handleSelectedCycloneId }) {
     const handleChange = (event) => {
-      handleSelectedCyclone(event.target.value);
+      handleSelectedCycloneId(event.target.value);
     };
 
     const cycloneNames = Object.keys(cyclones);
@@ -13,7 +13,7 @@ export function SelectCyclone({ cyclones, selectedCyclone, handleSelectedCyclone
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={selectedCyclone}
+          value={selectedCycloneId}
           onChange={handleChange}
           label="Cyclones"
           style={{width: "100%"}}

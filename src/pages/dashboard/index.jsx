@@ -37,7 +37,7 @@ const scaleUnits = {
 
 export function Dashboard({ dataTree, plumeMetaData, cyclones, dataproducts, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
   // states for data
-  const [ selectedCyclone, handleSelectedCyclone ] = useState(cyclones[Object.keys(cyclones)[0]].id);
+  const [ selectedCycloneId, handleSelectedCycloneId ] = useState(cyclones[Object.keys(cyclones)[0]].id);
 
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
   const [ selectedRegionId, setSelectedRegionId ] = useState(""); // region_id of the selected region (marker)
@@ -172,7 +172,7 @@ export function Dashboard({ dataTree, plumeMetaData, cyclones, dataproducts, zoo
               </Typography>
             </HorizontalLayout>
             <HorizontalLayout>
-              <SelectCyclone cyclones={cyclones} selectedCyclone={selectedCyclone} handleSelectedCyclone={handleSelectedCyclone}></SelectCyclone>
+              <SelectCyclone cyclones={cyclones} selectedCycloneId={selectedCycloneId} handleSelectedCycloneId={handleSelectedCycloneId}></SelectCyclone>
             </HorizontalLayout>
             <HorizontalLayout>
               <Typography>
