@@ -42,7 +42,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
   const [ selectedCycloneId, setSelectedCycloneId ] = useState(cyclones[Object.keys(cyclones)[0]].id);
   const [ selectedDataProductId, setSelectedDataProductId ] = useState([]);
 
-  const [startDate, setStartDate] = useState(moment("2018-01-01"));
+  const [startDate, setStartDate] = useState(moment("2018-01-01").format());
 
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
   const [ selectedRegionId, setSelectedRegionId ] = useState(""); // region_id of the selected region (marker)
@@ -198,9 +198,9 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
               <DateTimePicker
                 sx={{width: "100%"}}
                 label="Start Datetime"
-                value={startDate}
+                value={moment(startDate)}
                 onChange={(newValue) => {
-                    setStartDate(newValue)
+                    setStartDate(newValue.format())
                   }}
               />
             </HorizontalLayout>
