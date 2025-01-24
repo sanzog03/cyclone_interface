@@ -10,10 +10,10 @@ import CommentIcon from '@mui/icons-material/Comment';
 import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-export function DatasetCheckbox({ dataProducts, setSelectedDataProductIds, handleSelectedDatasetForAnimation }) {
+export function DatasetCheckbox({ dataProducts, setSelectedDataProductIds, handleSelectedDatasetForAnimation, setPlumesForAnimation }) {
     const [checked, setChecked] = useState([]);
 
-    const handleToggle = (value) => () => {
+    const handleToggle = (value) => {
       const currentIndex = checked.indexOf(value);
       const newChecked = [...checked];
   
@@ -39,11 +39,13 @@ export function DatasetCheckbox({ dataProducts, setSelectedDataProductIds, handl
                 key={labelId}
                 disablePadding
             >
-                <ListItemButton role={undefined} onClick={handleToggle(id)} dense>
+                <ListItemButton role={undefined} dense>
                     <ListItemIcon>
                         <Checkbox
                             onClick={(e) => {
                                 e.stopPropagation();
+                                handleToggle(id)
+                                setPlumesForAnimation([]);
                             }}
                             edge="start"
                             checked={checked.includes(id)}

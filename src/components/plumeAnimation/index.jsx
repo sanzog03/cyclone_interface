@@ -83,6 +83,8 @@ let prev=null;
 
 const handleAnimation = (map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource, vmin, vmax, colorMap) => {
     const momentFormattedDatetimeStr = moment(date).format();
+    // get the nearest datetime from the available datetime.
+
     if (!(momentFormattedDatetimeStr in plumeDateIdxMap)) return;
 
     const index = plumeDateIdxMap[momentFormattedDatetimeStr];

@@ -87,7 +87,7 @@ export function dataTransformationCyclone(collections: STACCollection[][], items
     return cycloneDictionary;
 }
 
-function findNearestDatetimeIndex(sortedStacItems: STACItem[], targetDatetime: string) {
+export function findNearestDatetimeIndex(sortedStacItems: STACItem[], targetDatetime: string) {
     let l=0;
     let r=sortedStacItems.length - 1;
 

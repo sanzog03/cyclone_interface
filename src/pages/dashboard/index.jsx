@@ -206,6 +206,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
             </HorizontalLayout>
             <HorizontalLayout>
               {<DatasetCheckbox
+                setPlumesForAnimation={setPlumesForAnimation}
                 dataProducts={dataProducts}
                 selectedDataProductIds={selectedDataProductIds}
                 setSelectedDataProductIds={setSelectedDataProductIds}
