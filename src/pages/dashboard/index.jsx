@@ -73,6 +73,8 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
 
   // handler functions
   const handleSelectedDatasetForAnimation = (dataProductId) => {
+    setSelectedDataProductIds([]); // reset the layers selected
+    // prepare animation
     const stacItemsForAnimation = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dataProductId].dataset.subDailyAssets;
     const { colormap, rescale } = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dataProductId];
     const vmin = rescale[0][0];

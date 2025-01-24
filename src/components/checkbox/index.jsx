@@ -10,7 +10,7 @@ import CommentIcon from '@mui/icons-material/Comment';
 import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-export function DatasetCheckbox({ dataProducts, setSelectedDataProductIds, handleSelectedDatasetForAnimation, setPlumesForAnimation }) {
+export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelectedDataProductIds, handleSelectedDatasetForAnimation, setPlumesForAnimation }) {
     const [checked, setChecked] = useState([]);
 
     const handleToggle = (value) => {
@@ -26,6 +26,10 @@ export function DatasetCheckbox({ dataProducts, setSelectedDataProductIds, handl
       setChecked(newChecked);
       setSelectedDataProductIds(newChecked);
     };
+
+    useEffect(() => {
+        setChecked(selectedDataProductIds);
+    }, [selectedDataProductIds]);
 
     return (
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
