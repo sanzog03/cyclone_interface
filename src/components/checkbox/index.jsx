@@ -42,16 +42,25 @@ export function DatasetCheckbox({ dataProducts, selectedDataProductId, setSelect
                 <ListItemButton role={undefined} onClick={handleToggle(id)} dense>
                     <ListItemIcon>
                         <Checkbox
-                        edge="start"
-                        checked={checked.includes(id)}
-                        tabIndex={-1}
-                        disableRipple
-                        inputProps={{ 'aria-labelledby': labelId }}
+                            onClick={(e) => e.stopPropagation()}
+                            edge="start"
+                            checked={checked.includes(id)}
+                            tabIndex={-1}
+                            disableRipple
+                            inputProps={{ 'aria-labelledby': labelId }}
                         />
                     </ListItemIcon>
                     <ListItemText sx={{width: "50%"}} id={labelId} primary={name} />
-                    <PlayArrowIcon sx={{width: "20%"}}/>
-                    <Slider sx={{width: "30%"}} defaultValue={100} aria-label="Disabled slider" />
+                        <PlayArrowIcon
+                            onClick={(e) => e.stopPropagation()}
+                            sx={{width: "20%"}}
+                        />
+                        <Slider
+                            onClick={(e) => e.stopPropagation()}
+                            sx={{width: "30%"}}
+                            defaultValue={100}
+                            aria-label="Disabled slider"
+                        />
                 </ListItemButton>
             </ListItem>
             );
