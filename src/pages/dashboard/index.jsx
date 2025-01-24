@@ -191,13 +191,13 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
 
             <HorizontalLayout>
               <Typography>
-                Start Datetime
+                Selected Datetime (UTC)
               </Typography>
             </HorizontalLayout>
             <HorizontalLayout>
               <DateTimePicker
                 sx={{width: "100%"}}
-                label="Start Datetime"
+                label="Selected Datetime (UTC)"
                 value={moment(startDate)}
                 onChange={(newValue) => {
                     setStartDate(newValue.format())
