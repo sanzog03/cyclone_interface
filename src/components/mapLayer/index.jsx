@@ -102,11 +102,7 @@ export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, 
             <MapLayer
                 key={dataProduct.dataset.id}
                 plumeId={dataProduct.dataset.id}
-                // dataProduct={dataProduct.dataset.representationalAsset}
-
-                // *** can change the asset to be shown wrt date time here
-                dataProduct={dataProduct.dataset.getAsset(startDate) || dataProduct.dataset.representationalAsset}
-
+                dataProduct={dataProduct.dataset.getAsset(startDate)}
                 rescale={dataProduct.rescale}
                 colormap={dataProduct.colormap}
                 handleLayerClick={handleLayerClick}

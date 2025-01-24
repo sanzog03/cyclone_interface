@@ -52,6 +52,7 @@ export function dataTransformationCyclone(collections: STACCollection[][], items
             endDate: sortedData[sortedData.length - 1].properties.datetime,
             subDailyAssets: [...sortedData],
             getAsset: (dateTime: string) => {
+                if (!dateTime) return cycloneDataset.subDailyAssets[0];
                 const dateTimeNoTimezone = moment(dateTime).format('YYYY-MM-DD HH:mm:ss'); // remove the timezone information that might
                 // be attached with the target datetime
                 const index = findNearestDatetimeIndex(cycloneDataset.subDailyAssets, dateTimeNoTimezone)
