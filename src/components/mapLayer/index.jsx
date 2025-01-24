@@ -83,10 +83,6 @@ export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, 
         let dataProducts = selectedDataProductIds.length && selectedDataProductIds.map(productId => {
             try {
                 let temp = dataTreeCyclone["current"][selectedCycloneId]["dataProducts"][productId];
-
-                // *** can change the asset to be shown wrt date time here
-                const STACItemBasedOnDate = temp.dataset.getAsset();
-
                 return temp;
             } catch (err) {
                 console.error(err);
