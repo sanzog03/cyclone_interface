@@ -73,14 +73,14 @@ export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plu
 }
 
 
-export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, showPlumeLayers, handleLayerClick, setHoveredPlumeId, selectedCycloneId, selectedDataProductId }) => {
+export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, showPlumeLayers, handleLayerClick, setHoveredPlumeId, selectedCycloneId, selectedDataProductIds }) => {
     const { map } = useMapbox();
     const [ dataProducts, setDataProducts ] = useState();
 
     useEffect(() => {
         if (!map || !dataTreeCyclone) return
 
-        let dataProducts = selectedDataProductId.length && selectedDataProductId.map(productId => {
+        let dataProducts = selectedDataProductIds.length && selectedDataProductIds.map(productId => {
             try {
                 let temp = dataTreeCyclone["current"][selectedCycloneId]["dataProducts"][productId];
 
@@ -95,7 +95,7 @@ export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, 
         }).filter(elem => elem);
 
         setDataProducts(dataProducts);
-    }, [startDate, map, dataTreeCyclone, selectedDataProductId, selectedCycloneId])
+    }, [startDate, map, dataTreeCyclone, selectedDataProductIds, selectedCycloneId])
 
     return (<>
         {dataProducts && dataProducts.length && dataProducts.map((dataProduct) =>

@@ -10,7 +10,7 @@ import CommentIcon from '@mui/icons-material/Comment';
 import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-export function DatasetCheckbox({ dataProducts, selectedDataProductId, setSelectedDataProductId }) {
+export function DatasetCheckbox({ dataProducts, setSelectedDataProductIds, handleSelectedDatasetForAnimation }) {
     const [checked, setChecked] = useState([]);
 
     const handleToggle = (value) => () => {
@@ -24,7 +24,7 @@ export function DatasetCheckbox({ dataProducts, selectedDataProductId, setSelect
       }
   
       setChecked(newChecked);
-      setSelectedDataProductId(newChecked);
+      setSelectedDataProductIds(newChecked);
     };
 
     return (
@@ -42,7 +42,9 @@ export function DatasetCheckbox({ dataProducts, selectedDataProductId, setSelect
                 <ListItemButton role={undefined} onClick={handleToggle(id)} dense>
                     <ListItemIcon>
                         <Checkbox
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                            }}
                             edge="start"
                             checked={checked.includes(id)}
                             tabIndex={-1}
@@ -52,7 +54,10 @@ export function DatasetCheckbox({ dataProducts, selectedDataProductId, setSelect
                     </ListItemIcon>
                     <ListItemText sx={{width: "50%"}} id={labelId} primary={name} />
                         <PlayArrowIcon
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleSelectedDatasetForAnimation(id);
+                            }}
                             sx={{width: "20%"}}
                         />
                         <Slider

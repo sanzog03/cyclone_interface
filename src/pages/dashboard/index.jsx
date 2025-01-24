@@ -40,7 +40,7 @@ const scaleUnits = {
 export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, dataProducts, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
   // states for data
   const [ selectedCycloneId, setSelectedCycloneId ] = useState(cyclones[Object.keys(cyclones)[0]].id);
-  const [ selectedDataProductId, setSelectedDataProductId ] = useState([]);
+  const [ selectedDataProductIds, setSelectedDataProductIds ] = useState([]);
 
   const [startDate, setStartDate] = useState(moment("2018-01-01").format());
 
@@ -66,6 +66,13 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
   const [ mapScaleUnit, setMapScaleUnit ] = useState(scaleUnits.MILES);
 
   // handler functions
+  const handleSelectedDatasetForAnimation = (dataProductId) => {
+    const stacItemsForAnimation = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dataProductId].dataset.subDailyAssets;
+    setPlumesForAnimation(stacItemsForAnimation);
+  }
+
+  // old ones
+
   const handleSelectedRegion = (regionId) => {
     if (!dataTree.current || !Object.keys(dataTree.current).length || !regionId) return;
     setSelectedRegionId(regionId); // an useEffect handles it further
@@ -186,7 +193,12 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
               </Typography>
             </HorizontalLayout>
             <HorizontalLayout>
-              {<DatasetCheckbox dataProducts={dataProducts} selectedDataProductId={selectedDataProductId} setSelectedDataProductId={setSelectedDataProductId}></DatasetCheckbox> }
+              {<DatasetCheckbox
+                dataProducts={dataProducts}
+                selectedDataProductIds={selectedDataProductIds}
+                setSelectedDataProductIds={setSelectedDataProductIds}
+                handleSelectedDatasetForAnimation={handleSelectedDatasetForAnimation}
+              ></DatasetCheckbox> }
             </HorizontalLayout>
 
             <HorizontalLayout>
@@ -216,7 +228,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
             // setHoveredPlumeId={setHoveredPlumeId}
             dataTreeCyclone={dataTreeCyclone}
             selectedCycloneId={selectedCycloneId}
-            selectedDataProductId={selectedDataProductId}
+            selectedDataProductIds={selectedDataProductIds}
             startDate={startDate}
           />
           <MapControls
