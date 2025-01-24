@@ -88,7 +88,7 @@ const handleAnimation = (map, date, plumeDateIdxMap, plumes, bufferedLayer, buff
     const index = plumeDateIdxMap[momentFormattedDatetimeStr];
 
     // buffer the following k elements.
-    const k = 4;
+    const k = 10;
     bufferSourceLayers(map, plumes, index, k, bufferedLayer, bufferedSource, vmin, vmax, colorMap);
 
     // display the indexed plume.
@@ -111,7 +111,6 @@ const bufferSourceLayers = (map, plumes, index, k, bufferedLayer, bufferedSource
         let sourceId = getSourceId(i);
         let layerId = getLayerId(i);
         if (!bufferedLayer.has(layerId)) {
-            console.log("++++++>>>>>> ", plumes[i])
             bufferSourceLayer(map, plumes[i], sourceId, layerId, vmin, vmax, colorMap); // also send in vmin, vmax and colormap
             bufferedLayer.add(layerId);
             if (!bufferedSource.has(sourceId)) bufferedSource.add(sourceId);
@@ -129,5 +128,5 @@ const transitionLayers = (map, prevLayerId, currentLayerId) => {
     setTimeout(() => {
         // Fade out the prev layer
         if (prevLayerId) map.setLayoutProperty(prevLayerId, 'visibility', 'none');
-    }, 900); // Because of timeout, there is a lag on the rewind. TODO: find a better solution.
+    }, 1200); // Because of timeout, there is a lag on the rewind. TODO: find a better solution.
 }
