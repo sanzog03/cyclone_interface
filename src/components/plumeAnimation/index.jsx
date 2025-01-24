@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMapbox } from "../../context/mapContext";
 import TimelineControl from "mapboxgl-timeline";
 import moment from "moment";
@@ -12,9 +12,17 @@ export const PlumeAnimation = ({ plumes }) => {
     const { map } = useMapbox();
     const timeline = useRef(null);
     const timelineComponent = useRef(null);
+    const [ frequency, setFrequency ] = useState(5*60);  // 5 minute for GOES satellite
 
     useEffect(() => {
         if (!map || !plumes.length) return;
+
+        if (plumes.length >= 2) {
+            let secondTime = moment(plumes[1]["properties"]["datetime"]);
+            let firstTime = moment(plumes[0]["properties"]["datetime"]);
+            let freq = secondTime.diff(firstTime, "seconds");
+            setFrequency(freq);
+        }
 
         // hashmap so we could refer the index and do manipulations with respect to the index.
         const plumeDateIdxMap = {}
@@ -34,7 +42,7 @@ export const PlumeAnimation = ({ plumes }) => {
             start: startDatetime,
             end: endDatetime,
             initial: startDatetime,
-            step: 1000 * 60 * 5, // 5 minute for GOES satellite; TODO: get this from the difference between the time of consecutive elements
+            step: 1000 * frequency,
             onStart: (date) => {
                 // executed on initial step tick.
                 handleAnimation(map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource);
@@ -62,7 +70,7 @@ export const PlumeAnimation = ({ plumes }) => {
                 map.removeControl(timeline.current);
             }
         }
-    }, [plumes, map]);
+    }, [plumes, map, frequency]);
 
     return (
         <div style={{ width: "100%", height: "100%" }} className="player-container">
