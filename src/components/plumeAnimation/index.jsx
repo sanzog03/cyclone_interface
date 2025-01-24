@@ -7,7 +7,7 @@ import { addSourceLayerToMap as bufferSourceLayer, getSourceId, getLayerId, laye
 import 'mapboxgl-timeline/dist/style.css';
 import "./index.css";
 
-export const PlumeAnimation = ({ plumes }) => {
+export const PlumeAnimation = ({ plumes, vmin, vmax, colorMap }) => {
     // plume is the array of stac collection features
     const { map } = useMapbox();
     const timeline = useRef(null);
@@ -45,11 +45,11 @@ export const PlumeAnimation = ({ plumes }) => {
             step: 1000 * frequency,
             onStart: (date) => {
                 // executed on initial step tick.
-                handleAnimation(map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource);
+                handleAnimation(map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource, vmin, vmax, colorMap);
             },
             onChange: date => {
                 // executed on each changed step tick.
-                handleAnimation(map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource);
+                handleAnimation(map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource, vmin, vmax, colorMap);
             },
             format: date => {
                 const dateStr = moment(date).utc().format("MM/DD/YYYY, HH:mm:ss") + " UTC";
@@ -70,7 +70,7 @@ export const PlumeAnimation = ({ plumes }) => {
                 map.removeControl(timeline.current);
             }
         }
-    }, [plumes, map, frequency]);
+    }, [plumes, map, frequency, vmin, vmax, colorMap]);
 
     return (
         <div style={{ width: "100%", height: "100%" }} className="player-container">
@@ -81,7 +81,7 @@ export const PlumeAnimation = ({ plumes }) => {
 
 let prev=null;
 
-const handleAnimation = (map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource) => {
+const handleAnimation = (map, date, plumeDateIdxMap, plumes, bufferedLayer, bufferedSource, vmin, vmax, colorMap) => {
     const momentFormattedDatetimeStr = moment(date).format();
     if (!(momentFormattedDatetimeStr in plumeDateIdxMap)) return;
 
@@ -89,7 +89,7 @@ const handleAnimation = (map, date, plumeDateIdxMap, plumes, bufferedLayer, buff
 
     // buffer the following k elements.
     const k = 4;
-    bufferSourceLayers(map, plumes, index, k, bufferedLayer, bufferedSource);
+    bufferSourceLayers(map, plumes, index, k, bufferedLayer, bufferedSource, vmin, vmax, colorMap);
 
     // display the indexed plume.
     const prevLayerId = prev;
@@ -98,7 +98,7 @@ const handleAnimation = (map, date, plumeDateIdxMap, plumes, bufferedLayer, buff
     prev = currentLayerId;
 }
 
-const bufferSourceLayers = (map, plumes, index, k, bufferedLayer, bufferedSource) => {
+const bufferSourceLayers = (map, plumes, index, k, bufferedLayer, bufferedSource, vmin, vmax, colorMap) => {
     let start = index;
     let limit = index + k;
     if (start >= (plumes.length - 1)) {
@@ -111,7 +111,8 @@ const bufferSourceLayers = (map, plumes, index, k, bufferedLayer, bufferedSource
         let sourceId = getSourceId(i);
         let layerId = getLayerId(i);
         if (!bufferedLayer.has(layerId)) {
-            bufferSourceLayer(map, plumes[i], sourceId, layerId);
+            console.log("++++++>>>>>> ", plumes[i])
+            bufferSourceLayer(map, plumes[i], sourceId, layerId, vmin, vmax, colorMap); // also send in vmin, vmax and colormap
             bufferedLayer.add(layerId);
             if (!bufferedSource.has(sourceId)) bufferedSource.add(sourceId);
         }

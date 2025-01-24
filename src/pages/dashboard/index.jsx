@@ -44,6 +44,13 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
 
   const [startDate, setStartDate] = useState(moment("2018-01-01").format());
 
+  // for animation
+  const [ plumesForAnimation, setPlumesForAnimation ] = useState([]); // list of subdaily_plumes used for animation
+  const [ VMIN, setVMIN] = useState(250);
+  const [ VMAX, setVMAX] = useState(300);
+  const [ colorMap, setColorMap ] = useState("magma");
+  // end for animation
+
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
   const [ selectedRegionId, setSelectedRegionId ] = useState(""); // region_id of the selected region (marker)
   const prevSelectedRegionId = useRef(""); // to be able to restore to previously selected region.
@@ -54,7 +61,6 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
   const [ filteredSelectedPlumes, setFilteredSelectedPlumes ] = useState([]); // plumes for the selected region with the filter applied
 
   const [ plumeIds, setPlumeIds ] = useState([]); // list of plume_ids for the search feature.
-  const [ plumesForAnimation, setPlumesForAnimation ] = useState([]); // list of subdaily_plumes used for animation
 
   const [ showPlumeLayers, setShowPlumeLayers ] = useState(true);
 
@@ -68,6 +74,12 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
   // handler functions
   const handleSelectedDatasetForAnimation = (dataProductId) => {
     const stacItemsForAnimation = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dataProductId].dataset.subDailyAssets;
+    const { colormap, rescale } = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dataProductId];
+    const vmin = rescale[0][0];
+    const vmax = rescale[0][1];
+    setColorMap(colormap);
+    setVMIN(vmin);
+    setVMAX(vmax);
     setPlumesForAnimation(stacItemsForAnimation);
   }
 
@@ -218,7 +230,12 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
             </HorizontalLayout>
 
             <HorizontalLayout>
-              <PlumeAnimation plumes={plumesForAnimation} />
+              <PlumeAnimation
+                plumes={plumesForAnimation}
+                colorMap={colorMap}
+                vmin={VMIN}
+                vmax={VMAX}
+              />
             </HorizontalLayout>
           </Title>
           <MapLayers
