@@ -7,8 +7,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { PlumeCard } from '../card';
 import { useEffect, useState } from 'react';
 
-import { CycloneMetas } from '../../assets/dataset/metadata';
-
 import "./index.css";
 
 const drawerWidth = "30rem";
@@ -62,10 +60,12 @@ const HorizontalLayout = styled.div`
     margin-bottom: 5px;
 `;
 
-export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId}) {
+export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId, selectedCycloneId, dataTree}) {
   const [ selectedPlumeMetas, setSelectedPlumeMetas ] = useState([]);
   const [ location, setLocation ] = useState("Cyclone Observations");
   const [ numberOfPlumes, setNumberOfPlumes ] = useState(0);
+
+  const [ cycloneMetas, setCycloneMetas] = useState([]);
 
   let VMIN = 0;
   let VMAX = 0.4;
@@ -74,6 +74,23 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (!dataTree.current || !selectedCycloneId) return;
+
+    const dataProducts = dataTree.current[selectedCycloneId].dataProducts;
+    const metas = Object.keys(dataProducts).map((key) => {
+      const dp = dataProducts[key]
+      return {
+        title: dp.name,
+        description: dp.description,
+        id: dp.id,
+        colorMap: dp.colormap,
+        rescale: dp.rescale[0]
+      }
+    });
+    setCycloneMetas(metas)
+  }, [dataTree, dataTree.current, selectedCycloneId]);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -112,12 +129,15 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
             </Typography>
           </HorizontalLayout>
         </DrawerHeader>
-          { !!CycloneMetas.length &&
-            CycloneMetas.map(cycloneMeta => (
+          { !!cycloneMetas.length &&
+            cycloneMetas.map(cycloneMeta => (
               <PlumeCard
                 key={cycloneMeta.id}
                 title={cycloneMeta.title}
                 description={cycloneMeta.description}
+                colorMap={cycloneMeta.colorMap}
+                VMIN={cycloneMeta.rescale[0]}
+                VMAX={cycloneMeta.rescale[1]}
               />
             ))
           }

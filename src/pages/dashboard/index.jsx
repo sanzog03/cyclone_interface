@@ -294,6 +294,8 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
         <PersistentDrawerRight
           open={openDrawer}
           setOpen={setOpenDrawer}
+          dataTree={dataTreeCyclone}
+          selectedCycloneId={selectedCycloneId}
           selectedPlumes={filteredSelectedPlumes}
           plumeMetaData={plumeMetaData}
           plumesMap={plumes}
