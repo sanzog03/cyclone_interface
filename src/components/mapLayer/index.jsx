@@ -43,7 +43,7 @@ export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plu
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dataProduct, map, handleLayerClick, plumeId, setHoveredPlumeId]);
+    }, [dataProduct, map, handleLayerClick, plumeId, setHoveredPlumeId, startDate]);
 
     useEffect(() => {
         if (!map || !hoveredPlumeId || !plumeId ) return;
@@ -123,6 +123,7 @@ export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, 
                 hoveredPlumeId={hoveredPlumeId}
                 setHoveredPlumeId={setHoveredPlumeId}
                 opacity={selectedDataProductIdsOpacity[dataProduct.dataset.satellite]}
+                startDate={startDate}
             >
             </MapLayer>
         )}
