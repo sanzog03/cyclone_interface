@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import CommentIcon from '@mui/icons-material/Comment';
 import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import Tooltip from '@mui/material/Tooltip';
 
 export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelectedDataProductIds, selectedDataProductIdsOpacity, setSelectedDataProductIdsOpacity, handleSelectedDatasetForAnimation, setPlumesForAnimation, setOpenDrawer }) {
     const [checked, setChecked] = useState([]);
@@ -64,27 +65,31 @@ export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelec
                         />
                     </ListItemIcon>
                     <ListItemText sx={{width: "50%"}} id={labelId} primary={name} />
-                        <PlayArrowIcon
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleSelectedDatasetForAnimation(id);
-                            }}
-                            sx={{width: "20%"}}
-                        />
-                        <Slider
-                            onChange={(event, newValue) => {
-                                event.stopPropagation();
-                                const va = {...selectedDataProductIdsOpacity};
-                                va[id] = newValue
-                                setSelectedDataProductIdsOpacity(va)
-                            }}
-                            min={0}
-                            max={1}
-                            step={0.1}
-                            sx={{width: "30%"}}
-                            value={selectedDataProductIdsOpacity[id] || 1}
-                            aria-label="Disabled slider"
-                        />
+                        <Tooltip title="Play Animation">
+                            <PlayArrowIcon
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleSelectedDatasetForAnimation(id);
+                                }}
+                                sx={{width: "20%"}}
+                            />
+                        </Tooltip>
+                        <Tooltip title="Change layer opacity">
+                            <Slider
+                                onChange={(event, newValue) => {
+                                    event.stopPropagation();
+                                    const va = {...selectedDataProductIdsOpacity};
+                                    va[id] = newValue
+                                    setSelectedDataProductIdsOpacity(va)
+                                }}
+                                min={0}
+                                max={1}
+                                step={0.1}
+                                sx={{width: "30%"}}
+                                value={selectedDataProductIdsOpacity[id] || 1}
+                                aria-label="Disabled slider"
+                            />
+                        </Tooltip>
                 </ListItemButton>
             </ListItem>
             );
