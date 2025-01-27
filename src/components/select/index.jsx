@@ -2,9 +2,10 @@ import { useState, useRef, useEffect } from "react";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
-export function SelectCyclone({ cyclones, selectedCycloneId, setSelectedCycloneId }) {
+export function SelectCyclone({ cyclones, selectedCycloneId, setSelectedCycloneId, setOpenDrawer }) {
     const handleChange = (event) => {
       setSelectedCycloneId(event.target.value);
+      setOpenDrawer(true);
     };
 
     const cycloneNames = Object.keys(cyclones);

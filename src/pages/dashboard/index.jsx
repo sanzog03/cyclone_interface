@@ -200,8 +200,14 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
               </Typography>
             </HorizontalLayout>
             <HorizontalLayout>
-              <SelectCyclone cyclones={cyclones} selectedCycloneId={selectedCycloneId} setSelectedCycloneId={setSelectedCycloneId}></SelectCyclone>
-            </HorizontalLayout>
+              <SelectCyclone
+                cyclones={cyclones}
+                selectedCycloneId={selectedCycloneId}
+                setSelectedCycloneId={setSelectedCycloneId}
+                setOpenDrawer={setOpenDrawer}
+              >
+              </SelectCyclone>
+           </HorizontalLayout>
 
             <HorizontalLayout>
               <Typography>
@@ -210,6 +216,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
             </HorizontalLayout>
             <HorizontalLayout>
               {<DatasetCheckbox
+                setOpenDrawer={setOpenDrawer}
                 setPlumesForAnimation={setPlumesForAnimation}
                 dataProducts={dataProducts}
                 selectedDataProductIds={selectedDataProductIds}

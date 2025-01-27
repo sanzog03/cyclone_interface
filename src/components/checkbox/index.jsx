@@ -10,7 +10,7 @@ import CommentIcon from '@mui/icons-material/Comment';
 import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelectedDataProductIds, selectedDataProductIdsOpacity, setSelectedDataProductIdsOpacity, handleSelectedDatasetForAnimation, setPlumesForAnimation }) {
+export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelectedDataProductIds, selectedDataProductIdsOpacity, setSelectedDataProductIdsOpacity, handleSelectedDatasetForAnimation, setPlumesForAnimation, setOpenDrawer }) {
     const [checked, setChecked] = useState([]);
 
     const handleToggle = (value) => {
@@ -28,6 +28,11 @@ export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelec
     };
 
     useEffect(() => {
+        if (!!selectedDataProductIds.length) {
+            setOpenDrawer(true);
+        } else {
+            setOpenDrawer(false);
+        }
         setChecked(selectedDataProductIds);
     }, [selectedDataProductIds]);
 
