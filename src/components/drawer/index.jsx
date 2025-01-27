@@ -91,7 +91,8 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
             width: drawerWidth,
             marginRight: "5px",
             marginTop: "5px",
-            height: 'calc(100vh - var(--colorbar-height) - 3.5%)', //colobar is up 3% from bottom
+            // height: 'calc(100vh - var(--colorbar-height) - 3.5%)', //colobar is up 3% from bottom
+            height: 'calc(100vh - 3.5%)', // 3% up from bottom
             borderRadius: '3px',
           },
         }}

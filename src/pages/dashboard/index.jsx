@@ -302,7 +302,6 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
           setHoveredPlumeId={setHoveredPlumeId}
         />
       </div>
-      {/* <ColorBar VMIN={-100} VMAX={100} STEP={20}/> */}
       {loadingData && <LoadingSpinner/>}
     </Box>
   );
