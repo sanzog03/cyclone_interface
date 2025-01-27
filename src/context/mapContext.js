@@ -25,8 +25,8 @@ export const MapboxProvider = ({ children }) => {
     map.current = new mapboxgl.Map({
         container: mapContainer.current,
         style: mapboxStyleUrl,
-        center: [-98.771556, 32.967243], // Centered on the US
-        zoom: 4,
+        center: [-78.771556, 32.967243], // Centered on the US
+        zoom: 3,
         projection: 'equirectangular',
         options: {
             trackResize: true

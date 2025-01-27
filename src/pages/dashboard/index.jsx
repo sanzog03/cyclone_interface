@@ -87,6 +87,16 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
     setPlumesForAnimation(stacItemsForAnimation);
   }
 
+  const handleResetHome = () => {
+    setSelectedDataProductIds([]); // reset the layers selected
+    setSelectedDataProductIdsOpacity({}) // reset the layers opacity
+    setPlumesForAnimation([]); // reset the animation
+    setOpenDrawer(false);
+    setZoomLevel(3);
+    setZoomLocation([-78.771556, 32.967243]);
+    setStartDate(moment("2018-01-01").format());
+  }
+
   // old ones
 
   const handleSelectedRegion = (regionId) => {
@@ -136,16 +146,6 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
     setZoomLevel(null); // take the default zoom level
     setSelectedRegionId(""); //to reset the plume that was shown
     setPlumesForAnimation([]); // to reset the previous animation
-  }
-
-  const handleResetHome = () => {
-    setSelectedRegionId("");
-    setHoveredPlumeId("");
-    setFilteredSelectedPlumes([]);
-    setPlumesForAnimation([]);
-    setOpenDrawer(false);
-    setZoomLevel(4);
-    setZoomLocation([-98.771556, 32.967243]);
   }
 
   const handleResetToSelectedRegion = () => {
