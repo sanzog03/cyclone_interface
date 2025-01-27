@@ -41,6 +41,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
   // states for data
   const [ selectedCycloneId, setSelectedCycloneId ] = useState(cyclones[Object.keys(cyclones)[0]].id);
   const [ selectedDataProductIds, setSelectedDataProductIds ] = useState([]);
+  const [ selectedDataProductIdsOpacity, setSelectedDataProductIdsOpacity ] = useState({}); // [key: string(dataProductId)]: number
 
   const [startDate, setStartDate] = useState(moment("2018-01-01").format());
 
@@ -212,6 +213,8 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
                 dataProducts={dataProducts}
                 selectedDataProductIds={selectedDataProductIds}
                 setSelectedDataProductIds={setSelectedDataProductIds}
+                selectedDataProductIdsOpacity={selectedDataProductIdsOpacity}
+                setSelectedDataProductIdsOpacity={setSelectedDataProductIdsOpacity}
                 handleSelectedDatasetForAnimation={handleSelectedDatasetForAnimation}
               ></DatasetCheckbox> }
             </HorizontalLayout>
@@ -250,6 +253,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
             selectedCycloneId={selectedCycloneId}
             selectedDataProductIds={selectedDataProductIds}
             startDate={startDate}
+            selectedDataProductIdsOpacity={selectedDataProductIdsOpacity}
           />
           <MapControls
             openDrawer={openDrawer}

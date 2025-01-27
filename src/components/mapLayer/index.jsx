@@ -73,9 +73,24 @@ export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plu
 }
 
 
-export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, showPlumeLayers, handleLayerClick, setHoveredPlumeId, selectedCycloneId, selectedDataProductIds }) => {
+export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, showPlumeLayers, handleLayerClick, setHoveredPlumeId, selectedCycloneId, selectedDataProductIds, selectedDataProductIdsOpacity }) => {
     const { map } = useMapbox();
     const [ dataProducts, setDataProducts ] = useState();
+
+    useEffect(() => {
+        if (!map) return;
+        // use the map reference
+        Object.keys(selectedDataProductIdsOpacity).forEach((dataProduct) => {
+            const dataProductId = dataProduct + "-cyclone-" + selectedCycloneId;
+            // const plumeId = dataProductId
+            const rasterLayerId = getLayerId("raster"+dataProductId);
+            try {
+                map.setPaintProperty(rasterLayerId, "raster-opacity", selectedDataProductIdsOpacity[dataProduct]);
+            } catch (err) {
+                return;
+            }
+        });
+    }, [selectedDataProductIdsOpacity]);
 
     useEffect(() => {
         if (!map || !dataTreeCyclone) return

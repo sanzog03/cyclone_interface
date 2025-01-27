@@ -10,7 +10,7 @@ import CommentIcon from '@mui/icons-material/Comment';
 import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelectedDataProductIds, handleSelectedDatasetForAnimation, setPlumesForAnimation }) {
+export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelectedDataProductIds, selectedDataProductIdsOpacity, setSelectedDataProductIdsOpacity, handleSelectedDatasetForAnimation, setPlumesForAnimation }) {
     const [checked, setChecked] = useState([]);
 
     const handleToggle = (value) => {
@@ -67,7 +67,15 @@ export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelec
                             sx={{width: "20%"}}
                         />
                         <Slider
-                            onClick={(e) => e.stopPropagation()}
+                            onChange={(event, newValue) => {
+                                event.stopPropagation();
+                                const va = {...selectedDataProductIdsOpacity};
+                                va[id] = newValue
+                                setSelectedDataProductIdsOpacity(va)
+                            }}
+                            min={0}
+                            max={1}
+                            step={0.1}
                             sx={{width: "30%"}}
                             defaultValue={100}
                             aria-label="Disabled slider"
