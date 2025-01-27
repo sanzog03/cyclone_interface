@@ -90,7 +90,7 @@ export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, 
                 return;
             }
         });
-    }, [selectedDataProductIdsOpacity]);
+    }, [map, selectedCycloneId, selectedDataProductIdsOpacity]);
 
     useEffect(() => {
         if (!map || !dataTreeCyclone) return
