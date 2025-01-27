@@ -7,12 +7,12 @@ import * as d3 from "d3";
 
 import "./index.css";
 
-export const ColorBar = ({VMIN, VMAX, STEP}) => {
+export const ColorBar = ({VMIN, VMAX, STEP, colorMap}) => {
     const colorBarScale = useRef();
 
     useEffect(() => {
         const colorbar = d3.select(colorBarScale.current);
-        createColorbar(colorbar, VMIN, VMAX, STEP);
+        createColorbar(colorbar, VMIN, VMAX, STEP, colorMap);
 
         return () => {
             colorbar.selectAll("*").remove();

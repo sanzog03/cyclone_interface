@@ -1,9 +1,18 @@
 import * as d3 from "d3";
 
-export const createColorbar = (colorbar, VMIN=-92, VMAX=100, STEP=30) => {
+const COLOR_MAP = {
+    magma: d3.interpolateMagma, //imerg (reverse this)
+    reds: d3.interpolateReds, //sst
+    bupu_r: d3.interpolatePuBu, //viirs,modis: "viridis"
+    viridis: d3.interpolateViridis, //cygnss
+    gist_earth: d3.interpolateGreys, //goes (reverse this)
+    default: d3.interpolatePlasma
+}
+
+export const createColorbar = (colorbar, VMIN=-92, VMAX=100, STEP=30, colorMap="default") => {
     // Create a color scale using D3
     const colorScale = d3
-        .scaleSequential(d3.interpolatePlasma)
+        .scaleSequential(COLOR_MAP[colorMap])
         .domain([VMIN, VMAX]); // Set VMIN and VMAX as your desired min and max values
 
     colorbar

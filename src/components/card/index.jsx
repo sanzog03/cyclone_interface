@@ -80,7 +80,7 @@ export function PlumeCard({ id, title, description, VMIN, VMAX, colorMap }) {
                     />
                 </HorizontalLayout>
                 <HorizontalLayout>
-                    <ColorBar VMIN={VMIN} VMAX={VMAX} STEP={(VMAX-VMIN)/5}/>
+                    <ColorBar VMIN={VMIN} VMAX={VMAX} STEP={(VMAX-VMIN)/5} colorMap={colorMap}/>
                 </HorizontalLayout>
             </CardContent>
             </Box>
