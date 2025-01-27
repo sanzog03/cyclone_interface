@@ -77,7 +77,7 @@ export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelec
                             max={1}
                             step={0.1}
                             sx={{width: "30%"}}
-                            defaultValue={100}
+                            value={selectedDataProductIdsOpacity[id] || 1}
                             aria-label="Disabled slider"
                         />
                 </ListItemButton>
