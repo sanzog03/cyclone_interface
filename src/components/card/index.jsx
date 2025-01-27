@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import styled from "styled-components";
 import Divider from '@mui/material/Divider';
 import DownloadIcon from '@mui/icons-material/Download';
+import { ColorBar } from '../colorBar';
 
 import "./index.css";
 
@@ -79,6 +80,9 @@ export function PlumeCard({ id, title, description }) {
                         caption = {title}
                         value = {description}
                     />
+                </HorizontalLayout>
+                <HorizontalLayout>
+                    <ColorBar VMIN={-100} VMAX={100} STEP={20}/>
                 </HorizontalLayout>
             </CardContent>
             </Box>

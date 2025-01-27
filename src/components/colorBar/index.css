@@ -3,11 +3,11 @@
 }
 
 #colorbar {
-    position: absolute;
-    bottom: 3%;
-    right: 5px;
-    height: var(--colorbar-height);
-    width: 30rem;
+    /* position: absolute; */
+    /* bottom: 3%; */
+    /* right: 5px; */
+    /* height: var(--colorbar-height); */
+    width: 100%;
     z-index: 10000;
     background-color: white;
     padding: 1rem;
@@ -18,7 +18,7 @@
 
 .colorbar-svg {
     height: 1rem;
-    width: 28rem; /* this will define the colorbar width, make it a bit small than container */
+    width: 100%; /* this will define the colorbar width, make it a bit small than container */
 }
 
 .colorbar-scale {
