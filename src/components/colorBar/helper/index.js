@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 
-export const createColorbar = (colorbar, VMIN=-92, VMAX=57) => {
+export const createColorbar = (colorbar, VMIN=-92, VMAX=100, STEP=30) => {
     // Create a color scale using D3
     const colorScale = d3
         .scaleSequential(d3.interpolatePlasma)
@@ -20,7 +20,7 @@ export const createColorbar = (colorbar, VMIN=-92, VMAX=57) => {
         .attr("fill", (d) => colorScale(d));
 
     // Define custom scale labels
-    const scaleLabels = generateScale(VMIN, VMAX, 40);
+    const scaleLabels = generateScale(VMIN, VMAX, STEP);
 
     // Create a container for color labels
     colorbar
