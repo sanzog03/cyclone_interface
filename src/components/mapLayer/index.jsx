@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useMapbox } from "../../context/mapContext";
 import { addSourceLayerToMap, addSourcePolygonToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
 
-export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId, startDate }) => {
+export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId, startDate, opacity }) => {
     const { map } = useMapbox();
     const [VMIN, VMAX] = rescale[0];
 
@@ -16,6 +16,8 @@ export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plu
         const polygonLayerId = getLayerId("polygon"+plumeId);
 
         addSourceLayerToMap(map, feature, rasterSourceId, rasterLayerId, VMIN, VMAX, colormap);
+        map.setPaintProperty(rasterLayerId, "raster-opacity", opacity);
+
         addSourcePolygonToMap(map, feature, polygonSourceId, polygonLayerId);
 
         const onClickHandler = (e) => {
@@ -40,6 +42,7 @@ export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plu
                 map.off("click", "clusters", onClickHandler);
             }
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataProduct, map, handleLayerClick, plumeId, setHoveredPlumeId]);
 
     useEffect(() => {
@@ -119,6 +122,7 @@ export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, 
                 handleLayerClick={handleLayerClick}
                 hoveredPlumeId={hoveredPlumeId}
                 setHoveredPlumeId={setHoveredPlumeId}
+                opacity={selectedDataProductIdsOpacity[dataProduct.dataset.satellite]}
             >
             </MapLayer>
         )}
