@@ -7,6 +7,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { PlumeCard } from '../card';
 import { useEffect, useState } from 'react';
 
+import { CycloneMetas } from '../../assets/dataset/metadata';
+
 import "./index.css";
 
 const drawerWidth = "30rem";
@@ -62,7 +64,7 @@ const HorizontalLayout = styled.div`
 
 export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId}) {
   const [ selectedPlumeMetas, setSelectedPlumeMetas ] = useState([]);
-  const [ location, setLocation ] = useState("USA");
+  const [ location, setLocation ] = useState("Cyclone Observations");
   const [ numberOfPlumes, setNumberOfPlumes ] = useState(0);
 
   let VMIN = 0;
@@ -72,37 +74,6 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  useEffect(() => {
-    if ( !plumeMetaData ) return;
-    if ( !selectedPlumes.length ) {
-      setSelectedPlumeMetas([]);
-      setLocation("USA");
-      setNumberOfPlumes(0);
-      return;
-    }
-
-    try {
-      const selectedMetas = selectedPlumes.map(plume => {
-        if (!(plume.id in plumeMetaData)) {
-          throw new Error(`plumeId: "${plume.id}" not found in metadata.`);
-        }
-        return plumeMetaData[plume.id]
-      });
-      setSelectedPlumeMetas(selectedMetas)
-
-      const firstPlumeMeta = plumeMetaData[selectedPlumes[0].id];
-      const { administrativeDivision, country } = firstPlumeMeta;
-      const location = `${administrativeDivision}, ${country}`;
-      const numberOfPlumes = selectedPlumes.length;
-      setLocation(location);
-      setNumberOfPlumes(numberOfPlumes);
-    } catch (err) {
-      console.error("Error getting data for the drawer.", err)
-    }
-  }, [plumeMetaData, selectedPlumes]);
-
-  const collectionId = "";
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -138,33 +109,14 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
             >
               { location }
             </Typography>
-            {/* <Typography
-                  variant="subtitle1"
-                  component="div"
-                  className='drawer-head-content'
-            >
-              { numberOfPlumes + " Plumes"}
-            </Typography> */}
           </HorizontalLayout>
         </DrawerHeader>
-          { !!selectedPlumeMetas.length &&
-            selectedPlumeMetas.map(selectedPlumeMeta => (
+          { !!CycloneMetas.length &&
+            CycloneMetas.map(cycloneMeta => (
               <PlumeCard
-                key={selectedPlumeMeta.id}
-                plumeSourceId={selectedPlumeMeta.id}
-                plumeSourceName={selectedPlumeMeta.id}
-                imageUrl={`${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${plumesMap[selectedPlumeMeta.id].representationalPlume.id}/preview.png?assets=rad&rescale=${VMIN}%2C${VMAX}&colormap_name=${colorMap}`}
-                tiffUrl={`${process.env.REACT_APP_CLOUD_BROWSE_URL}/browseui/#${collectionId}/#q=${selectedPlumeMeta.id.split("_").slice(-1)}`}
-                lon={selectedPlumeMeta.lon}
-                lat={selectedPlumeMeta.lat}
-                totalReleaseMass={selectedPlumeMeta.totalReleaseMass}
-                colEnhancements={selectedPlumeMeta.colEnhancements}
-                startDatetime={selectedPlumeMeta.startDatetime}
-                endDatetime={selectedPlumeMeta.endDatetime}
-                duration={selectedPlumeMeta.duration}
-                handleSelectedPlumeCard={handleSelectedPlumeCard}
-                hoveredPlumeId={hoveredPlumeId}
-                setHoveredPlumeId={setHoveredPlumeId}
+                key={cycloneMeta.id}
+                title={cycloneMeta.title}
+                description={cycloneMeta.description}
               />
             ))
           }

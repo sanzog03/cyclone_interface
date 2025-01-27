@@ -35,7 +35,7 @@ const CaptionValue = ({ caption, value, className }) => {
     return (
         <div className={className}>
             <Typography
-                variant="caption"
+                variant="body1"
                 component="div"
                 sx={{ color: 'text.primary' }}
             >
@@ -65,111 +65,24 @@ const formatDuration = (duration) => {
     return result;
 }
 
-export function PlumeCard({ plumeSourceId, plumeSourceName, startDatetime, endDatetime, duration, imageUrl, tiffUrl, lon, lat, totalReleaseMass, colEnhancements, handleSelectedPlumeCard, hoveredPlumeId, setHoveredPlumeId }) {
+export function PlumeCard({ id, title, description }) {
     const [ isHovered, setIsHovered ] = useState(false);
 
-    const handleCardClick = () => {
-        handleSelectedPlumeCard(plumeSourceId);
-    }
-
-    const handleMouseEnter = () => {
-        setHoveredPlumeId(plumeSourceId);
-    }
-
-    const handleMouseLeave = () => {
-        setHoveredPlumeId("");
-    }
-
-    useEffect(() => {
-        if (hoveredPlumeId === plumeSourceId) setIsHovered(true);
-        if (hoveredPlumeId !== plumeSourceId) setIsHovered(false);
-    }, [hoveredPlumeId, plumeSourceId])
-
     return (
-    <HighlightableCard
-        sx={{ display: 'flex', flex: '0 0 auto', margin: '15px' }}
-        onClick={handleCardClick}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        $isHovered={isHovered}
-    >
-        <div
-            style={{display: "flex", alignItems: "center", justifyContent: "center"}}
+        <HighlightableCard
+            sx={{ display: 'flex', flex: '0 0 auto', margin: '15px' }}
         >
-            <CardMedia
-                component="img"
-                height="100"
-                sx={{ padding: "1em", objectFit: "contain", minWidth: "50px", imageRendering: "pixelated" }}
-                image={imageUrl}
-                alt="Plume image"
-            />
-        </div>
+            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <CardContent sx={{ flex: '1 0 auto' }}>
+                <HorizontalLayout>
+                    <CaptionValue
+                        caption = {title}
+                        value = {description}
+                    />
+                </HorizontalLayout>
+            </CardContent>
+            </Box>
+        </HighlightableCard>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-        <CardContent sx={{ flex: '1 0 auto' }}>
-            <HorizontalLayout>
-                <CaptionValue
-                    caption = "Plume ID"
-                    value = {plumeSourceName}
-                />
-            </HorizontalLayout>
-            <HorizontalLayout>
-                <CaptionValue
-                    className="card-plume"
-                    caption = "Visualization Start time"
-                    value = { moment.utc(startDatetime).format("MM/DD/YYYY, HH:mm:ss") + " UTC" }
-                />
-                <CaptionValue
-                    className="card-plume"
-                    caption = "Visualization End time"
-                    value = { moment.utc(endDatetime).format("MM/DD/YYYY, HH:mm:ss") + " UTC" }
-                />
-            </HorizontalLayout>
-            <HorizontalLayout>
-                <CaptionValue
-                    className="card-plume"
-                    caption = "Approximate Release Duration from Start Time"
-                    value = { formatDuration(moment.duration(duration)) }
-                />
-            </HorizontalLayout>
-            <HorizontalLayout>
-                <a href={tiffUrl} target='_blank' rel="noreferrer" className='card-download-link'>
-                    <Typography
-                        variant="caption"
-                        component="div"
-                    >
-                        <div style={{display: "flex", justifyContent: "center"}}>
-                            Download the Tiff File <DownloadIcon fontSize='small'/>
-                        </div>
-                    </Typography></a>
-            </HorizontalLayout>
-            <Divider></Divider>
-            <HorizontalLayout>
-                <CaptionValue
-                    className="card-plume"
-                    caption = "Approximate Total Release Mass"
-                    value = {totalReleaseMass + (totalReleaseMass==="N/A" ? "" : " Metric Tonnes")}
-                />
-                <CaptionValue
-                    className="card-plume"
-                    caption = "Maximum Methane Column Enhancement"
-                    value = {colEnhancements + " mol/m²"}
-                />
-            </HorizontalLayout>
-            <HorizontalLayout>
-                <CaptionValue
-                    className="card-plume"
-                    caption = "Approximate Release Longitude"
-                    value = {Number(lon).toFixed(3)}
-                />
-                <CaptionValue
-                    className="card-plume"
-                    caption = "Approximate Release Latitude"
-                    value = {Number(lat).toFixed(3)}
-                />
-            </HorizontalLayout>
-        </CardContent>
-      </Box>
-    </HighlightableCard>
   );
 }
