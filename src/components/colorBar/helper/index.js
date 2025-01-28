@@ -3,7 +3,7 @@ import * as d3 from "d3";
 const COLOR_MAP = {
     magma: d3.interpolateMagma, //imerg
     reds: d3.interpolateReds, //sst
-    bupu_r: d3.interpolatePuBu, //viirs,modis: "viridis"
+    bupu_r: d3.interpolateBuPu, //viirs,modis: "viridis"
     viridis: d3.interpolateViridis, //cygnss
     gist_earth: (t) => d3.interpolateGreys(1-t), //goes (reversed)
     default: d3.interpolatePlasma
