@@ -76,6 +76,8 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
 
   // handler functions
   const handleSelectedDatasetForAnimation = (dataProductId) => {
+    if (!selectedCycloneId || !dataTreeCyclone.current || !dataProductId || !(dataProductId in dataTreeCyclone.current[selectedCycloneId]["dataProducts"])) return;
+
     setSelectedDataProductIds([]); // reset the layers selected
     setSelectedDataProductIdsOpacity({}) // reset the layers opacity
     // prepare animation
