@@ -60,7 +60,7 @@ const HorizontalLayout = styled.div`
     margin-bottom: 5px;
 `;
 
-export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId, selectedCycloneId, dataTree}) {
+export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId, selectedCycloneId, dataTree, selectedDataProductIds}) {
   const [ selectedPlumeMetas, setSelectedPlumeMetas ] = useState([]);
   const [ location, setLocation ] = useState("Cyclone Observations");
   const [ numberOfPlumes, setNumberOfPlumes ] = useState(0);
@@ -79,7 +79,9 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
     if (!dataTree.current || !selectedCycloneId || !dataTree.current[selectedCycloneId]) return;
 
     const dataProducts = dataTree.current[selectedCycloneId].dataProducts;
+    const selectedDataProductIdsSet = new Set(selectedDataProductIds)
     const metas = Object.keys(dataProducts).map((key) => {
+      if (!selectedDataProductIdsSet.has(key)) return null;
       const dp = dataProducts[key]
       return {
         title: dp.name,
@@ -88,9 +90,10 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
         colorMap: dp.colormap,
         rescale: dp.rescale[0]
       }
-    });
+    }).filter(el => el);
     setCycloneMetas(metas)
-  }, [dataTree, dataTree.current, selectedCycloneId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataTree, dataTree.current, selectedCycloneId, selectedDataProductIds]);
 
   return (
     <Box sx={{ display: 'flex' }}>

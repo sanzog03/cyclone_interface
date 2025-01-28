@@ -306,6 +306,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
           handleSelectedPlumeCard={handleSelectedPlume}
           hoveredPlumeId={hoveredPlumeId}
           setHoveredPlumeId={setHoveredPlumeId}
+          selectedDataProductIds={selectedDataProductIds}
         />
       </div>
       {loadingData && <LoadingSpinner/>}

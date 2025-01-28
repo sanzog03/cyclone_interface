@@ -22,7 +22,7 @@ export function DashboardContainer() {
     // constants
     const DATAPRODUCTS = {
         "IMERG": {
-            id: "gpm-imerg",
+            id: "gpm_imerg",
             name: "IMERG"
         },
         "SPORT": {
