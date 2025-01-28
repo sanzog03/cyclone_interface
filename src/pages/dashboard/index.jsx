@@ -19,6 +19,8 @@ import { DatasetCheckbox } from "../../components/checkbox";
 import { FilterByDate } from '../../components/filter';
 import { Divider, Typography } from "@mui/material";
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import Modal from '@mui/material/Modal';
+import CloseIcon from '@mui/icons-material/Close';
 
 import "./index.css";
 import { MeasurementLayer } from '../../components/measurementLayer';
@@ -35,6 +37,20 @@ const HorizontalLayout = styled.div`
 const scaleUnits = {
   KM: "km",
   MILES: "mi",
+};
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: "90%",
+  height: "90%",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  zIndex: 2001,
 };
 
 const BERYL_START_DATETIME = "2024-06-26";
@@ -54,6 +70,14 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
   const [ colorMap, setColorMap ] = useState("magma");
   const [ selectedProductIdForAnimation, setSelectedProductIdForAnimation ] = useState();
   // end for animation
+
+  // for modal
+
+  const [open, setOpen] = React.useState(true);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  // end for modal
 
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
   const [ selectedRegionId, setSelectedRegionId ] = useState(""); // region_id of the selected region (marker)
@@ -198,6 +222,24 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
   // JSX
   return (
     <Box className="fullSize">
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <div style={{display: "flex", justifyContent: "flex-end"}}>
+            <CloseIcon onClick={handleClose}></CloseIcon>
+          </div>
+          <iframe
+            src="https://deploy-preview-568--visex.netlify.app/stories/cyclones-beryl"
+            width="100%"
+            height="100%"
+            title="Embedded Content"
+          />
+        </Box>
+      </Modal>
       <div id="dashboard-map-container">
         <MainMap>
           <Title>
