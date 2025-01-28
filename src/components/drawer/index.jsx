@@ -76,7 +76,7 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
   };
 
   useEffect(() => {
-    if (!dataTree.current || !selectedCycloneId) return;
+    if (!dataTree.current || !selectedCycloneId || !dataTree.current[selectedCycloneId]) return;
 
     const dataProducts = dataTree.current[selectedCycloneId].dataProducts;
     const metas = Object.keys(dataProducts).map((key) => {
