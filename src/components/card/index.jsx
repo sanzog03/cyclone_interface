@@ -66,7 +66,7 @@ const formatDuration = (duration) => {
     return result;
 }
 
-export function PlumeCard({ id, title, description, VMIN, VMAX, colorMap }) {
+export function PlumeCard({ id, title, description, VMIN, VMAX, colorMap, skipColorBar=false }) {
     return (
         <HighlightableCard
             sx={{ display: 'flex', flex: '0 0 auto', margin: '15px' }}
@@ -79,9 +79,10 @@ export function PlumeCard({ id, title, description, VMIN, VMAX, colorMap }) {
                         value = {description}
                     />
                 </HorizontalLayout>
-                <HorizontalLayout>
+                {(!skipColorBar) &&<HorizontalLayout>
                     <ColorBar VMIN={VMIN} VMAX={VMAX} STEP={(VMAX-VMIN)/5} colorMap={colorMap}/>
                 </HorizontalLayout>
+                }
             </CardContent>
             </Box>
         </HighlightableCard>
