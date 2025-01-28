@@ -37,13 +37,15 @@ const scaleUnits = {
   MILES: "mi",
 };
 
+const BERYL_START_DATETIME = "2024-06-26";
+
 export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, dataProducts, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
   // states for data
   const [ selectedCycloneId, setSelectedCycloneId ] = useState(cyclones[Object.keys(cyclones)[0]].id);
   const [ selectedDataProductIds, setSelectedDataProductIds ] = useState([]);
   const [ selectedDataProductIdsOpacity, setSelectedDataProductIdsOpacity ] = useState({}); // [key: string(dataProductId)]: number
 
-  const [startDate, setStartDate] = useState(moment("2024-06-26").format()); // TODO: get this time based on the selected cyclone.
+  const [startDate, setStartDate] = useState(moment(BERYL_START_DATETIME).format()); // TODO: get this time based on the selected cyclone.
 
   // for animation
   const [ plumesForAnimation, setPlumesForAnimation ] = useState([]); // list of subdaily_plumes used for animation
@@ -94,7 +96,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
     setOpenDrawer(false);
     setZoomLevel(3);
     setZoomLocation([-78.771556, 32.967243]);
-    setStartDate(moment("2018-01-01").format());
+    setStartDate(moment(BERYL_START_DATETIME).format());
   }
 
   // old ones
