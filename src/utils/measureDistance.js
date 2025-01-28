@@ -197,12 +197,15 @@ export function createMeasuringLine(e, measurePoints, mapScaleUnit) {
   const startCoordinates = anchorPoint?.geometry.coordinates;
   const endCoordinates = [e.lngLat.lng, e.lngLat.lat];
   linestring.geometry.coordinates = [startCoordinates, endCoordinates];
-  const turfUnits = mapScaleUnit === "mi" ? "miles" : "kilometers";
+  // const turfUnits = mapScaleUnit === "mi" ? "miles" : "kilometers";
+  const turfUnits = "kilometers";
   const distance = turf?.length(linestring, {
     units: turfUnits,
   });
+  const newUnit = "Nautical Miles"
   const labelUnit = mapScaleUnit === "mi" ? " miles" : " km";
-  const distanceWithUnit = `${distance.toFixed(2)} ${labelUnit}`;
+  // const distanceWithUnit = `${distance.toFixed(2)} ${labelUnit}`;
+  const distanceWithUnit = `${(Number(distance)*0.539).toFixed(2)} ${newUnit}`;
   const line = {
     type: "Feature",
     geometry: {

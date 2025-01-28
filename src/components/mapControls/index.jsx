@@ -79,25 +79,25 @@ export const MapControls = ({
     };
   }, [map, measureMode]);
 
-  useEffect(() => {
-    if (!map) return;
+  // useEffect(() => {
+  //   if (!map) return;
 
-    const changeUnitControl = new ChangeUnitControl(
-      mapScaleUnit,
-      setMapScaleUnit
-    );
+  //   const changeUnitControl = new ChangeUnitControl(
+  //     mapScaleUnit,
+  //     setMapScaleUnit
+  //   );
 
-    const mapboxCustomControlContainer = document.querySelector("#mapbox-custom-controls");
-    const changeUnitControlElem = changeUnitControl.onAdd(map);
-    mapboxCustomControlContainer.append(changeUnitControlElem);
+  //   const mapboxCustomControlContainer = document.querySelector("#mapbox-custom-controls");
+  //   const changeUnitControlElem = changeUnitControl.onAdd(map);
+  //   mapboxCustomControlContainer.append(changeUnitControlElem);
 
-    return () => {
-      // clean ups
-      if (changeUnitControl) {
-        changeUnitControl.onRemove();
-      }
-    };
-  }, [map, mapScaleUnit, measureMode]);
+  //   return () => {
+  //     // clean ups
+  //     if (changeUnitControl) {
+  //       changeUnitControl.onRemove();
+  //     }
+  //   };
+  // }, [map, mapScaleUnit, measureMode]);
 
   useEffect(() => {
     if (!map) return;
