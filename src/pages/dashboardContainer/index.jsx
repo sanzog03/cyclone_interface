@@ -38,8 +38,12 @@ export function DashboardContainer() {
             name: "GOES-16 (2, 8, 13)"
         },
         "MODIS": {
-            id: "modis",
-            name: "MODIS IR/VIRS IR"
+            id: "modis_mosaic",
+            name: "MODIS IR"
+        },
+        "VIIRS": {
+            id: "viirs_mosaic",
+            name: "VIRS IR"
         },
     }
 
@@ -47,10 +51,8 @@ export function DashboardContainer() {
         "BERYL": {
             id: "beryl",
             name: "Beryl (2024)",
-            dataProducts: [DATAPRODUCTS["IMERG"], DATAPRODUCTS["SPORT"], DATAPRODUCTS["CYGNSS"], 
-                DATAPRODUCTS["GOES"],
-                //  DATAPRODUCTS["MODIS"]
-            ]
+            dataProducts: [ DATAPRODUCTS["IMERG"], DATAPRODUCTS["SPORT"], DATAPRODUCTS["CYGNSS"],
+                            DATAPRODUCTS["GOES"], DATAPRODUCTS["MODIS"], DATAPRODUCTS["VIIRS"] ]
         },
         "MILTON": {
             id: "milton",
