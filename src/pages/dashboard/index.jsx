@@ -213,7 +213,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
 
             <HorizontalLayout>
               <Typography>
-                Datasets
+                Data Products
               </Typography>
             </HorizontalLayout>
             <HorizontalLayout>

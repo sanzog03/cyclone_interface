@@ -33,9 +33,17 @@ export function DashboardContainer() {
             id: "cygnss",
             name: "CYGNSS"
         },
-        "GOES": {
-            id: "goes-16-l1b",
-            name: "GOES-16 (2, 8, 13)"
+        "GOESM02": {
+            id: "goes_16_l1b_M02",
+            name: "GOES-16 (2)"
+        },
+        "GOESM08": {
+            id: "goes_16_l1b_M08",
+            name: "GOES-16 (8)"
+        },
+        "GOESM13": {
+            id: "goes_16_l1b_M13",
+            name: "GOES-16 (13)"
         },
         "MODIS": {
             id: "modis_mosaic",
@@ -52,7 +60,8 @@ export function DashboardContainer() {
             id: "beryl",
             name: "Beryl (2024)",
             dataProducts: [ DATAPRODUCTS["IMERG"], DATAPRODUCTS["SPORT"], DATAPRODUCTS["CYGNSS"],
-                            DATAPRODUCTS["GOES"], DATAPRODUCTS["MODIS"], DATAPRODUCTS["VIIRS"] ]
+                            DATAPRODUCTS["GOESM02"], DATAPRODUCTS["GOESM08"], DATAPRODUCTS["GOESM13"],
+                            DATAPRODUCTS["MODIS"], DATAPRODUCTS["VIIRS"] ]
         },
         "MILTON": {
             id: "milton",
@@ -102,15 +111,16 @@ export function DashboardContainer() {
                         // dataProductsFetchPromises[cycloneName+"-"+dataProduct.id] = promise;
                     });
                 }));
-                const data = await Promise.all(dataProductsFetchPromises);
+                const data = await Promise.allSettled(dataProductsFetchPromises);
                 const collectionData = [];
                 const collectionItemData = [];
                 // const data = await Promise.all(Object.entries(dataProductsFetchPromises).map(([key, promise]) => promise.then(value => [key, value])));
                 // const jsonData = Object.fromEntries(data)
                 data.forEach(d => {
-                    if (!d.length) return;
-                    if (d[0].type === "Collection") collectionData.push(d)
-                    else if (d[0].type === "Feature") collectionItemData.push(d)
+                    console.log(d)
+                    if (!d || !d.value || !d.value.length || d.status==="rejected") return;
+                    if (d.value[0].type === "Collection") collectionData.push(d.value)
+                    else if (d.value[0].type === "Feature") collectionItemData.push(d.value)
                 });
                 const cycloneDictionary = dataTransformationCyclone(collectionData, collectionItemData)
                 console.log(cycloneDictionary)
