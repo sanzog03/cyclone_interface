@@ -11,7 +11,7 @@ import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import Tooltip from '@mui/material/Tooltip';
 
-export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelectedDataProductIds, selectedDataProductIdsOpacity, setSelectedDataProductIdsOpacity, handleSelectedDatasetForAnimation, setPlumesForAnimation, setOpenDrawer }) {
+export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelectedDataProductIds, selectedDataProductIdsOpacity, setSelectedDataProductIdsOpacity, handleSelectedDatasetForAnimation, setPlumesForAnimation, setOpenDrawer, selectedProductIdForAnimation, setSelectedProductIdForAnimation }) {
     const [checked, setChecked] = useState([]);
 
     const handleToggle = (value) => {
@@ -34,8 +34,14 @@ export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelec
         } else {
             setOpenDrawer(false);
         }
+        setSelectedProductIdForAnimation();//reset
         setChecked(selectedDataProductIds);
     }, [selectedDataProductIds]);
+
+    useEffect(() => {
+        if (!selectedProductIdForAnimation) return;
+        setChecked([selectedProductIdForAnimation])
+    }, [selectedProductIdForAnimation]);
 
     return (
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>

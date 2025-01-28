@@ -52,6 +52,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
   const [ VMIN, setVMIN] = useState(250);
   const [ VMAX, setVMAX] = useState(300);
   const [ colorMap, setColorMap ] = useState("magma");
+  const [ selectedProductIdForAnimation, setSelectedProductIdForAnimation ] = useState();
   // end for animation
 
   const [ plumes, setPlumes ] = useState([]); // store all available plumes
@@ -88,6 +89,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
     setColorMap(colormap);
     setVMIN(vmin);
     setVMAX(vmax);
+    setSelectedProductIdForAnimation(dataProductId);
     setPlumesForAnimation(stacItemsForAnimation);
   }
 
@@ -95,6 +97,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
     setSelectedDataProductIds([]); // reset the layers selected
     setSelectedDataProductIdsOpacity({}) // reset the layers opacity
     setPlumesForAnimation([]); // reset the animation
+    setSelectedProductIdForAnimation();
     setOpenDrawer(false);
     setZoomLevel(3);
     setZoomLocation([-78.771556, 32.967243]);
@@ -228,6 +231,8 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
                 selectedDataProductIdsOpacity={selectedDataProductIdsOpacity}
                 setSelectedDataProductIdsOpacity={setSelectedDataProductIdsOpacity}
                 handleSelectedDatasetForAnimation={handleSelectedDatasetForAnimation}
+                selectedProductIdForAnimation={selectedProductIdForAnimation}
+                setSelectedProductIdForAnimation={setSelectedProductIdForAnimation}
               ></DatasetCheckbox> }
             </HorizontalLayout>
 
