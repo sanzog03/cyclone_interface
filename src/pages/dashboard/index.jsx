@@ -43,7 +43,7 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
   const [ selectedDataProductIds, setSelectedDataProductIds ] = useState([]);
   const [ selectedDataProductIdsOpacity, setSelectedDataProductIdsOpacity ] = useState({}); // [key: string(dataProductId)]: number
 
-  const [startDate, setStartDate] = useState(moment("2018-01-01").format());
+  const [startDate, setStartDate] = useState(moment("2024-06-26").format()); // TODO: get this time based on the selected cyclone.
 
   // for animation
   const [ plumesForAnimation, setPlumesForAnimation ] = useState([]); // list of subdaily_plumes used for animation
