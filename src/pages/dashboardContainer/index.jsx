@@ -33,6 +33,10 @@ export function DashboardContainer() {
             id: "cygnss",
             name: "CYGNSS"
         },
+        "GOESC13": {
+            id: "goes_16_l1b_C13",
+            name: "GOES-16 (C13)"
+        },
         "GOESM02": {
             id: "goes_16_l1b_M02",
             name: "GOES-16 (2)"
@@ -61,7 +65,7 @@ export function DashboardContainer() {
             name: "Beryl (2024)",
             dataProducts: [ DATAPRODUCTS["IMERG"], DATAPRODUCTS["SPORT"], DATAPRODUCTS["CYGNSS"],
                             DATAPRODUCTS["GOESM02"], DATAPRODUCTS["GOESM08"], DATAPRODUCTS["GOESM13"],
-                            DATAPRODUCTS["MODIS"], DATAPRODUCTS["VIIRS"] ]
+                            DATAPRODUCTS["MODIS"], DATAPRODUCTS["VIIRS"], DATAPRODUCTS["GOESC13"], ]
         },
         "MILTON": {
             id: "milton",
