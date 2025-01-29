@@ -50,7 +50,11 @@ export const createColorbar = (colorbar, VMIN=-92, VMAX=100, STEP=30, colorMap="
 function generateScale(min, max, step) {
     const numbers = [];
     for (let i = min; i <= max; i += step) {
-        numbers.push(Number(i).toFixed(2));
+        if (Number(i)%1 !== 0 ) {
+            numbers.push(Number(i).toFixed(2));
+        } else {
+            numbers.push(i);
+        }
     }
     numbers[numbers.length - 1] += "+";
     return numbers;

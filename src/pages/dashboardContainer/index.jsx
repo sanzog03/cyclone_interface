@@ -125,13 +125,11 @@ export function DashboardContainer() {
                 // const data = await Promise.all(Object.entries(dataProductsFetchPromises).map(([key, promise]) => promise.then(value => [key, value])));
                 // const jsonData = Object.fromEntries(data)
                 data.forEach(d => {
-                    console.log(d)
                     if (!d || !d.value || !d.value.length || d.status==="rejected") return;
                     if (d.value[0].type === "Collection") collectionData.push(d.value)
                     else if (d.value[0].type === "Feature") collectionItemData.push(d.value)
                 });
                 const cycloneDictionary = dataTransformationCyclone(collectionData, collectionItemData)
-                console.log(cycloneDictionary)
                 dataTreeCyclone.current = cycloneDictionary;
                 // remove loading
                 setLoadingData(false);
