@@ -23,39 +23,48 @@ export function DashboardContainer() {
     const DATAPRODUCTS = {
         "IMERG": {
             id: "gpm_imerg",
-            name: "IMERG"
+            name: "IMERG",
+            fullName: "Integrated Multi-satellitE Retrievals for GPM (IMERG)"
         },
         "SPORT": {
             id: "sst",
-            name: "SPoRT SST"
+            name: "SPoRT SST",
+            fullName: "SPoRT Sea Surface Temperature (SST)"
         },
         "CYGNSS": {
             id: "cygnss",
-            name: "CYGNSS"
+            name: "CYGNSS",
+            fullName: "Cyclone Global Navigation Satellite System (CYGNSS)"
         },
         "GOESC13": {
             id: "goes_16_l1b_C13",
-            name: "GOES-16 (C13)"
+            name: "GOES-16 (C13)",
+            fullName: "GOES Subset (Channel 13)"
         },
         "GOESM02": {
             id: "goes_16_l1b_M02",
-            name: "GOES-16 (2)"
+            name: "GOES-16 (2)",
+            fullName: "GOES (Channel 2)"
         },
         "GOESM08": {
             id: "goes_16_l1b_M08",
-            name: "GOES-16 (8)"
+            name: "GOES-16 (8)",
+            fullName: "GOES (Channel 8)"
         },
         "GOESM13": {
             id: "goes_16_l1b_M13",
-            name: "GOES-16 (13)"
+            name: "GOES-16 (13)",
+            fullName: "GOES (Channel 13)"
         },
         "MODIS": {
             id: "modis_mosaic",
-            name: "MODIS IR"
+            name: "MODIS IR",
+            fullName: "MODIS (Band 31)"
         },
         "VIIRS": {
             id: "viirs_mosaic",
-            name: "VIRS IR"
+            name: "VIRS IR",
+            fullName: "VIIRS (Band I5)"
         },
     }
 

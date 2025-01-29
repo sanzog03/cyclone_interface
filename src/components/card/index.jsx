@@ -75,7 +75,7 @@ export function PlumeCard({ id, title, description, VMIN, VMAX, colorMap, skipCo
             <CardContent sx={{ flex: '1 0 auto' }}>
                 <HorizontalLayout>
                     <CaptionValue
-                        caption = {String(title).toUpperCase()}
+                        caption = {String(title)}
                         value = {description}
                     />
                 </HorizontalLayout>

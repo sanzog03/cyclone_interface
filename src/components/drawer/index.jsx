@@ -60,7 +60,7 @@ const HorizontalLayout = styled.div`
     margin-bottom: 5px;
 `;
 
-export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId, selectedCycloneId, dataTree, selectedDataProductIds}) {
+export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId, selectedCycloneId, dataTree, selectedDataProductIds, dataProductsTemp}) {
   const [ selectedPlumeMetas, setSelectedPlumeMetas ] = useState([]);
   const [ location, setLocation ] = useState("Cyclone Observations");
   const [ numberOfPlumes, setNumberOfPlumes ] = useState(0);
@@ -83,8 +83,15 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
     const metas = Object.keys(dataProducts).map((key) => {
       if (!selectedDataProductIdsSet.has(key)) return null;
       const dp = dataProducts[key]
+
+      const mapRev = {}; // todo: handle this in data transformation, i.e. putting fullName to dataTree
+      Object.keys(dataProductsTemp).map(key => {
+        mapRev[`${dataProductsTemp[key].id}`]= dataProductsTemp[key]
+      })
+
       return {
-        title: dp.name,
+        // title: dp.name,
+        title: mapRev[dp.name].fullName, // todo: handle this in data transformation, i.e. putting fullName to dataTree
         description: dp.description,
         id: dp.id,
         colorMap: dp.colormap,
