@@ -36,34 +36,29 @@ export function DashboardContainer() {
             name: "CYGNSS",
             fullName: "Cyclone Global Navigation Satellite System (CYGNSS)"
         },
-        "GOESC13": {
-            id: "goes_16_l1b_C13",
-            name: "GOES-16 (C13)",
-            fullName: "GOES Subset (Channel 13)"
-        },
         "GOESM02": {
-            id: "goes_16_l1b_M02",
-            name: "GOES-16 (2)",
+            id: "goes_radF_l1b_C02",
+            name: "GOES (Channel 2)",
             fullName: "GOES (Channel 2)"
         },
         "GOESM08": {
-            id: "goes_16_l1b_M08",
-            name: "GOES-16 (8)",
+            id: "goes_radF_l1b_C08",
+            name: "GOES (Channel 8)",
             fullName: "GOES (Channel 8)"
         },
         "GOESM13": {
-            id: "goes_16_l1b_M13",
-            name: "GOES-16 (13)",
+            id: "goes_radF_l1b_C13",
+            name: "GOES (Channel 13)",
             fullName: "GOES (Channel 13)"
         },
         "MODIS": {
             id: "modis_mosaic",
-            name: "MODIS IR",
+            name: "MODIS (Band 31)",
             fullName: "MODIS (Band 31)"
         },
         "VIIRS": {
             id: "viirs_mosaic",
-            name: "VIRS IR",
+            name: "VIIRS (Band I5)",
             fullName: "VIIRS (Band I5)"
         },
     }
@@ -74,7 +69,7 @@ export function DashboardContainer() {
             name: "Beryl (2024)",
             dataProducts: [ DATAPRODUCTS["IMERG"], DATAPRODUCTS["SPORT"], DATAPRODUCTS["CYGNSS"],
                             DATAPRODUCTS["GOESM02"], DATAPRODUCTS["GOESM08"], DATAPRODUCTS["GOESM13"],
-                            DATAPRODUCTS["MODIS"], DATAPRODUCTS["VIIRS"], DATAPRODUCTS["GOESC13"], ]
+                            DATAPRODUCTS["MODIS"], DATAPRODUCTS["VIIRS"], ]
         },
         "MILTON": {
             id: "milton",
