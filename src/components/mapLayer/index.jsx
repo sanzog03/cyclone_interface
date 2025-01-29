@@ -18,7 +18,7 @@ export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plu
         addSourceLayerToMap(map, feature, rasterSourceId, rasterLayerId, VMIN, VMAX, colormap);
         map.setPaintProperty(rasterLayerId, "raster-opacity", opacity);
 
-        addSourcePolygonToMap(map, feature, polygonSourceId, polygonLayerId);
+        // addSourcePolygonToMap(map, feature, polygonSourceId, polygonLayerId);
 
         const onClickHandler = (e) => {
             // handleLayerClick(plumeId);
