@@ -5,6 +5,7 @@ const COLOR_MAP = {
     turbo: d3.interpolateTurbo, //sst
     bupu_r: (t) => d3.interpolateBuPu(t), //viirs,modis
     viridis: d3.interpolateViridis, //cygnss
+    greys: d3.interpolateGreys,
     greys_r: (t) => d3.interpolateGreys(1-t), //goes02 (reversed)
     cubehelix: d3.interpolateCubehelixDefault, //goes13
     magma: d3.interpolateMagma,
