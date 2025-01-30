@@ -88,9 +88,11 @@ export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, 
             // const plumeId = dataProductId
             const rasterLayerId = getLayerId("raster"+dataProductId);
             try {
-                map.setPaintProperty(rasterLayerId, "raster-opacity", selectedDataProductIdsOpacity[dataProduct]);
+                if (layerExists(map, rasterLayerId)) {
+                    map.setPaintProperty(rasterLayerId, "raster-opacity", selectedDataProductIdsOpacity[dataProduct]);
+                }
             } catch (err) {
-                return;
+                console.error(err);
             }
         });
     }, [map, selectedCycloneId, selectedDataProductIdsOpacity]);
@@ -104,7 +106,6 @@ export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, 
                 return temp;
             } catch (err) {
                 console.error(err);
-                return null;
             }
         }).filter(elem => elem);
 
