@@ -3,11 +3,11 @@ import * as d3 from "d3";
 const COLOR_MAP = {
     rdylgn: d3.interpolateRdYlGn, //imerg
     turbo: d3.interpolateTurbo, //sst
-    bupu_r: (t) => d3.interpolateBuPu(t), //viirs,modis
-    viridis: d3.interpolateViridis, //cygnss
-    greys: d3.interpolateGreys,
+    bupu_r: (t) => d3.interpolateBuPu(1-t), //viirs,modis // todo: review
+    viridis: d3.interpolateViridis, //cygnss // todo: review
+    greys: d3.interpolateGreys, // goes 8
     greys_r: (t) => d3.interpolateGreys(1-t), //goes02 (reversed)
-    cubehelix: d3.interpolateCubehelixDefault, //goes13
+    cubehelix: (t) => d3.interpolateCubehelixDefault(1-t), //goes13 // todo: review
     magma: d3.interpolateMagma,
     reds: d3.interpolateReds,
     gist_earth: (t) => d3.interpolateGreys(1-t), // (reversed)
