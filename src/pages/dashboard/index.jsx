@@ -50,7 +50,7 @@ const modalStyle = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  zIndex: 2001,
+  zIndex: 2000,
 };
 
 const BERYL_START_DATETIME = "2024-06-26";
