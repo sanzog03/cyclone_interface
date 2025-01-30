@@ -10,15 +10,19 @@
     top: 5px;
     left: 5px;
     width: 27rem;
+    max-width: 27rem;
     background-color: white;
     color: black;
     z-index: 999;
+    overflow: scroll;
 }
 
 .title-content {
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-height: calc(100vh - 250px);  /* Adjust this value based on your needs */
+    overflow-y: 'scroll';
 }
 
 .title-note {
