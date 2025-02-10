@@ -60,20 +60,8 @@ const HorizontalLayout = styled.div`
     margin-bottom: 5px;
 `;
 
-export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId, selectedCycloneId, dataTree, selectedDataProductIds, dataProductsTemp}) {
-  const [ selectedPlumeMetas, setSelectedPlumeMetas ] = useState([]);
-  const [ location, setLocation ] = useState("Cyclone Observations");
-  const [ numberOfPlumes, setNumberOfPlumes ] = useState(0);
-
+export function PersistentDrawerRight({open, selectedCycloneId, dataTree, selectedDataProductIds, dataProductsTemp}) {
   const [ cycloneMetas, setCycloneMetas] = useState([]);
-
-  let VMIN = 0;
-  let VMAX = 0.4;
-  let colorMap = "plasma";
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
 
   useEffect(() => {
     if (!dataTree.current || !selectedCycloneId || !dataTree.current[selectedCycloneId]) return;
@@ -135,7 +123,7 @@ export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaD
                   fontWeight="bold"
                   className='drawer-head-content'
             >
-              { location }
+              Cyclone Observations
             </Typography>
           </HorizontalLayout>
         </DrawerHeader>

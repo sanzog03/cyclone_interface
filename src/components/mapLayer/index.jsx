@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMapbox } from "../../context/mapContext";
-import { addSourceLayerToMap, addSourcePolygonToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
+import { addSourceLayerToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
 
 export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId, startDate, opacity }) => {
     const { map } = useMapbox();
@@ -17,8 +17,6 @@ export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plu
 
         addSourceLayerToMap(map, feature, rasterSourceId, rasterLayerId, VMIN, VMAX, colormap);
         map.setPaintProperty(rasterLayerId, "raster-opacity", opacity);
-
-        // addSourcePolygonToMap(map, feature, polygonSourceId, polygonLayerId);
 
         const onClickHandler = (e) => {
             // handleLayerClick(plumeId);
@@ -76,7 +74,7 @@ export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plu
 }
 
 
-export const MapLayers = ({ dataTreeCyclone, plumes, startDate, hoveredPlumeId, showPlumeLayers, handleLayerClick, setHoveredPlumeId, selectedCycloneId, selectedDataProductIds, selectedDataProductIdsOpacity }) => {
+export const MapLayers = ({ dataTreeCyclone, startDate, hoveredPlumeId, handleLayerClick, setHoveredPlumeId, selectedCycloneId, selectedDataProductIds, selectedDataProductIdsOpacity }) => {
     const { map } = useMapbox();
     const [ dataProducts, setDataProducts ] = useState();
 

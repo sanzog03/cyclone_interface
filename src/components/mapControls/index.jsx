@@ -3,11 +3,9 @@ import mapboxgl from "mapbox-gl";
 import { useMapbox } from "../../context/mapContext";
 import { HamburgerControl } from "./hamburger";
 import { MeasureDistanceControl } from "./measureDistance";
-import { ChangeUnitControl } from "./changeUnit";
 import { ClearMeasurementControl } from "./clearMeasurement";
 import { LayerVisibilityControl } from "./layerVisibility";
 import { HomeControl } from "./home";
-import { RestoreControl } from "./restore";
 
 import "./index.css";
 
@@ -18,9 +16,7 @@ export const MapControls = ({
   onClickClearIcon,
   clearMeasurementIcon,
   mapScaleUnit,
-  setMapScaleUnit,
   handleResetHome,
-  handleResetToSelectedRegion,
   openDrawer
 }) => {
   const { map } = useMapbox();
@@ -33,7 +29,6 @@ export const MapControls = ({
     const mapboxNavigation = new mapboxgl.NavigationControl({showCompass: false});
     const layerVisibilityControl = new LayerVisibilityControl();
     const homeControl = new HomeControl(handleResetHome);
-    const restoreControl = new RestoreControl(handleResetToSelectedRegion);
 
     const hamburgerControlElem = hamburgerControl.onAdd(map);
     const homeControlElem = homeControl.onAdd(map);
@@ -78,26 +73,6 @@ export const MapControls = ({
       }
     };
   }, [map, measureMode]);
-
-  // useEffect(() => {
-  //   if (!map) return;
-
-  //   const changeUnitControl = new ChangeUnitControl(
-  //     mapScaleUnit,
-  //     setMapScaleUnit
-  //   );
-
-  //   const mapboxCustomControlContainer = document.querySelector("#mapbox-custom-controls");
-  //   const changeUnitControlElem = changeUnitControl.onAdd(map);
-  //   mapboxCustomControlContainer.append(changeUnitControlElem);
-
-  //   return () => {
-  //     // clean ups
-  //     if (changeUnitControl) {
-  //       changeUnitControl.onRemove();
-  //     }
-  //   };
-  // }, [map, mapScaleUnit, measureMode]);
 
   useEffect(() => {
     if (!map) return;
