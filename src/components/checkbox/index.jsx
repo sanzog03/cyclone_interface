@@ -1,18 +1,17 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import CommentIcon from '@mui/icons-material/Comment';
 import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import Tooltip from '@mui/material/Tooltip';
 
-export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelectedDataProductIds, selectedDataProductIdsOpacity, setSelectedDataProductIdsOpacity, handleSelectedDatasetForAnimation, setPlumesForAnimation, setOpenDrawer, selectedProductIdForAnimation, setSelectedProductIdForAnimation }) {
+export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCycloneId, selectedDataProductIds, setSelectedDataProductIds, selectedDataProductIdsOpacity, setSelectedDataProductIdsOpacity, handleSelectedDatasetForAnimation, setPlumesForAnimation, setOpenDrawer, selectedProductIdForAnimation, setSelectedProductIdForAnimation }) {
     const [checked, setChecked] = useState([]);
+    const [ dataProductCorrectedMapping, setDataProductCorrectedMapping ] = useState({});
 
     const handleToggle = (value) => {
       const currentIndex = checked.indexOf(value);
@@ -43,11 +42,21 @@ export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelec
         setChecked([selectedProductIdForAnimation])
     }, [selectedProductIdForAnimation]);
 
+    useEffect(() => {
+        // TODO: think of removing this process all together
+        const temp = {};
+        Object.keys(dataProducts).forEach(dataProduct => {
+            temp[`${dataProducts[dataProduct].id}`] = dataProducts[dataProduct];
+        });
+        setDataProductCorrectedMapping(temp);
+    }, [dataProducts]);
+
     return (
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-        {Object.keys(dataProducts).map((dataProduct) => {
-            const name = dataProducts[dataProduct].name;
-            const id = dataProducts[dataProduct].id;
+        { dataTreeCyclone.current && selectedCycloneId && dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts && Object.keys(dataProductCorrectedMapping).length ?
+          Object.keys(dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts).map((dataProduct) => {
+            const name = dataProductCorrectedMapping[dataProduct].name;
+            const id = dataProduct;
             const labelId = `checkbox-list-label-${id}`;
 
             return (
@@ -71,35 +80,35 @@ export function DatasetCheckbox({ dataProducts, selectedDataProductIds, setSelec
                         />
                     </ListItemIcon>
                     <ListItemText sx={{width: "50%"}} id={labelId} primary={name} />
-                        <Tooltip title="Play Animation">
-                            <PlayArrowIcon
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleSelectedDatasetForAnimation(id);
-                                }}
-                                sx={{width: "20%"}}
-                            />
-                        </Tooltip>
-                        <Tooltip title="Change layer opacity">
-                            <Slider
-                                onChange={(event, newValue) => {
-                                    event.stopPropagation();
-                                    const va = {...selectedDataProductIdsOpacity};
-                                    va[id] = newValue
-                                    setSelectedDataProductIdsOpacity(va)
-                                }}
-                                min={0}
-                                max={1}
-                                step={0.1}
-                                sx={{width: "30%"}}
-                                value={selectedDataProductIdsOpacity[id] || 1}
-                                aria-label="Disabled slider"
-                            />
-                        </Tooltip>
+                    <Tooltip title="Play Animation">
+                        <PlayArrowIcon
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleSelectedDatasetForAnimation(id);
+                            }}
+                            sx={{width: "20%"}}
+                        />
+                    </Tooltip>
+                    <Tooltip title="Change layer opacity">
+                        <Slider
+                            onChange={(event, newValue) => {
+                                event.stopPropagation();
+                                const va = {...selectedDataProductIdsOpacity};
+                                va[id] = newValue
+                                setSelectedDataProductIdsOpacity(va)
+                            }}
+                            min={0}
+                            max={1}
+                            step={0.1}
+                            sx={{width: "30%"}}
+                            value={selectedDataProductIdsOpacity[id] || 1}
+                            aria-label="Disabled slider"
+                        />
+                    </Tooltip>
                 </ListItemButton>
             </ListItem>
             );
-        })}
+        }): "Loading..."}
     </List>
     );
 }

@@ -157,7 +157,9 @@ export function Dashboard({ dataTreeCyclone, cyclones, dataProducts, zoomLocatio
               {<DatasetCheckbox
                 setOpenDrawer={setOpenDrawer}
                 setPlumesForAnimation={setPlumesForAnimation}
+                dataTreeCyclone={dataTreeCyclone}
                 dataProducts={dataProducts}
+                selectedCycloneId={selectedCycloneId}
                 selectedDataProductIds={selectedDataProductIds}
                 setSelectedDataProductIds={setSelectedDataProductIds}
                 selectedDataProductIdsOpacity={selectedDataProductIdsOpacity}
