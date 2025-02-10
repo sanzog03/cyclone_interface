@@ -69,7 +69,6 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
 
   // for modal
   const [open, setOpen] = useState(true);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   // end for modal
 
@@ -230,7 +229,6 @@ export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, 
         </MainMap>
         <PersistentDrawerRight
           open={openDrawer}
-          setOpen={setOpenDrawer}
           dataTree={dataTreeCyclone}
           selectedCycloneId={selectedCycloneId}
           selectedDataProductIds={selectedDataProductIds}

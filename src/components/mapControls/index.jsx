@@ -3,11 +3,9 @@ import mapboxgl from "mapbox-gl";
 import { useMapbox } from "../../context/mapContext";
 import { HamburgerControl } from "./hamburger";
 import { MeasureDistanceControl } from "./measureDistance";
-import { ChangeUnitControl } from "./changeUnit";
 import { ClearMeasurementControl } from "./clearMeasurement";
 import { LayerVisibilityControl } from "./layerVisibility";
 import { HomeControl } from "./home";
-import { RestoreControl } from "./restore";
 
 import "./index.css";
 
@@ -75,26 +73,6 @@ export const MapControls = ({
       }
     };
   }, [map, measureMode]);
-
-  // useEffect(() => {
-  //   if (!map) return;
-
-  //   const changeUnitControl = new ChangeUnitControl(
-  //     mapScaleUnit,
-  //     setMapScaleUnit
-  //   );
-
-  //   const mapboxCustomControlContainer = document.querySelector("#mapbox-custom-controls");
-  //   const changeUnitControlElem = changeUnitControl.onAdd(map);
-  //   mapboxCustomControlContainer.append(changeUnitControlElem);
-
-  //   return () => {
-  //     // clean ups
-  //     if (changeUnitControl) {
-  //       changeUnitControl.onRemove();
-  //     }
-  //   };
-  // }, [map, mapScaleUnit, measureMode]);
 
   useEffect(() => {
     if (!map) return;
