@@ -1,5 +1,10 @@
 import { useState } from 'react';
 import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import CloseIcon from '@mui/icons-material/Close';
+import { Typography } from '@mui/material';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+
 import styled from "styled-components";
 import moment from "moment";
 
@@ -13,14 +18,9 @@ import { PersistentDrawerRight } from "../../components/drawer";
 import { Title } from "../../components/title";
 import { SelectCyclone } from '../../components/select';
 import { DatasetCheckbox } from "../../components/checkbox";
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import Modal from '@mui/material/Modal';
-import CloseIcon from '@mui/icons-material/Close';
-import { Typography } from '@mui/material';
-
-import "./index.css";
 import { MeasurementLayer } from '../../components/measurementLayer';
 
+import "./index.css";
 
 const HorizontalLayout = styled.div`
     width: 90%;
@@ -51,7 +51,7 @@ const modalStyle = {
 
 const BERYL_START_DATETIME = "2024-06-26";
 
-export function Dashboard({ dataTree, dataTreeCyclone, plumeMetaData, cyclones, dataProducts, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
+export function Dashboard({ dataTreeCyclone, cyclones, dataProducts, zoomLocation, setZoomLocation, zoomLevel, setZoomLevel, loadingData }) {
   // states for data
   const [ selectedCycloneId, setSelectedCycloneId ] = useState(cyclones[Object.keys(cyclones)[0]].id);
   const [ selectedDataProductIds, setSelectedDataProductIds ] = useState([]);
