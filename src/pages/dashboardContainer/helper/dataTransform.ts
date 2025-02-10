@@ -58,6 +58,17 @@ export function dataTransformationCyclone(collections: STACCollection[][], items
                 const nearestAsset: STACItem = cycloneDataset.subDailyAssets[index];
                 return nearestAsset;
             },
+            getNearestDateTime: (dateTime: string) => {
+                if (!dateTime) return dateTime;
+                const dateTimeNoTimezone = moment(dateTime).format('YYYY-MM-DD HH:mm:ss'); // remove the timezone information that might
+                // be attached with the target datetime
+                const index = findNearestDatetimeIndex(cycloneDataset.subDailyAssets, dateTimeNoTimezone)
+                const nearestAsset: STACItem = cycloneDataset.subDailyAssets[index];
+                if (nearestAsset && nearestAsset.properties && nearestAsset.properties.datetime) {
+                    return nearestAsset.properties.datetime;
+                }
+                return dateTime;
+            }
         };
         
         // create DataProduct
