@@ -60,7 +60,7 @@ const HorizontalLayout = styled.div`
     margin-bottom: 5px;
 `;
 
-export function PersistentDrawerRight({open, setOpen, selectedPlumes, plumeMetaData, plumesMap, handleSelectedPlumeCard, setHoveredPlumeId, hoveredPlumeId, selectedCycloneId, dataTree, selectedDataProductIds, dataProductsTemp}) {
+export function PersistentDrawerRight({open, setOpen, selectedCycloneId, dataTree, selectedDataProductIds, dataProductsTemp}) {
   const [ selectedPlumeMetas, setSelectedPlumeMetas ] = useState([]);
   const [ location, setLocation ] = useState("Cyclone Observations");
   const [ numberOfPlumes, setNumberOfPlumes ] = useState(0);

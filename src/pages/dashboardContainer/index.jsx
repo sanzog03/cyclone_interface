@@ -3,8 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { Dashboard } from '../dashboard/index.jsx';
 import { fetchAllFromSTACAPI } from "../../services/api";
-import { dataTransformationPlume, dataTransformationPlumeRegion, dataTransformationCyclone, dataTransformationPlumeMeta, dataTransformationPlumeRegionMeta, metaDatetimeFix } from './helper/dataTransform';
-import { PlumeMetas } from '../../assets/dataset/metadata.ts';
+import { dataTransformationCyclone } from './helper/dataTransform';
 
 export function DashboardContainer() {
     // get the query params

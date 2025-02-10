@@ -18,9 +18,7 @@ export const MapControls = ({
   onClickClearIcon,
   clearMeasurementIcon,
   mapScaleUnit,
-  setMapScaleUnit,
   handleResetHome,
-  handleResetToSelectedRegion,
   openDrawer
 }) => {
   const { map } = useMapbox();
@@ -33,7 +31,6 @@ export const MapControls = ({
     const mapboxNavigation = new mapboxgl.NavigationControl({showCompass: false});
     const layerVisibilityControl = new LayerVisibilityControl();
     const homeControl = new HomeControl(handleResetHome);
-    const restoreControl = new RestoreControl(handleResetToSelectedRegion);
 
     const hamburgerControlElem = hamburgerControl.onAdd(map);
     const homeControlElem = homeControl.onAdd(map);
