@@ -167,6 +167,7 @@ export function Dashboard({ dataTreeCyclone, cyclones, dataProducts, zoomLocatio
                 handleSelectedDatasetForAnimation={handleSelectedDatasetForAnimation}
                 selectedProductIdForAnimation={selectedProductIdForAnimation}
                 setSelectedProductIdForAnimation={setSelectedProductIdForAnimation}
+                selectedStartDate={startDate}
               ></DatasetCheckbox> }
             </HorizontalLayout>
 
