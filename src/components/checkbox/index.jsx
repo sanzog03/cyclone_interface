@@ -8,6 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Slider from '@mui/material/Slider';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
 export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCycloneId, selectedDataProductIds, setSelectedDataProductIds, selectedDataProductIdsOpacity, setSelectedDataProductIdsOpacity, handleSelectedDatasetForAnimation, setPlumesForAnimation, setOpenDrawer, selectedProductIdForAnimation, setSelectedProductIdForAnimation, selectedStartDate }) {
     const [checked, setChecked] = useState([]);
@@ -109,11 +110,13 @@ export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCyclone
                                 />
                             </Tooltip>
                         </div>
-                        <div style={{ width: "100%" }}>
-                            {
-                                nearesetDateTime && `Selected Datetime: ${nearesetDateTime}`
-                            }
-                        </div>
+                        { nearesetDateTime &&
+                            <div style={{ width: "100%", display: "flex", flexDirection: "row" }}>
+                                <Typography variant="caption">
+                                    {`Datetime (UTC): ${nearesetDateTime}`}
+                                </Typography>
+                            </div>
+                        }
                     </div>
                 </ListItemButton>
                 {/* </div> */}
