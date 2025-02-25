@@ -12,7 +12,6 @@ import Typography from '@mui/material/Typography';
 
 export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCycloneId, selectedDataProductIds, setSelectedDataProductIds, selectedDataProductIdsOpacity, setSelectedDataProductIdsOpacity, handleSelectedDatasetForAnimation, setPlumesForAnimation, setOpenDrawer, selectedProductIdForAnimation, setSelectedProductIdForAnimation, selectedStartDate }) {
     const [checked, setChecked] = useState([]);
-    const [ dataProductCorrectedMapping, setDataProductCorrectedMapping ] = useState({});
 
     const handleToggle = (value) => {
       const currentIndex = checked.indexOf(value);
@@ -24,6 +23,7 @@ export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCyclone
         newChecked.splice(currentIndex, 1);
       }
   
+      console.log(">>>>>>>", newChecked)
       setChecked(newChecked);
       setSelectedDataProductIds(newChecked);
     };
@@ -43,23 +43,15 @@ export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCyclone
         setChecked([selectedProductIdForAnimation])
     }, [selectedProductIdForAnimation]);
 
-    useEffect(() => {
-        // TODO: think of removing this process all together
-        const temp = {};
-        Object.keys(dataProducts).forEach(dataProduct => {
-            temp[`${dataProducts[dataProduct].id}`] = dataProducts[dataProduct];
-        });
-        setDataProductCorrectedMapping(temp);
-    }, [dataProducts, selectedStartDate]);
-
     return (
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-        { dataTreeCyclone.current && selectedCycloneId && dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts && Object.keys(dataProductCorrectedMapping).length && selectedStartDate ?
+        { dataTreeCyclone.current && selectedCycloneId && dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts && Object.keys(dataProducts).length && selectedStartDate ?
           Object.keys(dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts).map((dataProduct) => {
-            const name = dataProductCorrectedMapping[dataProduct].name;
+            const name = dataProducts[dataProduct].name;
             const id = dataProduct;
             const labelId = `checkbox-list-label-${id}`;
-            const nearesetDateTime = dataTreeCyclone.current[selectedCycloneId].dataProducts[dataProduct].dataset.getNearestDateTime(selectedStartDate);
+            const nearesetDateTime = selectedStartDate && dataTreeCyclone.current[selectedCycloneId].dataProducts[dataProduct].dataset.getNearestDateTime(selectedStartDate);
+            const isPath = dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts[dataProduct].dataset.isPath;
             return (
             <ListItem
                 key={labelId}
@@ -82,35 +74,39 @@ export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCyclone
                         />
                     </ListItemIcon>
                     <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-                        <div style={{ display:"flex", width: "100%" }}>
-                            <ListItemText sx={{width: "50%"}} id={labelId} primary={name} />
-                            <Tooltip title="Play Animation">
-                                <PlayArrowIcon
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleSelectedDatasetForAnimation(id);
-                                    }}
-                                    sx={{width: "20%"}}
-                                />
-                            </Tooltip>
-                            <Tooltip title="Change layer opacity">
-                                <Slider
-                                    onChange={(event, newValue) => {
-                                        event.stopPropagation();
-                                        const va = {...selectedDataProductIdsOpacity};
-                                        va[id] = newValue
-                                        setSelectedDataProductIdsOpacity(va)
-                                    }}
-                                    min={0}
-                                    max={1}
-                                    step={0.1}
-                                    sx={{width: "30%"}}
-                                    value={selectedDataProductIdsOpacity[id] || 1}
-                                    aria-label="Disabled slider"
-                                />
-                            </Tooltip>
-                        </div>
-                        { nearesetDateTime &&
+                            <div style={{ display:"flex", width: "100%" }}>
+                                <ListItemText sx={{width: "50%"}} id={labelId} primary={name} />
+                                { !isPath && 
+                                    <>
+                                    <Tooltip title="Play Animation">
+                                        <PlayArrowIcon
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleSelectedDatasetForAnimation(id);
+                                            }}
+                                            sx={{width: "20%"}}
+                                        />
+                                    </Tooltip>
+                                    <Tooltip title="Change layer opacity">
+                                        <Slider
+                                            onChange={(event, newValue) => {
+                                                event.stopPropagation();
+                                                const va = {...selectedDataProductIdsOpacity};
+                                                va[id] = newValue
+                                                setSelectedDataProductIdsOpacity(va)
+                                            }}
+                                            min={0}
+                                            max={1}
+                                            step={0.1}
+                                            sx={{width: "30%"}}
+                                            value={selectedDataProductIdsOpacity[id] || 1}
+                                            aria-label="Disabled slider"
+                                        />
+                                    </Tooltip>
+                                    </>
+                                }
+                            </div>
+                        { nearesetDateTime && !isPath &&
                             <div style={{ width: "100%", display: "flex", flexDirection: "row" }}>
                                 <Typography variant="caption">
                                     {`Datetime (UTC): ${nearesetDateTime}`}

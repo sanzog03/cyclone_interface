@@ -3,5 +3,5 @@ import { CycloneMeta } from "./cycloneMeta";
 
 export type {  CycloneMap, Cyclone, SubDailyAsset, CycloneDataset,
                SatelliteSystem, DataProduct, CycloneMeta,
-               DateTime, Lon, Lat, STACItem, STACCollection,
+               DateTime, Lon, Lat, STACItem, STACCollection
           };

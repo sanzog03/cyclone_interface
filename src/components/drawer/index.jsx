@@ -69,7 +69,7 @@ export function PersistentDrawerRight({open, selectedCycloneId, dataTree, select
     const dataProducts = dataTree.current[selectedCycloneId].dataProducts;
     const selectedDataProductIdsSet = new Set(selectedDataProductIds)
     const metas = Object.keys(dataProducts).map((key) => {
-      if (!selectedDataProductIdsSet.has(key)) return null;
+      if (!selectedDataProductIdsSet.has(key) || dataProducts[key].dataset.isPath) return null;
       const dp = dataProducts[key]
 
       const mapRev = {}; // todo: handle this in data transformation, i.e. putting fullName to dataTree

@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { Dashboard } from '../dashboard/index.jsx';
 import { fetchAllFromSTACAPI } from "../../services/api";
+import { fetchAllFromFeaturesAPI } from "../../services/apiFeatures";
 import { dataTransformationCyclone } from './helper/dataTransform';
 
 export function DashboardContainer() {
@@ -17,45 +18,63 @@ export function DashboardContainer() {
 
     // constants
     const DATAPRODUCTS = {
-        "IMERG": {
+        "gpm_imerg": {
             id: "gpm_imerg",
             name: "IMERG",
             fullName: "Integrated Multi-satellitE Retrievals for GPM (IMERG)"
         },
-        "SPORT": {
+        "sst": {
             id: "sst",
             name: "SPoRT SST",
             fullName: "SPoRT Sea Surface Temperature (SST)"
         },
-        "CYGNSS": {
+        "cygnss": {
             id: "cygnss",
             name: "CYGNSS",
             fullName: "Cyclone Global Navigation Satellite System (CYGNSS)"
         },
-        "GOESM02": {
+        "goes_radF_l1b_C02": {
             id: "goes_radF_l1b_C02",
             name: "GOES (Channel 2)",
             fullName: "GOES (Channel 2)"
         },
-        "GOESM08": {
+        "goes_radF_l1b_C08": {
             id: "goes_radF_l1b_C08",
             name: "GOES (Channel 8)",
             fullName: "GOES (Channel 8)"
         },
-        "GOESM13": {
+        "goes_radF_l1b_C13": {
             id: "goes_radF_l1b_C13",
             name: "GOES (Channel 13)",
             fullName: "GOES (Channel 13)"
         },
-        "MODIS": {
+        "modis_mosaic": {
             id: "modis_mosaic",
             name: "MODIS (Band 31)",
             fullName: "MODIS (Band 31)"
         },
-        "VIIRS": {
+        "viirs_mosaic": {
             id: "viirs_mosaic",
             name: "VIIRS (Band I5)",
             fullName: "VIIRS (Band I5)"
+        },
+        "public.path_point": {
+            id: "public.path_point",
+            name: "Cyclone Point Path",
+            fullName: "Cyclone Point Path",
+            type: "FEATURES"
+        },
+        "public.path_line": {
+            id: "public.path_line",
+            name: "Cyclone Line Path",
+            fullName: "Cyclone Line Path",
+            type: "FEATURES"
+        },
+        "public.wind_polygon": {
+            id: "public.wind_polygon",
+            name: "Cyclone Wind Polygon",
+            fullName: "Cyclone Wind Polygon",
+            type: "FEATURES"
         },
     }
 
@@ -63,9 +82,15 @@ export function DashboardContainer() {
         "BERYL": {
             id: "beryl",
             name: "Beryl (2024)",
-            dataProducts: [ DATAPRODUCTS["IMERG"], DATAPRODUCTS["SPORT"], DATAPRODUCTS["CYGNSS"],
-                            DATAPRODUCTS["GOESM02"], DATAPRODUCTS["GOESM08"], DATAPRODUCTS["GOESM13"],
-                            DATAPRODUCTS["MODIS"], DATAPRODUCTS["VIIRS"], ]
+            dataProducts: [ 
+                            // DATAPRODUCTS["IMERG"], DATAPRODUCTS["SPORT"], DATAPRODUCTS["CYGNSS"],
+                            // DATAPRODUCTS["GOESM02"], DATAPRODUCTS["GOESM08"], DATAPRODUCTS["GOESM13"],
+                            DATAPRODUCTS["modis_mosaic"], 
+                            // DATAPRODUCTS["VIIRS"], 
+                            // DATAPRODUCTS["PATHPOINT"],
+                            // DATAPRODUCTS["PATHLINE"],
+                            DATAPRODUCTS["public.wind_polygon"]
+                        ]
         },
         "MILTON": {
             id: "milton",
@@ -100,19 +125,34 @@ export function DashboardContainer() {
                 Object.keys(CYCLONES).forEach((cyclone => {
                     const { dataProducts, id: cycloneId } = CYCLONES[cyclone];
                     dataProducts.forEach(dataProduct => {
-                        const collectionId = dataProduct.id + "-cyclone-" + cycloneId;
-                        const collectionUrl = `${process.env.REACT_APP_STAC_API_URL}/collections/${collectionId}`;
-                        const collectionItemUrl = `${collectionUrl}/items`;
+                        if (dataProduct.type === "FEATURES") {
+                            const collectionId = dataProduct.id + "_cyclone_" + cycloneId;
+                            const collectionUrl = `${process.env.REACT_APP_FEATURES_API_URL}/collections/${collectionId}`;
+                            const collectionItemUrl = `${collectionUrl}/items`;
 
-                        // get the collection details
-                        const collectionPromise = fetch(collectionUrl).then(async metaData => metaData.json()).then(result => [result])
-                                                    .catch(err => console.error("Error fetching data: ", err));
-                        dataProductsFetchPromises.push(collectionPromise);
-                        
-                        // get all the collection items
-                        const itemPromise = fetchAllFromSTACAPI(collectionItemUrl);
-                        dataProductsFetchPromises.push(itemPromise);
-                        // dataProductsFetchPromises[cycloneName+"-"+dataProduct.id] = promise;
+                            // get the collection details
+                            const collectionPromise = fetch(collectionUrl).then(async metaData => metaData.json()).then(result => [result])
+                                                        .catch(err => console.error("Error fetching data: ", err));
+                            dataProductsFetchPromises.push(collectionPromise);
+
+                            // get all the collection items
+                            const itemPromise = fetchAllFromFeaturesAPI(collectionItemUrl);
+                            dataProductsFetchPromises.push(itemPromise);
+                        } else { // STAC by default
+                            const collectionId = dataProduct.id + "-cyclone-" + cycloneId;
+                            const collectionUrl = `${process.env.REACT_APP_STAC_API_URL}/collections/${collectionId}`;
+                            const collectionItemUrl = `${collectionUrl}/items`;
+    
+                            // get the collection details
+                            const collectionPromise = fetch(collectionUrl).then(async metaData => metaData.json()).then(result => [result])
+                                                        .catch(err => console.error("Error fetching data: ", err));
+                            dataProductsFetchPromises.push(collectionPromise);
+
+                            // get all the collection items
+                            const itemPromise = fetchAllFromSTACAPI(collectionItemUrl);
+                            dataProductsFetchPromises.push(itemPromise);
+                            // dataProductsFetchPromises[cycloneName+"-"+dataProduct.id] = promise;
+                        }
                     });
                 }));
                 const data = await Promise.allSettled(dataProductsFetchPromises);
@@ -122,7 +162,7 @@ export function DashboardContainer() {
                 // const jsonData = Object.fromEntries(data)
                 data.forEach(d => {
                     if (!d || !d.value || !d.value.length || d.status==="rejected") return;
-                    if (d.value[0].type === "Collection") collectionData.push(d.value)
+                    if (d.value[0].type === "Collection" || d.value[0].itemType === "feature") collectionData.push(d.value)
                     else if (d.value[0].type === "Feature") collectionItemData.push(d.value)
                 });
                 const cycloneDictionary = dataTransformationCyclone(collectionData, collectionItemData)

@@ -3,6 +3,7 @@ export type SubDailyAsset = STACItem; // This is the smallest working unit of da
 export interface CycloneDataset {
     id: string; // Format: <satellite>_hurricane_<hurricane_name>. e.g. GOES16_hurricane_beryl
     satellite: string; // e.g. GOES, IMERG, SPoRT, MODIS, CYGNSS
+    isPath: boolean; // Represents if it is a cyclone path data instead.
     representationalAsset: SubDailyAsset;
     location: [Lon, Lat]; // [lon, lat]
     startDate: DateTime;
@@ -43,6 +44,8 @@ export type Lon = string;
 export type Lat = string;
 
 // Stac collection defination
+
+export type GEOJSON = STACCollection;
 
 export interface STACCollection {
     type: 'Collection';

@@ -13,7 +13,7 @@ export function dataTransformationCyclone(collections: STACCollection[][], items
     // transforms the data from STAC api to Cyclone models.
     const cycloneDictionary: CycloneMap = {};
     
-    const collectionDictionary: CollectionDictionary = {};     
+    const collectionDictionary: CollectionDictionary = {};
 
     collections.forEach((collectionArr: STACCollection[]) => {
         collectionArr.forEach((collection: STACCollection) => {
@@ -25,13 +25,23 @@ export function dataTransformationCyclone(collections: STACCollection[][], items
     });
 
     items.forEach((items: STACItem[]) => {
-        const collectionName = items[0].collection; // <satellite/data_product>-cyclone-<cyclone_name>
-        const acc = collectionName.split("-");
-        const lenAcc = acc.length;
-        const dataProductNameArr = acc.slice(0, lenAcc-2)
+        let collectionName = items[0].collection; // <satellite/data_product>-cyclone-<cyclone_name>
+        let acc = collectionName.split("-");
+        let lenAcc = acc.length;
+        let dataProductNameArr = acc.slice(0, lenAcc-2)
 
-        const cycloneName = acc[lenAcc-1];
-        const dataProductName = dataProductNameArr.join("-");
+        let cycloneName = acc[lenAcc-1];
+        let dataProductName = dataProductNameArr.join("-");
+
+        if (items[0].collection.includes("path") || items[0].collection.includes("wind")) {
+            collectionName = items[0].collection; // <satellite/data_product>-cyclone-<cyclone_name>
+            acc = collectionName.split("_");
+            lenAcc = acc.length;
+            dataProductNameArr = acc.slice(0, lenAcc-2)
+    
+            cycloneName = acc[lenAcc-1];
+            dataProductName = dataProductNameArr.join("_");
+        }
 
         // sort by data by time
         const sortedData = items.sort((prev: STACItem, next: STACItem): number => {
@@ -45,6 +55,7 @@ export function dataTransformationCyclone(collections: STACCollection[][], items
         const cycloneDataset: CycloneDataset = {
             id: dataProductName+"-cyclone-"+cycloneName,
             satellite: dataProductName,
+            isPath: (dataProductName.includes("path") || dataProductName.includes("wind")),
             representationalAsset: sortedData[(0)],
             location: [lon, lat],
             startDate: sortedData[0].properties.datetime,
@@ -77,10 +88,10 @@ export function dataTransformationCyclone(collections: STACCollection[][], items
             id: dataProductName+"-cyclone-"+cycloneName,
             name: dataProductName,
             dataset: cycloneDataset,
-            description: collectionDictionary[collectionName].description,
-            datetimes: collectionDictionary[collectionName].summaries.datetime,
-            rescale: collectionDictionary[collectionName].renders.dashboard.rescale,
-            colormap: collectionDictionary[collectionName].renders.dashboard.colormap_name,
+            description: collectionDictionary[collectionName] && collectionDictionary[collectionName].description,
+            datetimes: collectionDictionary[collectionName] && collectionDictionary[collectionName].summaries && collectionDictionary[collectionName].summaries.datetime,
+            rescale: collectionDictionary[collectionName] && collectionDictionary[collectionName].renders && collectionDictionary[collectionName].renders.dashboard.rescale,
+            colormap: collectionDictionary[collectionName] && collectionDictionary[collectionName].renders && collectionDictionary[collectionName].renders.dashboard.colormap_name,
         }
 
         if (!(cycloneName in cycloneDictionary)) {
