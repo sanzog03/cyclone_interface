@@ -22,8 +22,6 @@ export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCyclone
       } else {
         newChecked.splice(currentIndex, 1);
       }
-  
-      console.log(">>>>>>>", newChecked)
       setChecked(newChecked);
       setSelectedDataProductIds(newChecked);
     };

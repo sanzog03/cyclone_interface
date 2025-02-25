@@ -83,12 +83,12 @@ export function DashboardContainer() {
             id: "beryl",
             name: "Beryl (2024)",
             dataProducts: [ 
-                            // DATAPRODUCTS["IMERG"], DATAPRODUCTS["SPORT"], DATAPRODUCTS["CYGNSS"],
-                            // DATAPRODUCTS["GOESM02"], DATAPRODUCTS["GOESM08"], DATAPRODUCTS["GOESM13"],
+                            DATAPRODUCTS["gpm_imerg"], DATAPRODUCTS["sst"], DATAPRODUCTS["cygnss"],
+                            DATAPRODUCTS["goes_radF_l1b_C02"], DATAPRODUCTS["goes_radF_l1b_C08"], DATAPRODUCTS["goes_radF_l1b_C13"],
                             DATAPRODUCTS["modis_mosaic"], 
-                            // DATAPRODUCTS["VIIRS"], 
-                            // DATAPRODUCTS["PATHPOINT"],
-                            // DATAPRODUCTS["PATHLINE"],
+                            DATAPRODUCTS["viirs_mosaic"],
+                            // DATAPRODUCTS["public.path_point"],
+                            // DATAPRODUCTS["public.path_line"],
                             DATAPRODUCTS["public.wind_polygon"]
                         ]
         },
