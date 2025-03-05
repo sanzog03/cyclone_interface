@@ -1,5 +1,7 @@
 export type SubDailyAsset = STACItem; // This is the smallest working unit of data. Format: <satellite>_<product>_<datetime>. e.g. "GOES_16b__2019-05-21T17:31:00Z"
 
+// type datetime = string;
+
 export interface CycloneDataset {
     id: string; // Format: <satellite>_hurricane_<hurricane_name>. e.g. GOES16_hurricane_beryl
     satellite: string; // e.g. GOES, IMERG, SPoRT, MODIS, CYGNSS
@@ -8,8 +10,8 @@ export interface CycloneDataset {
     startDate: DateTime;
     endDate: DateTime;
     subDailyAssets: SubDailyAsset[];
-    getAsset: (dateTime: DateTime) => SubDailyAsset;
-    getNearestDateTime: (dateTime: DateTime) => DateTime;
+    getAsset: (dateTime: string) => SubDailyAsset;
+    // getNearestDateTime: (dateTime: datetime) => datetime; 
 }
 
 export type SatelliteSystem = DataProduct;
@@ -21,7 +23,6 @@ export interface DataProduct { // ~ Collection
     description: string;
     datetimes: string[];
     rescale: [number, number]; // [min, max]
-    assets: string, // to know the property in items containing the cog url
     colormap: string;
 }
 
