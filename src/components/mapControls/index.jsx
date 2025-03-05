@@ -118,6 +118,7 @@ export const MapControls = ({
 
   useEffect(() => {
     if (!map) return;
+    let popup = null;
 
     const mouseMoveHandler = (e) => {
       // get the value from the pointer
@@ -139,7 +140,7 @@ export const MapControls = ({
       .addTo(map);
 
       const tooltipContent = text;
-      const popup = new mapboxgl.Popup({
+      popup = new mapboxgl.Popup({
           closeButton: false,
           offset: [-3, -15],
           anchor: 'bottom'
@@ -165,7 +166,8 @@ export const MapControls = ({
 
     return () => {
       if (intensityControl) intensityControl.onRemove();
-      if (map) map.off("click", mouseMoveHandler)
+      if (map) map.off("click", mouseMoveHandler);
+      if (popup) popup.remove();
     }
   }, [map, intensityControlEnabled]);
 
