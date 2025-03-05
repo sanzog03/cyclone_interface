@@ -20,7 +20,9 @@ export const MapControls = ({
   handleResetHome,
   openDrawer,
   selectedDataProductIds,
-  dataTreeCyclone
+  selectedCycloneId,
+  dataTreeCyclone,
+  selectedStartDate //needed for the intensity picker tool, to show the intensity of the selected layer
 }) => {
   const [ intensityControlEnabled, setIntensityControlEnabled ] = useState(false);
   const { map } = useMapbox();
@@ -130,7 +132,25 @@ export const MapControls = ({
       const collectionId = "gpm_imerg-cyclone-beryl";
       const itemId = "IMERG_precipitation_2024-07-11T20%3A29%3A59Z";
       const assets = "cog_default";
-      let resultHTML = await fetchIntensityData(lng, lat, collectionId, itemId, assets);
+      let resultHTML = ""
+
+      if (!selectedDataProductIds.length || !selectedCycloneId) {
+        resultHTML = "<p>No data products Selected</p>";
+      } else {
+        const promises = selectedDataProductIds.map((dp) => {
+          const dataProductItem = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dp].dataset.getAsset(selectedStartDate);
+          const { collection: collectionId, id: itemId } = dataProductItem;
+          return fetchIntensityData(lng, lat, collectionId, itemId, assets);
+        });
+        const data = await Promise.all(promises);
+        data.forEach((res, idx) => { // assuming the promise.all will retain order
+          resultHTML+= `
+            <b>${selectedDataProductIds[idx]}</b>
+            <div>${res}</div>
+            <br>
+          `
+        });
+      }
       // show it in the tooltip
       const el = document.createElement('div');
       popupElem = el;
@@ -173,7 +193,7 @@ export const MapControls = ({
       if (map) map.off("click", mouseClickHandler);
       if (popup) popup.remove();
     }
-  }, [map, intensityControlEnabled, selectedDataProductIds, dataTreeCyclone]);
+  }, [map, intensityControlEnabled, selectedDataProductIds, dataTreeCyclone, dataTreeCyclone.current, selectedStartDate]);
 
   return (
     <div id="mapbox-custom-controls" ref={customControlContainer} style={{ right: openDrawer ? "30.7rem" : "0.5rem" }}></div>
