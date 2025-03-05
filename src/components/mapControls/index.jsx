@@ -114,7 +114,10 @@ export const MapControls = ({
       if (!selectedDataProductIds.length || !selectedCycloneId) {
         resultHTML = "<p>No data products Selected</p>";
       } else {
-        const promises = selectedDataProductIds.map((dp) => {
+        const rasterDataProducts = selectedDataProductIds.map(dp => {
+          if (dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dp].type === "Raster") return dp;
+        }).filter(item => item);
+        const promises = rasterDataProducts.map((dp) => {
           const dataProductItem = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dp].dataset.getAsset(selectedStartDate);
           const { assets } = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dp];
           const { collection: collectionId, id: itemId } = dataProductItem;
@@ -123,7 +126,7 @@ export const MapControls = ({
         const data = await Promise.all(promises);
         data.forEach((res, idx) => { // assuming the promise.all will retain order
           resultHTML+= `
-            <b>${dataProducts[selectedDataProductIds[idx]].name}</b>
+            <b>${dataProducts[rasterDataProducts[idx]].name}</b>
             <div>${res}</div>
             <br>
           `
@@ -189,9 +192,6 @@ const fetchIntensityData = async (lng, lat, collectionId, itemId, assets) => {
     resultHTML = `
       <div>
         Value: ${result.values[0]}
-      </div>
-      <div>
-        Band Name: ${result.band_names}
       </div>
     `;
 
