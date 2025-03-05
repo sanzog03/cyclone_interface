@@ -22,6 +22,7 @@ export const MapControls = ({
   selectedDataProductIds,
   selectedCycloneId,
   dataTreeCyclone,
+  dataProducts,
   selectedStartDate //needed for the intensity picker tool, to show the intensity of the selected layer
 }) => {
   const [ intensityControlEnabled, setIntensityControlEnabled ] = useState(false);
@@ -122,7 +123,7 @@ export const MapControls = ({
         const data = await Promise.all(promises);
         data.forEach((res, idx) => { // assuming the promise.all will retain order
           resultHTML+= `
-            <b>${selectedDataProductIds[idx]}</b>
+            <b>${dataProducts[selectedDataProductIds[idx]].name}</b>
             <div>${res}</div>
             <br>
           `
@@ -172,7 +173,7 @@ export const MapControls = ({
       if (map) map.off("click", mouseClickHandler);
       if (popup) popup.remove();
     }
-  }, [map, intensityControlEnabled, selectedDataProductIds, dataTreeCyclone, dataTreeCyclone.current, selectedStartDate]);
+  }, [map, intensityControlEnabled, selectedDataProductIds, dataTreeCyclone, dataTreeCyclone.current, dataProducts, selectedStartDate]);
 
   return (
     <div id="mapbox-custom-controls" ref={customControlContainer} style={{ right: openDrawer ? "30.7rem" : "0.5rem" }}></div>
@@ -187,7 +188,7 @@ const fetchIntensityData = async (lng, lat, collectionId, itemId, assets) => {
     const result = await response.json();
     resultHTML = `
       <div>
-        Value: ${result.values[0]} \n
+        Value: ${result.values[0]}
       </div>
       <div>
         Band Name: ${result.band_names}

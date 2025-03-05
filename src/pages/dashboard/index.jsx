@@ -221,6 +221,7 @@ export function Dashboard({ dataTreeCyclone, cyclones, dataProducts, zoomLocatio
             handleResetHome={handleResetHome}
             selectedDataProductIds={selectedDataProductIds}
             dataTreeCyclone={dataTreeCyclone}
+            dataProducts={dataProducts}
             selectedCycloneId={selectedCycloneId}
             selectedStartDate={startDate}
           />

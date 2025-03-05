@@ -17,45 +17,63 @@ export function DashboardContainer() {
 
     // constants
     const DATAPRODUCTS = {
-        "IMERG": {
+        "gpm_imerg": {
             id: "gpm_imerg",
             name: "IMERG",
             fullName: "Integrated Multi-satellitE Retrievals for GPM (IMERG)"
         },
-        "SPORT": {
+        "sst": {
             id: "sst",
             name: "SPoRT SST",
             fullName: "SPoRT Sea Surface Temperature (SST)"
         },
-        "CYGNSS": {
+        "cygnss": {
             id: "cygnss",
             name: "CYGNSS",
             fullName: "Cyclone Global Navigation Satellite System (CYGNSS)"
         },
-        "GOESM02": {
+        "goes_radF_l1b_C02": {
             id: "goes_radF_l1b_C02",
             name: "GOES (Channel 2)",
             fullName: "GOES (Channel 2)"
         },
-        "GOESM08": {
+        "goes_radF_l1b_C08": {
             id: "goes_radF_l1b_C08",
             name: "GOES (Channel 8)",
             fullName: "GOES (Channel 8)"
         },
-        "GOESM13": {
+        "goes_radF_l1b_C13": {
             id: "goes_radF_l1b_C13",
             name: "GOES (Channel 13)",
             fullName: "GOES (Channel 13)"
         },
-        "MODIS": {
+        "modis_mosaic": {
             id: "modis_mosaic",
             name: "MODIS (Band 31)",
             fullName: "MODIS (Band 31)"
         },
-        "VIIRS": {
+        "viirs_mosaic": {
             id: "viirs_mosaic",
             name: "VIIRS (Band I5)",
             fullName: "VIIRS (Band I5)"
+        },
+        "public.path_point": {
+            id: "public.path_point",
+            name: "Cyclone Point Path",
+            fullName: "Cyclone Point Path",
+            type: "FEATURES"
+        },
+        "public.path_line": {
+            id: "public.path_line",
+            name: "Cyclone Line Path",
+            fullName: "Cyclone Line Path",
+            type: "FEATURES"
+        },
+        "public.wind_polygon": {
+            id: "public.wind_polygon",
+            name: "Cyclone Wind Polygon",
+            fullName: "Cyclone Wind Polygon",
+            type: "FEATURES"
         },
     }
 
@@ -63,9 +81,12 @@ export function DashboardContainer() {
         "BERYL": {
             id: "beryl",
             name: "Beryl (2024)",
-            dataProducts: [ DATAPRODUCTS["IMERG"], DATAPRODUCTS["SPORT"], DATAPRODUCTS["CYGNSS"],
-                            DATAPRODUCTS["GOESM02"], DATAPRODUCTS["GOESM08"], DATAPRODUCTS["GOESM13"],
-                            DATAPRODUCTS["MODIS"], DATAPRODUCTS["VIIRS"], ]
+            dataProducts: [
+                DATAPRODUCTS["gpm_imerg"], DATAPRODUCTS["sst"], DATAPRODUCTS["cygnss"],
+                DATAPRODUCTS["goes_radF_l1b_C02"], DATAPRODUCTS["goes_radF_l1b_C08"], DATAPRODUCTS["goes_radF_l1b_C13"],
+                DATAPRODUCTS["modis_mosaic"],
+                DATAPRODUCTS["viirs_mosaic"]
+            ]
         },
         "MILTON": {
             id: "milton",
