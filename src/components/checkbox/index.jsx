@@ -51,7 +51,7 @@ export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCyclone
             const id = dataProduct;
             const labelId = `checkbox-list-label-${id}`;
             if (dataProductType === "Vector") return (
-                <ListItemButton role={undefined} dense>
+                <ListItemButton role={undefined} dense key={`${labelId}-button-vector`}>
                     <ListItemIcon>
                         <Checkbox
                             onClick={(e) => {
@@ -80,7 +80,7 @@ export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCyclone
                 disablePadding
             >
                 {/* <div style={{ display: "flex", flexDirection: "vertical", width: "100%" }}> */}
-                <ListItemButton role={undefined} dense>
+                <ListItemButton role={undefined} dense key={`${labelId}-button-raster`}>
                     <ListItemIcon>
                         <Checkbox
                             onClick={(e) => {

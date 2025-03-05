@@ -142,10 +142,10 @@ const MapAllVectorLayer = (dataProducts, handleLayerClick, hoveredPlumeId, setHo
     return (
         <>
         {
-            dataProducts.dataProducts && dataProducts.dataProducts.length && dataProducts.dataProducts.map((dataProductItem) =>
+            dataProducts.dataProducts && dataProducts.dataProducts.length && dataProducts.dataProducts.map((dataProductItem, idx) =>
             <MapLayerVector
+                key={plumeId+dataProductItem.id+idx}
                 noRaster={true}
-                key={plumeId+dataProductItem.id}
                 plumeId={plumeId+"_"+dataProductItem.id}
                 dataProduct={dataProductItem}
                 handleLayerClick={handleLayerClick}
