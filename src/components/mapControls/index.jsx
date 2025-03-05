@@ -119,19 +119,21 @@ export const MapControls = ({
   useEffect(() => {
     if (!map) return;
     let popup = null;
+    let popupElem = null;
 
-    const mouseMoveHandler = (e) => {
+    const mouseClickHandler = (e) => {
+      if (popupElem) popupElem.remove();
       // get the value from the pointer
       const lng = e.lngLat.lng;
-        const lat = e.lngLat.lat;
-        console.log(lng, lat);
-        // TODO: use that to get the actual intensity value
+      const lat = e.lngLat.lat;
+      // TODO: use that to get the actual intensity value
 
-        // show it in the tooltip
-        const el = document.createElement('div');
-        el.className = 'marker';
-        const text = `lon: ${lng} lat: ${lat}`
-        addTooltip(el, lng, lat, text);
+      // show it in the tooltip
+      const el = document.createElement('div');
+      popupElem = el;
+      el.className = 'marker';
+      const text = `lon: ${lng} lat: ${lat}`
+      addTooltip(el, lng, lat, text);
     }
 
     const addTooltip = (element, longitude, latitude, text) => {
@@ -156,7 +158,7 @@ export const MapControls = ({
     }
 
     if (intensityControlEnabled) {
-      map.on("click", mouseMoveHandler);
+      map.on("click", mouseClickHandler);
     }
 
     const intensityControl = new IntensityControl(intensityControlClickHandler, intensityControlEnabled);
@@ -166,7 +168,7 @@ export const MapControls = ({
 
     return () => {
       if (intensityControl) intensityControl.onRemove();
-      if (map) map.off("click", mouseMoveHandler);
+      if (map) map.off("click", mouseClickHandler);
       if (popup) popup.remove();
     }
   }, [map, intensityControlEnabled]);
