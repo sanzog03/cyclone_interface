@@ -80,6 +80,8 @@ export function Dashboard({ dataTreeCyclone, cyclones, dataProducts, zoomLocatio
   const [ clearMeasurementLayer, setClearMeasurementLayer ] = useState(false)
   const [ mapScaleUnit, setMapScaleUnit ] = useState(scaleUnits.MILES);
 
+  console.log("!!", dataTreeCyclone)
+
   // handler functions
   const handleSelectedDatasetForAnimation = (dataProductId) => {
     if (!selectedCycloneId || !dataTreeCyclone.current || !dataProductId || !(dataProductId in dataTreeCyclone.current[selectedCycloneId]["dataProducts"])) return;

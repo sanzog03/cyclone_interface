@@ -1,7 +1,7 @@
 import moment from "moment";
 import { STACItem, STACCollection } from "../../../dataModel";
 
-import { CycloneDataset, DataProduct, Cyclone, CycloneMap } from "../../../dataModel"
+import { CycloneRasterDataset, RasterDataProduct, Cyclone, CycloneMap, VisualizationType } from "../../../dataModel"
 
 // NEW!!!
 
@@ -42,7 +42,7 @@ export function dataTransformationCyclone(collections: STACCollection[][], items
 
         // create CycloneDataset
         let [lon, lat] = sortedData[0].geometry.coordinates[0][0];
-        const cycloneDataset: CycloneDataset = {
+        const cycloneDataset: CycloneRasterDataset = {
             id: dataProductName+"-cyclone-"+cycloneName,
             satellite: dataProductName,
             representationalAsset: sortedData[(0)],
@@ -72,9 +72,10 @@ export function dataTransformationCyclone(collections: STACCollection[][], items
             }
         };
         
-        // create DataProduct
-        const dataProduct:DataProduct = {
+        // create RasterDataProduct
+        const dataProduct:RasterDataProduct = {
             id: dataProductName+"-cyclone-"+cycloneName,
+            type: VisualizationType.Raster,
             name: dataProductName,
             dataset: cycloneDataset,
             description: collectionDictionary[collectionName].description,

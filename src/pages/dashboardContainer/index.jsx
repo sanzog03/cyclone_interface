@@ -20,42 +20,50 @@ export function DashboardContainer() {
         "gpm_imerg": {
             id: "gpm_imerg",
             name: "IMERG",
-            fullName: "Integrated Multi-satellitE Retrievals for GPM (IMERG)"
+            fullName: "Integrated Multi-satellitE Retrievals for GPM (IMERG)",
+            type: "STAC"
         },
         "sst": {
             id: "sst",
             name: "SPoRT SST",
-            fullName: "SPoRT Sea Surface Temperature (SST)"
+            fullName: "SPoRT Sea Surface Temperature (SST)",
+            type: "STAC"
         },
         "cygnss": {
             id: "cygnss",
             name: "CYGNSS",
-            fullName: "Cyclone Global Navigation Satellite System (CYGNSS)"
+            fullName: "Cyclone Global Navigation Satellite System (CYGNSS)",
+            type: "STAC"
         },
         "goes_radF_l1b_C02": {
             id: "goes_radF_l1b_C02",
             name: "GOES (Channel 2)",
-            fullName: "GOES (Channel 2)"
+            fullName: "GOES (Channel 2)",
+            type: "STAC"
         },
         "goes_radF_l1b_C08": {
             id: "goes_radF_l1b_C08",
             name: "GOES (Channel 8)",
-            fullName: "GOES (Channel 8)"
+            fullName: "GOES (Channel 8)",
+            type: "STAC"
         },
         "goes_radF_l1b_C13": {
             id: "goes_radF_l1b_C13",
             name: "GOES (Channel 13)",
-            fullName: "GOES (Channel 13)"
+            fullName: "GOES (Channel 13)",
+            type: "STAC"
         },
         "modis_mosaic": {
             id: "modis_mosaic",
             name: "MODIS (Band 31)",
-            fullName: "MODIS (Band 31)"
+            fullName: "MODIS (Band 31)",
+            type: "STAC"
         },
         "viirs_mosaic": {
             id: "viirs_mosaic",
             name: "VIIRS (Band I5)",
-            fullName: "VIIRS (Band I5)"
+            fullName: "VIIRS (Band I5)",
+            type: "STAC"
         },
         "public.path_point": {
             id: "public.path_point",
