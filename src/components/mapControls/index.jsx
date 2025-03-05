@@ -191,7 +191,7 @@ const fetchIntensityData = async (lng, lat, collectionId, itemId, assets) => {
     const result = await response.json();
     resultHTML = `
       <div>
-        Value: ${result.values[0]}
+        Value: ${Number(result.values[0]).toFixed(4)}
       </div>
     `;
 
