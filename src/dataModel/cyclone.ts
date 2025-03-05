@@ -137,6 +137,24 @@ export interface STACCollection {
     };
 }
 
+export interface FeatureCollection {
+    itemType: 'feature';
+    id: string;
+    crs: string;
+    extent: {
+        spatial: {
+            bbox: number[][];
+            crs: string;
+        };
+    };
+    links: Array<{
+        rel: string;
+        href: string;
+        type?: string;
+        title?: string;
+    }>;
+    title?: string;
+}
 
 // Stac Item defination. A subset of GEOJSON
 export interface STACItem {
@@ -160,6 +178,7 @@ export interface STACItem {
 // feature item defination. A subset of GEOJSON
 export interface FeatureItem {
     id: string;
+    collection: string;
     type: string;
     links: Link[];
     geometry: Geometry;

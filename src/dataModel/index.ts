@@ -13,6 +13,7 @@ export type { DateTime } from "./cyclone";
 export type { Lon } from "./cyclone";
 export type { Lat } from "./cyclone";
 export type { STACCollection } from "./cyclone";
+export type { FeatureCollection } from "./cyclone";
 export type { STACItem } from "./cyclone";
 export type { FeatureItem } from "./cyclone";
 
