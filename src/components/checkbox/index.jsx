@@ -46,6 +46,8 @@ export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCyclone
     <List sx={{ width: '100%', maxWidth: 360, maxHeight: 230, overflow: "scroll",  bgcolor: 'background.paper' }}>
         { dataTreeCyclone.current && selectedCycloneId && dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts && Object.keys(dataProducts).length && selectedStartDate ?
           Object.keys(dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts).map((dataProduct) => {
+            const dataProductType = dataTreeCyclone.current[selectedCycloneId].dataProducts[dataProduct].type;
+            if (dataProductType === "Vector") return (null);
             const name = dataProducts[dataProduct].name;
             const id = dataProduct;
             const labelId = `checkbox-list-label-${id}`;

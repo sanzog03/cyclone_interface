@@ -15,10 +15,6 @@ interface VectorCollectionDictionary {
 
 export function dataTransformationCyclone(STACCollections: STACCollection[][], STACItemsList: STACItem[][], FeatureCollections: FeatureCollection[][], FeatureItemsList: FeatureItem[][]) {
     // transforms the data from STAC api to Cyclone models.
-    console.log("1Herenow>>>>>", STACCollections)
-    console.log("2Herenow>>>>>", FeatureCollections)
-    console.log("3Herenow>>>>>", STACItemsList)
-    console.log("4Herenow2>>>>>", FeatureItemsList)
     const cycloneDictionary: CycloneMap = {};
     
     const rasterCollectionDictionary: RasterCollectionDictionary = {};     
