@@ -79,6 +79,7 @@ export function dataTransformationCyclone(collections: STACCollection[][], items
             dataset: cycloneDataset,
             description: collectionDictionary[collectionName].description,
             datetimes: collectionDictionary[collectionName].summaries.datetime,
+            assets: collectionDictionary[collectionName].renders.dashboard.assets[0],
             rescale: collectionDictionary[collectionName].renders.dashboard.rescale,
             colormap: collectionDictionary[collectionName].renders.dashboard.colormap_name,
         }
