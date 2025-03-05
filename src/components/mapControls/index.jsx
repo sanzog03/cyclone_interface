@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import { useMapbox } from "../../context/mapContext";
 import { HamburgerControl } from "./hamburger";
@@ -6,6 +6,7 @@ import { MeasureDistanceControl } from "./measureDistance";
 import { ClearMeasurementControl } from "./clearMeasurement";
 import { LayerVisibilityControl } from "./layerVisibility";
 import { HomeControl } from "./home";
+import { IntensityControl } from "./intensity";
 
 import "./index.css";
 
@@ -17,8 +18,10 @@ export const MapControls = ({
   clearMeasurementIcon,
   mapScaleUnit,
   handleResetHome,
-  openDrawer
+  openDrawer,
+  selectedDataProductIds
 }) => {
+  const [ intensityControlEnabled, setIntensityControlEnabled ] = useState(false);
   const { map } = useMapbox();
   const customControlContainer = useRef();
 
@@ -112,6 +115,59 @@ export const MapControls = ({
       if (scaleControl) map.removeControl(scaleControl);
     };
   }, [map, mapScaleUnit, measureMode]);
+
+  useEffect(() => {
+    if (!map) return;
+
+    const mouseMoveHandler = (e) => {
+      // get the value from the pointer
+      const lng = e.lngLat.lng;
+        const lat = e.lngLat.lat;
+        console.log(lng, lat);
+        // TODO: use that to get the actual intensity value
+
+        // show it in the tooltip
+        const el = document.createElement('div');
+        el.className = 'marker';
+        const text = `lon: ${lng} lat: ${lat}`
+        addTooltip(el, lng, lat, text);
+    }
+
+    const addTooltip = (element, longitude, latitude, text) => {
+      let marker = new mapboxgl.Marker(element)
+      .setLngLat([longitude, latitude])
+      .addTo(map);
+
+      const tooltipContent = text;
+      const popup = new mapboxgl.Popup({
+          closeButton: false,
+          offset: [-3, -15],
+          anchor: 'bottom'
+      }).setHTML(tooltipContent);
+      marker.setPopup(popup);
+      popup.addTo(map);
+      // popup.remove() //TODO: do this on another click.
+      return marker;
+    }
+
+    const intensityControlClickHandler = () => {
+      setIntensityControlEnabled(!intensityControlEnabled);
+    }
+
+    if (intensityControlEnabled) {
+      map.on("click", mouseMoveHandler);
+    }
+
+    const intensityControl = new IntensityControl(intensityControlClickHandler, intensityControlEnabled);
+    const intensityControlElem = intensityControl.onAdd(map);
+    const mapboxCustomControlContainer = customControlContainer.current;
+    mapboxCustomControlContainer.append(intensityControlElem);
+
+    return () => {
+      if (intensityControl) intensityControl.onRemove();
+      if (map) map.off("click", mouseMoveHandler)
+    }
+  }, [map, intensityControlEnabled]);
 
   return (
     <div id="mapbox-custom-controls" ref={customControlContainer} style={{ right: openDrawer ? "30.7rem" : "0.5rem" }}></div>
