@@ -47,10 +47,32 @@ export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCyclone
         { dataTreeCyclone.current && selectedCycloneId && dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts && Object.keys(dataProducts).length && selectedStartDate ?
           Object.keys(dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts).map((dataProduct) => {
             const dataProductType = dataTreeCyclone.current[selectedCycloneId].dataProducts[dataProduct].type;
-            if (dataProductType === "Vector") return (null);
             const name = dataProducts[dataProduct].name;
             const id = dataProduct;
             const labelId = `checkbox-list-label-${id}`;
+            if (dataProductType === "Vector") return (
+                <ListItemButton role={undefined} dense>
+                    <ListItemIcon>
+                        <Checkbox
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggle(id)
+                                setPlumesForAnimation([]);
+                            }}
+                            edge="start"
+                            checked={checked.includes(id)}
+                            tabIndex={-1}
+                            disableRipple
+                            inputProps={{ 'aria-labelledby': labelId }}
+                        />
+                    </ListItemIcon>
+                    <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+                        <div style={{ display:"flex", width: "100%" }}>
+                            <ListItemText sx={{width: "50%"}} id={labelId} primary={name} />
+                        </div>
+                    </div>
+                </ListItemButton>
+            );
             const nearesetDateTime = dataTreeCyclone.current[selectedCycloneId].dataProducts[dataProduct].dataset.getNearestDateTime(selectedStartDate);
             return (
             <ListItem

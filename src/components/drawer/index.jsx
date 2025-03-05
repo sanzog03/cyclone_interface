@@ -71,11 +71,12 @@ export function PersistentDrawerRight({open, selectedCycloneId, dataTree, select
     const metas = Object.keys(dataProducts).map((key) => {
       if (!selectedDataProductIdsSet.has(key)) return null;
       const dp = dataProducts[key]
+      if (dp.type === "Vector") return null;
 
       const mapRev = {}; // todo: handle this in data transformation, i.e. putting fullName to dataTree
       Object.keys(dataProductsTemp).map(key => {
         mapRev[`${dataProductsTemp[key].id}`]= dataProductsTemp[key]
-      })
+      });
 
       return {
         // title: dp.name,

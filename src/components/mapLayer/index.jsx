@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useMapbox } from "../../context/mapContext";
-import { addSourceLayerToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
+import { addSourceLayerToMap, addSourcePolygonToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
 
-export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId, startDate, opacity }) => {
+export const MapLayerRaster = ({ dataProduct, rescale, colormap, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId, startDate, opacity }) => {
     const { map } = useMapbox();
     const [VMIN, VMAX] = rescale[0];
 
@@ -73,10 +73,96 @@ export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plu
     return null;
 }
 
+export const MapLayerVector = ({ dataProduct, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId }) => {
+    const { map } = useMapbox();
+
+    useEffect(() => {
+        if (!map || !dataProduct) return;
+
+        const feature = dataProduct;
+        const polygonSourceId = getSourceId("polygon"+plumeId);
+        const polygonLayerId = getLayerId("polygon"+plumeId);
+
+        addSourcePolygonToMap(map, feature, polygonSourceId, polygonLayerId)
+
+        const onClickHandler = (e) => {
+            // handleLayerClick(plumeId);
+        }
+
+        const onHoverHandler = (e) => {
+            // setHoveredPlumeId(plumeId);
+        }
+
+        map.on("click", polygonLayerId, onClickHandler);
+        map.on("mousemove", polygonLayerId, onHoverHandler);
+
+        return () => {
+            // cleanups
+            if (map) {
+                if (layerExists(map, polygonLayerId)) map.removeLayer(polygonLayerId);
+                if (sourceExists(map, polygonSourceId)) map.removeSource(polygonSourceId);
+                map.off("click", "clusters", onClickHandler);
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dataProduct, map, handleLayerClick, plumeId, setHoveredPlumeId]);
+
+    useEffect(() => {
+        if (!map || !hoveredPlumeId || !plumeId ) return;
+
+        const polygonLayerId = getLayerId("polygon"+plumeId);
+        const rasterLayerId = getLayerId("raster"+plumeId);
+
+        if (hoveredPlumeId !== plumeId) {
+            // when the plume is not hovered
+            if (layerExists(map, polygonLayerId)) {
+                map.setPaintProperty(polygonLayerId, 'fill-outline-color', '#20B2AA');
+            }
+            if (layerExists(map, rasterLayerId)) {
+                map.setLayoutProperty(rasterLayerId, 'visibility', 'none');
+            }
+        }
+
+        if (hoveredPlumeId === plumeId) {
+            // when the plume is hovered
+            if (layerExists(map, rasterLayerId)) {
+                map.moveLayer(rasterLayerId);
+            }
+            if (layerExists(map, polygonLayerId)) {
+                map.setPaintProperty(polygonLayerId, 'fill-outline-color', '#0000ff');
+            }
+        }
+    }, [hoveredPlumeId, map, plumeId]);
+
+    return null;
+}
+
+const MapAllVectorLayer = (dataProducts, handleLayerClick, hoveredPlumeId, setHoveredPlumeId) => {
+    const { plumeId } = dataProducts;
+    return (
+        <>
+        {
+            dataProducts.dataProducts && dataProducts.dataProducts.length && dataProducts.dataProducts.map((dataProductItem) =>
+            <MapLayerVector
+                noRaster={true}
+                key={plumeId+dataProductItem.id}
+                plumeId={plumeId+"_"+dataProductItem.id}
+                dataProduct={dataProductItem}
+                handleLayerClick={handleLayerClick}
+                hoveredPlumeId={hoveredPlumeId}
+                setHoveredPlumeId={setHoveredPlumeId}
+            >
+            </MapLayerVector>
+            )
+        }
+        </>
+    )
+}
 
 export const MapLayers = ({ dataTreeCyclone, startDate, hoveredPlumeId, handleLayerClick, setHoveredPlumeId, selectedCycloneId, selectedDataProductIds, selectedDataProductIdsOpacity }) => {
     const { map } = useMapbox();
-    const [ dataProducts, setDataProducts ] = useState();
+    const [ rasterDataProducts, setRasterDataProducts ] = useState([]);
+    const [ vectorDataProducts, setVectorDataProducts ] = useState([]);
 
     useEffect(() => {
         if (!map) return;
@@ -98,21 +184,27 @@ export const MapLayers = ({ dataTreeCyclone, startDate, hoveredPlumeId, handleLa
     useEffect(() => {
         if (!map || !dataTreeCyclone) return
 
-        let dataProducts = selectedDataProductIds.length && selectedDataProductIds.map(productId => {
+        let rasterDP = [];
+        let vectorDP = [];
+        if (selectedDataProductIds.length) selectedDataProductIds.forEach(productId => {
             try {
-                let temp = dataTreeCyclone["current"][selectedCycloneId]["dataProducts"][productId];
-                return temp;
+                let dp = dataTreeCyclone["current"][selectedCycloneId]["dataProducts"][productId];
+                if (dp.type === "Raster") {
+                    rasterDP.push(dp);
+                } else if (dp.type === "Vector") {
+                    vectorDP.push(dp);
+                }
             } catch (err) {
                 console.error(err);
             }
-        }).filter(elem => elem);
-
-        setDataProducts(dataProducts);
+        });
+        setRasterDataProducts(rasterDP);
+        setVectorDataProducts(vectorDP);
     }, [startDate, map, dataTreeCyclone, selectedDataProductIds, selectedCycloneId])
 
     return (<>
-        {dataProducts && dataProducts.length && dataProducts.map((dataProduct) =>
-            <MapLayer
+        {rasterDataProducts && rasterDataProducts.length && rasterDataProducts.map((dataProduct) =>
+            <MapLayerRaster
                 key={dataProduct.dataset.id}
                 plumeId={dataProduct.dataset.id}
                 dataProduct={dataProduct.dataset.getAsset(startDate)}
@@ -124,7 +216,17 @@ export const MapLayers = ({ dataTreeCyclone, startDate, hoveredPlumeId, handleLa
                 opacity={selectedDataProductIdsOpacity[dataProduct.dataset.satellite]}
                 startDate={startDate}
             >
-            </MapLayer>
+            </MapLayerRaster>
+        )}
+        {vectorDataProducts && vectorDataProducts.length && vectorDataProducts.map((dataProduct) =>
+            <MapAllVectorLayer
+                key={dataProduct.dataset.id}
+                dataProducts={dataProduct.dataset.subDailyAssets}
+                handleLayerClick={handleLayerClick}
+                hoveredPlumeId={hoveredPlumeId}
+                setHoveredPlumeId={setHoveredPlumeId}
+            >
+            </MapAllVectorLayer>
         )}
         </>
     );
