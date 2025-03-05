@@ -21,6 +21,7 @@ export interface DataProduct { // ~ Collection
     description: string;
     datetimes: string[];
     rescale: [number, number]; // [min, max]
+    assets: string, // to know the property in items containing the cog url
     colormap: string;
 }
 

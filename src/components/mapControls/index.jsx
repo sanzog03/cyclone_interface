@@ -129,9 +129,6 @@ export const MapControls = ({
       // get the value from the pointer
       const lng = e.lngLat.lng;
       const lat = e.lngLat.lat;
-      const collectionId = "gpm_imerg-cyclone-beryl";
-      const itemId = "IMERG_precipitation_2024-07-11T20%3A29%3A59Z";
-      const assets = "cog_default";
       let resultHTML = ""
 
       if (!selectedDataProductIds.length || !selectedCycloneId) {
@@ -139,6 +136,7 @@ export const MapControls = ({
       } else {
         const promises = selectedDataProductIds.map((dp) => {
           const dataProductItem = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dp].dataset.getAsset(selectedStartDate);
+          const { assets } = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dp];
           const { collection: collectionId, id: itemId } = dataProductItem;
           return fetchIntensityData(lng, lat, collectionId, itemId, assets);
         });
@@ -166,7 +164,6 @@ export const MapControls = ({
       const tooltipContent = text;
       popup = new mapboxgl.Popup({
           closeButton: false,
-          offset: [-3, -15],
           anchor: 'bottom'
       }).setHTML(tooltipContent);
       marker.setPopup(popup);
