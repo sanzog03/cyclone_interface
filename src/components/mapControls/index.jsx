@@ -182,7 +182,7 @@ export const MapControls = ({
 const fetchIntensityData = async (lng, lat, collectionId, itemId, assets) => {
   let resultHTML = "";
   try {
-    const url = `http://dev.openveda.cloud/api/raster/collections/${collectionId}/items/${itemId}/point/${lng},${lat}?bidx=1&assets=${assets}&unscale=false&resampling=nearest&reproject=nearest`
+    const url = `${process.env.REACT_APP_RASTER_API_URL}/collections/${collectionId}/items/${itemId}/point/${lng},${lat}?bidx=1&assets=${assets}&unscale=false&resampling=nearest&reproject=nearest`
     const response = await fetch(url);
     const result = await response.json();
     resultHTML = `
