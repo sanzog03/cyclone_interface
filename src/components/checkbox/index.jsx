@@ -43,7 +43,7 @@ export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCyclone
     }, [selectedProductIdForAnimation]);
 
     return (
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+    <List sx={{ width: '100%', maxWidth: 360, maxHeight: 230, overflow: "scroll",  bgcolor: 'background.paper' }}>
         { dataTreeCyclone.current && selectedCycloneId && dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts && Object.keys(dataProducts).length && selectedStartDate ?
           Object.keys(dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts).map((dataProduct) => {
             const name = dataProducts[dataProduct].name;
