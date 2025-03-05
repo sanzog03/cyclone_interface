@@ -157,7 +157,9 @@ export function Dashboard({ dataTreeCyclone, cyclones, dataProducts, zoomLocatio
               {<DatasetCheckbox
                 setOpenDrawer={setOpenDrawer}
                 setPlumesForAnimation={setPlumesForAnimation}
+                dataTreeCyclone={dataTreeCyclone}
                 dataProducts={dataProducts}
+                selectedCycloneId={selectedCycloneId}
                 selectedDataProductIds={selectedDataProductIds}
                 setSelectedDataProductIds={setSelectedDataProductIds}
                 selectedDataProductIdsOpacity={selectedDataProductIdsOpacity}
@@ -165,6 +167,7 @@ export function Dashboard({ dataTreeCyclone, cyclones, dataProducts, zoomLocatio
                 handleSelectedDatasetForAnimation={handleSelectedDatasetForAnimation}
                 selectedProductIdForAnimation={selectedProductIdForAnimation}
                 setSelectedProductIdForAnimation={setSelectedProductIdForAnimation}
+                selectedStartDate={startDate}
               ></DatasetCheckbox> }
             </HorizontalLayout>
 
@@ -216,6 +219,10 @@ export function Dashboard({ dataTreeCyclone, cyclones, dataProducts, zoomLocatio
             mapScaleUnit={mapScaleUnit}
             setMapScaleUnit={setMapScaleUnit}
             handleResetHome={handleResetHome}
+            selectedDataProductIds={selectedDataProductIds}
+            dataTreeCyclone={dataTreeCyclone}
+            selectedCycloneId={selectedCycloneId}
+            selectedStartDate={startDate}
           />
           <MapZoom zoomLocation={zoomLocation} zoomLevel={zoomLevel} />
           <MeasurementLayer
