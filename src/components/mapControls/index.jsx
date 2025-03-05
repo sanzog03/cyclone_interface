@@ -183,7 +183,10 @@ export const MapControls = ({
     const intensityControl = new IntensityControl(intensityControlClickHandler, intensityControlEnabled);
     const intensityControlElem = intensityControl.onAdd(map);
     const mapboxCustomControlContainer = customControlContainer.current;
-    mapboxCustomControlContainer.append(intensityControlElem);
+    // Get the reference to the last child
+    const lastChild = mapboxCustomControlContainer.lastChild;
+    // Insert the new child before the last child
+    mapboxCustomControlContainer.insertBefore(intensityControlElem, lastChild);
 
     return () => {
       if (intensityControl) intensityControl.onRemove();
