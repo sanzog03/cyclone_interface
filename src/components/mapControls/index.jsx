@@ -121,19 +121,40 @@ export const MapControls = ({
     let popup = null;
     let popupElem = null;
 
-    const mouseClickHandler = (e) => {
+    const mouseClickHandler = async (e) => {
       if (popupElem) popupElem.remove();
       // get the value from the pointer
       const lng = e.lngLat.lng;
       const lat = e.lngLat.lat;
+      const collectionId = "gpm_imerg-cyclone-beryl";
+      const itemId = "IMERG_precipitation_2024-07-11T20%3A29%3A59Z";
+      const assets = "cog_default";
+      let resultHTML = "";
       // TODO: use that to get the actual intensity value
+      try {
+        const url = `http://dev.openveda.cloud/api/raster/collections/${collectionId}/items/${itemId}/point/${lng},${lat}?bidx=1&assets=${assets}&unscale=false&resampling=nearest&reproject=nearest`
+        const response = await fetch(url);
+        const result = await response.json();
+        resultHTML = `
+          <div>
+            Value: ${result.values[0]} \n
+          </div>
+          <div>
+            Band Name: ${result.band_names}
+          </div>
+        `;
 
-      // show it in the tooltip
-      const el = document.createElement('div');
-      popupElem = el;
-      el.className = 'marker';
-      const text = `lon: ${lng} lat: ${lat}`
-      addTooltip(el, lng, lat, text);
+      } catch(error) {
+        resultHTML = "<p>No Data for the clicked location</p>"
+      } finally {
+        // show it in the tooltip
+        const el = document.createElement('div');
+        popupElem = el;
+        el.className = 'marker';
+        const text = resultHTML;
+        addTooltip(el, lng, lat, text);
+      }
+
     }
 
     const addTooltip = (element, longitude, latitude, text) => {
