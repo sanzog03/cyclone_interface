@@ -220,6 +220,7 @@ export function Dashboard({ dataTreeCyclone, cyclones, dataProducts, zoomLocatio
             setMapScaleUnit={setMapScaleUnit}
             handleResetHome={handleResetHome}
             selectedDataProductIds={selectedDataProductIds}
+            dataTreeCyclone={dataTreeCyclone}
           />
           <MapZoom zoomLocation={zoomLocation} zoomLevel={zoomLevel} />
           <MeasurementLayer

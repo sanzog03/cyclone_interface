@@ -19,7 +19,8 @@ export const MapControls = ({
   mapScaleUnit,
   handleResetHome,
   openDrawer,
-  selectedDataProductIds
+  selectedDataProductIds,
+  dataTreeCyclone
 }) => {
   const [ intensityControlEnabled, setIntensityControlEnabled ] = useState(false);
   const { map } = useMapbox();
@@ -129,32 +130,12 @@ export const MapControls = ({
       const collectionId = "gpm_imerg-cyclone-beryl";
       const itemId = "IMERG_precipitation_2024-07-11T20%3A29%3A59Z";
       const assets = "cog_default";
-      let resultHTML = "";
-      // TODO: use that to get the actual intensity value
-      try {
-        const url = `http://dev.openveda.cloud/api/raster/collections/${collectionId}/items/${itemId}/point/${lng},${lat}?bidx=1&assets=${assets}&unscale=false&resampling=nearest&reproject=nearest`
-        const response = await fetch(url);
-        const result = await response.json();
-        resultHTML = `
-          <div>
-            Value: ${result.values[0]} \n
-          </div>
-          <div>
-            Band Name: ${result.band_names}
-          </div>
-        `;
-
-      } catch(error) {
-        resultHTML = "<p>No Data for the clicked location</p>"
-      } finally {
-        // show it in the tooltip
-        const el = document.createElement('div');
-        popupElem = el;
-        el.className = 'marker';
-        const text = resultHTML;
-        addTooltip(el, lng, lat, text);
-      }
-
+      let resultHTML = await fetchIntensityData(lng, lat, collectionId, itemId, assets);
+      // show it in the tooltip
+      const el = document.createElement('div');
+      popupElem = el;
+      el.className = 'marker';
+      addTooltip(el, lng, lat, resultHTML);
     }
 
     const addTooltip = (element, longitude, latitude, text) => {
@@ -192,9 +173,30 @@ export const MapControls = ({
       if (map) map.off("click", mouseClickHandler);
       if (popup) popup.remove();
     }
-  }, [map, intensityControlEnabled]);
+  }, [map, intensityControlEnabled, selectedDataProductIds, dataTreeCyclone]);
 
   return (
     <div id="mapbox-custom-controls" ref={customControlContainer} style={{ right: openDrawer ? "30.7rem" : "0.5rem" }}></div>
   );
 };
+
+const fetchIntensityData = async (lng, lat, collectionId, itemId, assets) => {
+  let resultHTML = "";
+  try {
+    const url = `http://dev.openveda.cloud/api/raster/collections/${collectionId}/items/${itemId}/point/${lng},${lat}?bidx=1&assets=${assets}&unscale=false&resampling=nearest&reproject=nearest`
+    const response = await fetch(url);
+    const result = await response.json();
+    resultHTML = `
+      <div>
+        Value: ${result.values[0]} \n
+      </div>
+      <div>
+        Band Name: ${result.band_names}
+      </div>
+    `;
+
+  } catch(error) {
+    resultHTML = "<p>No Data for the clicked location</p>"
+  }
+  return resultHTML;
+}
