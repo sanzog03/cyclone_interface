@@ -41,14 +41,42 @@ export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCyclone
         if (!selectedProductIdForAnimation) return;
         setChecked([selectedProductIdForAnimation])
     }, [selectedProductIdForAnimation]);
+    console.log(dataTreeCyclone.current, "--", selectedCycloneId, "--")
+    if (dataTreeCyclone.current && selectedCycloneId && !(selectedCycloneId in dataTreeCyclone.current)) {
+        return (<p>No data products available for the selected Cyclone...</p>);
+    }
 
     return (
     <List sx={{ width: '100%', maxWidth: 360, maxHeight: 230, overflow: "scroll",  bgcolor: 'background.paper' }}>
         { dataTreeCyclone.current && selectedCycloneId && dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts && Object.keys(dataProducts).length && selectedStartDate ?
           Object.keys(dataTreeCyclone.current[`${selectedCycloneId}`].dataProducts).map((dataProduct) => {
+            const dataProductType = dataTreeCyclone.current[selectedCycloneId].dataProducts[dataProduct].type;
             const name = dataProducts[dataProduct].name;
             const id = dataProduct;
             const labelId = `checkbox-list-label-${id}`;
+            if (dataProductType === "Vector") return (
+                <ListItemButton role={undefined} dense key={`${labelId}-button-vector`}>
+                    <ListItemIcon>
+                        <Checkbox
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggle(id)
+                                setPlumesForAnimation([]);
+                            }}
+                            edge="start"
+                            checked={checked.includes(id)}
+                            tabIndex={-1}
+                            disableRipple
+                            inputProps={{ 'aria-labelledby': labelId }}
+                        />
+                    </ListItemIcon>
+                    <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+                        <div style={{ display:"flex", width: "100%" }}>
+                            <ListItemText sx={{width: "50%"}} id={labelId} primary={name} />
+                        </div>
+                    </div>
+                </ListItemButton>
+            );
             const nearesetDateTime = dataTreeCyclone.current[selectedCycloneId].dataProducts[dataProduct].dataset.getNearestDateTime(selectedStartDate);
             return (
             <ListItem
@@ -56,7 +84,7 @@ export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCyclone
                 disablePadding
             >
                 {/* <div style={{ display: "flex", flexDirection: "vertical", width: "100%" }}> */}
-                <ListItemButton role={undefined} dense>
+                <ListItemButton role={undefined} dense key={`${labelId}-button-raster`}>
                     <ListItemIcon>
                         <Checkbox
                             onClick={(e) => {

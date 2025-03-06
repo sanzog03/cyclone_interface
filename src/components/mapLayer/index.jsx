@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useMapbox } from "../../context/mapContext";
-import { addSourceLayerToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
+import { addSourceLayerToMap, addSourcePolygonToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
 
-export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId, startDate, opacity }) => {
+export const MapLayerRaster = ({ dataProduct, rescale, colormap, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId, startDate, opacity }) => {
     const { map } = useMapbox();
     const [VMIN, VMAX] = rescale[0];
 
@@ -73,10 +73,65 @@ export const MapLayer = ({ dataProduct, rescale, colormap, handleLayerClick, plu
     return null;
 }
 
+export const MapLayerVector = ({ dataProductItem, dataItemId, uniqueId }) => {
+    const { map } = useMapbox();
+
+    useEffect(() => {
+        if (!map || !dataProductItem || !dataItemId) return;
+
+        const feature = dataProductItem;
+        const polygonSourceId = getSourceId("polygon"+dataItemId+uniqueId);
+        const polygonLayerId = getLayerId("polygon"+dataItemId+uniqueId);
+
+        addSourcePolygonToMap(map, feature, polygonSourceId, polygonLayerId)
+
+        const onClickHandler = (e) => {
+            // handleLayerClick(plumeId);
+        }
+
+        const onHoverHandler = (e) => {
+            // setHoveredPlumeId(plumeId);
+        }
+
+        map.on("click", polygonLayerId, onClickHandler);
+        map.on("mousemove", polygonLayerId, onHoverHandler);
+
+        return () => {
+            // cleanups
+            if (map) {
+                if (layerExists(map, polygonLayerId)) map.removeLayer(polygonLayerId);
+                if (sourceExists(map, polygonSourceId)) map.removeSource(polygonSourceId);
+                map.off("click", "clusters", onClickHandler);
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dataProductItem, map, dataItemId]);
+
+    return null;
+}
+
+const MapAllVectorLayer = ({ dataProducts, dataProductId }) => {
+    return (
+        <div>
+        {
+            dataProducts?.length && dataProducts.map((dataProductItem, idx) => {
+                return (<MapLayerVector
+                    key={dataProductId+dataProductItem.collection+dataProductItem.id+idx}
+                    uniqueId={dataProductId+dataProductItem.collection+dataProductItem.id+idx}
+                    dataItemId={dataProductItem.id}
+                    dataProductItem={dataProductItem}
+                >
+                </MapLayerVector>)
+            })
+        }
+        </div>
+    )
+}
 
 export const MapLayers = ({ dataTreeCyclone, startDate, hoveredPlumeId, handleLayerClick, setHoveredPlumeId, selectedCycloneId, selectedDataProductIds, selectedDataProductIdsOpacity }) => {
     const { map } = useMapbox();
-    const [ dataProducts, setDataProducts ] = useState();
+    const [ rasterDataProducts, setRasterDataProducts ] = useState([]);
+    const [ vectorDataProducts, setVectorDataProducts ] = useState([]);
 
     useEffect(() => {
         if (!map) return;
@@ -98,21 +153,27 @@ export const MapLayers = ({ dataTreeCyclone, startDate, hoveredPlumeId, handleLa
     useEffect(() => {
         if (!map || !dataTreeCyclone) return
 
-        let dataProducts = selectedDataProductIds.length && selectedDataProductIds.map(productId => {
+        let rasterDP = [];
+        let vectorDP = [];
+        if (selectedDataProductIds.length) selectedDataProductIds.forEach(productId => {
             try {
-                let temp = dataTreeCyclone["current"][selectedCycloneId]["dataProducts"][productId];
-                return temp;
+                let dp = dataTreeCyclone["current"][selectedCycloneId]["dataProducts"][productId];
+                if (dp.type === "Raster") {
+                    rasterDP.push(dp);
+                } else if (dp.type === "Vector") {
+                    vectorDP.push(dp);
+                }
             } catch (err) {
                 console.error(err);
             }
-        }).filter(elem => elem);
-
-        setDataProducts(dataProducts);
+        });
+        setRasterDataProducts(rasterDP);
+        setVectorDataProducts(vectorDP);
     }, [startDate, map, dataTreeCyclone, selectedDataProductIds, selectedCycloneId])
 
     return (<>
-        {dataProducts && dataProducts.length && dataProducts.map((dataProduct) =>
-            <MapLayer
+        {rasterDataProducts?.length && rasterDataProducts.map((dataProduct) =>
+            <MapLayerRaster
                 key={dataProduct.dataset.id}
                 plumeId={dataProduct.dataset.id}
                 dataProduct={dataProduct.dataset.getAsset(startDate)}
@@ -124,7 +185,14 @@ export const MapLayers = ({ dataTreeCyclone, startDate, hoveredPlumeId, handleLa
                 opacity={selectedDataProductIdsOpacity[dataProduct.dataset.satellite]}
                 startDate={startDate}
             >
-            </MapLayer>
+            </MapLayerRaster>
+        )}
+        {vectorDataProducts?.length && vectorDataProducts.map((dataProduct, idx) =>
+            <MapAllVectorLayer
+                key={dataProduct.dataset.id+idx}
+                dataProducts={dataProduct.dataset.subDailyAssets}
+                dataProductId={dataProduct.dataset.id}
+            />
         )}
         </>
     );

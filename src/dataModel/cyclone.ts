@@ -1,6 +1,27 @@
+// Declarations
+
 export type SubDailyAsset = STACItem; // This is the smallest working unit of data. Format: <satellite>_<product>_<datetime>. e.g. "GOES_16b__2019-05-21T17:31:00Z"
 
-export interface CycloneDataset {
+export interface PointAsset extends Omit<FeatureItem, "geometry"> { // This is the smallest working unit of data.
+    geometry: PointGeometry;
+}
+
+export interface LineStringAsset extends Omit<FeatureItem, "geometry"> { // This is the smallest working unit of data.
+    geometry: LineStringGeometry;
+}
+
+export interface PolygonAsset extends Omit<FeatureItem, "geometry"> { // This is the smallest working unit of data.
+    geometry: PolygonGeometry;
+}
+
+export enum VisualizationType {
+    Vector = "Vector",
+    Raster = "Raster"
+}
+
+// End Declarations
+
+export interface CycloneRasterDataset {
     id: string; // Format: <satellite>_hurricane_<hurricane_name>. e.g. GOES16_hurricane_beryl
     satellite: string; // e.g. GOES, IMERG, SPoRT, MODIS, CYGNSS
     representationalAsset: SubDailyAsset;
@@ -12,12 +33,16 @@ export interface CycloneDataset {
     getNearestDateTime: (dateTime: DateTime) => DateTime;
 }
 
-export type SatelliteSystem = DataProduct;
+export interface CycloneShapeDataset {
+    id: string; // Format: <dataproduct>_hurricane_<hurricane_name>. e.g. path_line_hurricane_beryl
+    subDailyAssets: PolygonAsset[] | LineStringAsset[] | PointAsset[];
+}
 
-export interface DataProduct { // ~ Collection
+export interface RasterDataProduct { // ~ Collection
     id: string;
+    type: VisualizationType;
     name: string; // e.g. GOES-16, IMERG, SPoRT-SST, MODIS-IR, CYGNSS
-    dataset: CycloneDataset;
+    dataset: CycloneRasterDataset;
     description: string;
     datetimes: string[];
     rescale: [number, number]; // [min, max]
@@ -25,11 +50,19 @@ export interface DataProduct { // ~ Collection
     colormap: string;
 }
 
+export interface VectorDataProduct {
+    id: string;
+    type: VisualizationType;
+    name: string; // path_line, path_point, wind_polygon
+    dataset: CycloneShapeDataset;
+    description: string;
+}
+
 export interface Cyclone {
     id: string;
     name: string; // e.g. Beryl, Milton, Ian, Nicole, Ida
     dataProducts: {
-        [key: string]: DataProduct
+        [key: string]: RasterDataProduct | VectorDataProduct
     }
 }
 
@@ -104,8 +137,26 @@ export interface STACCollection {
     };
 }
 
+export interface FeatureCollection {
+    itemType: 'feature';
+    id: string;
+    crs: string;
+    extent: {
+        spatial: {
+            bbox: number[][];
+            crs: string;
+        };
+    };
+    links: Array<{
+        rel: string;
+        href: string;
+        type?: string;
+        title?: string;
+    }>;
+    title?: string;
+}
 
-// Stac Item defination
+// Stac Item defination. A subset of GEOJSON
 export interface STACItem {
     id: string;
     bbox: number[];
@@ -122,6 +173,18 @@ export interface STACItem {
     };
     stac_version: string;
     stac_extensions: string[];
+}
+
+// feature item defination. A subset of GEOJSON
+export interface FeatureItem {
+    id: string;
+    collection: string;
+    type: string;
+    links: Link[];
+    geometry: Geometry;
+    properties: {
+        [key: string]: string;
+    };
 }
 
 interface Link {
@@ -173,6 +236,21 @@ interface Statistics {
 }
 
 interface Geometry {
+    type: string;
+    coordinates: string[][][];
+}
+
+interface PointGeometry {
+    type: string;
+    coordinates: string[];
+}
+
+interface LineStringGeometry {
+    type: string;
+    coordinates: string[][];
+}
+
+interface PolygonGeometry {
     type: string;
     coordinates: string[][][];
 }

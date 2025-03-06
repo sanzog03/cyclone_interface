@@ -1,7 +1,20 @@
-import { CycloneMap, Cyclone, SubDailyAsset, CycloneDataset, SatelliteSystem, DataProduct, STACCollection, DateTime, Lon, Lat, STACItem  } from "./cyclone";
-import { CycloneMeta } from "./cycloneMeta";
+export type { CycloneMeta } from "./cycloneMeta";
+export type { SubDailyAsset } from "./cyclone";
+export type { PointAsset } from "./cyclone";
+export type { LineStringAsset } from "./cyclone";
+export type { PolygonAsset } from "./cyclone";
+export type { CycloneRasterDataset } from "./cyclone";
+export type { CycloneShapeDataset } from "./cyclone";
+export type { RasterDataProduct } from "./cyclone";
+export type { VectorDataProduct } from "./cyclone";
+export type { Cyclone } from "./cyclone";
+export type { CycloneMap } from "./cyclone";
+export type { DateTime } from "./cyclone";
+export type { Lon } from "./cyclone";
+export type { Lat } from "./cyclone";
+export type { STACCollection } from "./cyclone";
+export type { FeatureCollection } from "./cyclone";
+export type { STACItem } from "./cyclone";
+export type { FeatureItem } from "./cyclone";
 
-export type {  CycloneMap, Cyclone, SubDailyAsset, CycloneDataset,
-               SatelliteSystem, DataProduct, CycloneMeta,
-               DateTime, Lon, Lat, STACItem, STACCollection,
-          };
+export { VisualizationType } from "./cyclone";

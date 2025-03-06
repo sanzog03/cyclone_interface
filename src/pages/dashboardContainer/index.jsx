@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { Dashboard } from '../dashboard/index.jsx';
-import { fetchAllFromSTACAPI } from "../../services/api";
+import { fetchAllFromSTACAPI, fetchAllFromFeaturesAPI } from "../../services/api";
 import { dataTransformationCyclone } from './helper/dataTransform';
 
 export function DashboardContainer() {
@@ -20,42 +20,50 @@ export function DashboardContainer() {
         "gpm_imerg": {
             id: "gpm_imerg",
             name: "IMERG",
-            fullName: "Integrated Multi-satellitE Retrievals for GPM (IMERG)"
+            fullName: "Integrated Multi-satellitE Retrievals for GPM (IMERG)",
+            type: "STAC"
         },
         "sst": {
             id: "sst",
             name: "SPoRT SST",
-            fullName: "SPoRT Sea Surface Temperature (SST)"
+            fullName: "SPoRT Sea Surface Temperature (SST)",
+            type: "STAC"
         },
         "cygnss": {
             id: "cygnss",
             name: "CYGNSS",
-            fullName: "Cyclone Global Navigation Satellite System (CYGNSS)"
+            fullName: "Cyclone Global Navigation Satellite System (CYGNSS)",
+            type: "STAC"
         },
         "goes_radF_l1b_C02": {
             id: "goes_radF_l1b_C02",
             name: "GOES (Channel 2)",
-            fullName: "GOES (Channel 2)"
+            fullName: "GOES (Channel 2)",
+            type: "STAC"
         },
         "goes_radF_l1b_C08": {
             id: "goes_radF_l1b_C08",
             name: "GOES (Channel 8)",
-            fullName: "GOES (Channel 8)"
+            fullName: "GOES (Channel 8)",
+            type: "STAC"
         },
         "goes_radF_l1b_C13": {
             id: "goes_radF_l1b_C13",
             name: "GOES (Channel 13)",
-            fullName: "GOES (Channel 13)"
+            fullName: "GOES (Channel 13)",
+            type: "STAC"
         },
         "modis_mosaic": {
             id: "modis_mosaic",
             name: "MODIS (Band 31)",
-            fullName: "MODIS (Band 31)"
+            fullName: "MODIS (Band 31)",
+            type: "STAC"
         },
         "viirs_mosaic": {
             id: "viirs_mosaic",
             name: "VIIRS (Band I5)",
-            fullName: "VIIRS (Band I5)"
+            fullName: "VIIRS (Band I5)",
+            type: "STAC"
         },
         "public.path_point": {
             id: "public.path_point",
@@ -85,7 +93,11 @@ export function DashboardContainer() {
                 DATAPRODUCTS["gpm_imerg"], DATAPRODUCTS["sst"], DATAPRODUCTS["cygnss"],
                 DATAPRODUCTS["goes_radF_l1b_C02"], DATAPRODUCTS["goes_radF_l1b_C08"], DATAPRODUCTS["goes_radF_l1b_C13"],
                 DATAPRODUCTS["modis_mosaic"],
-                DATAPRODUCTS["viirs_mosaic"]
+                DATAPRODUCTS["viirs_mosaic"],
+                DATAPRODUCTS["public.path_point"],
+                DATAPRODUCTS["public.path_line"],
+                DATAPRODUCTS["public.wind_polygon"]
+
             ]
         },
         "MILTON": {
@@ -117,10 +129,20 @@ export function DashboardContainer() {
         const fetchData = async () => {
             try {
                 const dataProductsFetchPromises = [];
-                // const dataProductsFetchPromises = {};
-                Object.keys(CYCLONES).forEach((cyclone => {
+
+                Object.keys(CYCLONES).forEach((cyclone) => {
                     const { dataProducts, id: cycloneId } = CYCLONES[cyclone];
-                    dataProducts.forEach(dataProduct => {
+                    const RasterDataProducts = [];
+                    const VectorDataProducts = [];
+                    dataProducts.forEach((dp) => {
+                        if (dp.type === "FEATURES") {
+                            VectorDataProducts.push(dp);
+                        } else if (dp.type === "STAC") {
+                            RasterDataProducts.push(dp);
+                        }
+                    });
+
+                    RasterDataProducts.forEach(dataProduct => {
                         const collectionId = dataProduct.id + "-cyclone-" + cycloneId;
                         const collectionUrl = `${process.env.REACT_APP_STAC_API_URL}/collections/${collectionId}`;
                         const collectionItemUrl = `${collectionUrl}/items`;
@@ -135,18 +157,37 @@ export function DashboardContainer() {
                         dataProductsFetchPromises.push(itemPromise);
                         // dataProductsFetchPromises[cycloneName+"-"+dataProduct.id] = promise;
                     });
-                }));
+
+                    VectorDataProducts.forEach(dataProduct => {
+                        const collectionId = dataProduct.id + "_cyclone_" + cycloneId;
+                        const collectionUrl = `${process.env.REACT_APP_FEATURES_API_URL}/collections/${collectionId}`;
+                        const collectionItemUrl = `${collectionUrl}/items`;
+                    
+                        // get the collection details
+                        const collectionPromise = fetch(collectionUrl).then(async metaData => metaData.json()).then(result => [result])
+                                                    .catch(err => console.error("Error fetching data: ", err));
+                        dataProductsFetchPromises.push(collectionPromise);
+                    
+                        // get all the collection items
+                        const itemPromise = fetchAllFromFeaturesAPI(collectionItemUrl);
+                        dataProductsFetchPromises.push(itemPromise);
+                    });
+                });
+
                 const data = await Promise.allSettled(dataProductsFetchPromises);
-                const collectionData = [];
-                const collectionItemData = [];
-                // const data = await Promise.all(Object.entries(dataProductsFetchPromises).map(([key, promise]) => promise.then(value => [key, value])));
-                // const jsonData = Object.fromEntries(data)
+                const STACCollectionData = [];
+                const STACCollectionItemData = [];
+                const FeatureCollectionData = [];
+                const FeatureCollectionItemData = [];
                 data.forEach(d => {
                     if (!d || !d.value || !d.value.length || d.status==="rejected") return;
-                    if (d.value[0].type === "Collection") collectionData.push(d.value)
-                    else if (d.value[0].type === "Feature") collectionItemData.push(d.value)
+                    let sample = d.value[0]
+                    if (sample.type === "Collection" && !!sample.item_assets) STACCollectionData.push(d.value)
+                    else if (sample.itemType === "feature" && !sample.item_assets) FeatureCollectionData.push(d.value)
+                    else if (sample.type === "Feature" && !!sample.assets) STACCollectionItemData.push(d.value)
+                    else if (sample.type === "Feature" && !sample.assets) FeatureCollectionItemData.push(d.value)
                 });
-                const cycloneDictionary = dataTransformationCyclone(collectionData, collectionItemData)
+                const cycloneDictionary = dataTransformationCyclone(STACCollectionData, STACCollectionItemData, FeatureCollectionData, FeatureCollectionItemData);
                 dataTreeCyclone.current = cycloneDictionary;
                 // remove loading
                 setLoadingData(false);
