@@ -112,25 +112,42 @@ export const MapControls = ({
       let resultHTML = ""
 
       if (!selectedDataProductIds.length || !selectedCycloneId) {
-        resultHTML = "<p>No data products Selected</p>";
+        resultHTML = "<p>No Data Products Selected</p>";
       } else {
         const rasterDataProducts = selectedDataProductIds.map(dp => {
-          if (dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dp].type === "Raster") return dp;
+          if (dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dp].type === "Raster") {
+            return dp;
+          }
+          return null;
         }).filter(item => item);
-        const promises = rasterDataProducts.map((dp) => {
-          const dataProductItem = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dp].dataset.getAsset(selectedStartDate);
-          const { assets } = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dp];
-          const { collection: collectionId, id: itemId } = dataProductItem;
-          return fetchIntensityData(lng, lat, collectionId, itemId, assets);
-        });
-        const data = await Promise.all(promises);
-        data.forEach((res, idx) => { // assuming the promise.all will retain order
-          resultHTML+= `
-            <b>${dataProducts[rasterDataProducts[idx]].name}</b>
-            <div>${res}</div>
-            <br>
-          `
-        });
+        // maintain order wrt to the dataProducts item order
+        const rasterDataProductsSet = new Set(rasterDataProducts);
+        const orderedRasterDataProducts = Object.keys(dataProducts).map((dataProduct) => {
+          if (rasterDataProductsSet.has(dataProduct)) {
+            return dataProduct;
+          } else {
+            return null;
+          }
+        }).filter(elem => elem);
+        // maintain order wrt to the dataProducts item order end
+        if (!orderedRasterDataProducts.length) {
+          resultHTML = "<p>No Raster Data Products Selected</p>"
+        } else {
+          const promises = orderedRasterDataProducts.map((dp) => {
+            const dataProductItem = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dp].dataset.getAsset(selectedStartDate);
+            const { assets } = dataTreeCyclone.current[selectedCycloneId]["dataProducts"][dp];
+            const { collection: collectionId, id: itemId } = dataProductItem;
+            return fetchIntensityData(lng, lat, collectionId, itemId, assets);
+          });
+          const data = await Promise.all(promises);
+          data.forEach((res, idx) => { // assuming the promise.all will retain order
+            resultHTML+= `
+              <b>${dataProducts[orderedRasterDataProducts[idx]].name}</b>
+              <div>${res}</div>
+              <br>
+            `
+          });
+        }
       }
       // show it in the tooltip
       const el = document.createElement('div');
