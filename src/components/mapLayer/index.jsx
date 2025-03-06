@@ -114,7 +114,7 @@ const MapAllVectorLayer = ({ dataProducts, dataProductId }) => {
     return (
         <div>
         {
-            dataProducts && dataProducts.length && dataProducts.map((dataProductItem, idx) => {
+            dataProducts?.length && dataProducts.map((dataProductItem, idx) => {
                 return (<MapLayerVector
                     key={dataProductId+dataProductItem.collection+dataProductItem.id+idx}
                     uniqueId={dataProductId+dataProductItem.collection+dataProductItem.id+idx}
@@ -172,7 +172,7 @@ export const MapLayers = ({ dataTreeCyclone, startDate, hoveredPlumeId, handleLa
     }, [startDate, map, dataTreeCyclone, selectedDataProductIds, selectedCycloneId])
 
     return (<>
-        {rasterDataProducts && rasterDataProducts.length && rasterDataProducts.map((dataProduct) =>
+        {rasterDataProducts?.length && rasterDataProducts.map((dataProduct) =>
             <MapLayerRaster
                 key={dataProduct.dataset.id}
                 plumeId={dataProduct.dataset.id}
@@ -187,7 +187,7 @@ export const MapLayers = ({ dataTreeCyclone, startDate, hoveredPlumeId, handleLa
             >
             </MapLayerRaster>
         )}
-        {vectorDataProducts && vectorDataProducts.length && vectorDataProducts.map((dataProduct, idx) =>
+        {vectorDataProducts?.length && vectorDataProducts.map((dataProduct, idx) =>
             <MapAllVectorLayer
                 key={dataProduct.dataset.id+idx}
                 dataProducts={dataProduct.dataset.subDailyAssets}

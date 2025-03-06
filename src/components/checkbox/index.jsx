@@ -41,6 +41,10 @@ export function DatasetCheckbox({ dataProducts, dataTreeCyclone, selectedCyclone
         if (!selectedProductIdForAnimation) return;
         setChecked([selectedProductIdForAnimation])
     }, [selectedProductIdForAnimation]);
+    console.log(dataTreeCyclone.current, "--", selectedCycloneId, "--")
+    if (dataTreeCyclone.current && selectedCycloneId && !(selectedCycloneId in dataTreeCyclone.current)) {
+        return (<p>No data products available for the selected Cyclone...</p>);
+    }
 
     return (
     <List sx={{ width: '100%', maxWidth: 360, maxHeight: 230, overflow: "scroll",  bgcolor: 'background.paper' }}>
