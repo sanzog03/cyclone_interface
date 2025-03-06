@@ -110,12 +110,11 @@ export const MapLayerVector = ({ dataProductItem, dataItemId, uniqueId }) => {
     return null;
 }
 
-const MapAllVectorLayer = (dataProducts, dataProductId) => {
-// const MapAllVectorLayer = ({ dataProducts, dataProductId }) => { // TODO: this doesnot work. But why??
+const MapAllVectorLayer = ({ dataProducts, dataProductId }) => {
     return (
         <div>
         {
-            dataProducts.dataProducts && dataProducts.dataProducts.length && dataProducts.dataProducts.map((dataProductItem, idx) => {
+            dataProducts && dataProducts.length && dataProducts.map((dataProductItem, idx) => {
                 return (<MapLayerVector
                     key={dataProductId+dataProductItem.collection+dataProductItem.id+idx}
                     uniqueId={dataProductId+dataProductItem.collection+dataProductItem.id+idx}
