@@ -73,15 +73,15 @@ export const MapLayerRaster = ({ dataProduct, rescale, colormap, handleLayerClic
     return null;
 }
 
-export const MapLayerVector = ({ dataProduct, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId }) => {
+export const MapLayerVector = ({ dataProductItem, dataItemId, uniqueId }) => {
     const { map } = useMapbox();
 
     useEffect(() => {
-        if (!map || !dataProduct) return;
+        if (!map || !dataProductItem || !dataItemId) return;
 
-        const feature = dataProduct;
-        const polygonSourceId = getSourceId("polygon"+plumeId);
-        const polygonLayerId = getLayerId("polygon"+plumeId);
+        const feature = dataProductItem;
+        const polygonSourceId = getSourceId("polygon"+dataItemId+uniqueId);
+        const polygonLayerId = getLayerId("polygon"+dataItemId+uniqueId);
 
         addSourcePolygonToMap(map, feature, polygonSourceId, polygonLayerId)
 
@@ -105,57 +105,27 @@ export const MapLayerVector = ({ dataProduct, handleLayerClick, plumeId, hovered
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dataProduct, map, handleLayerClick, plumeId, setHoveredPlumeId]);
-
-    useEffect(() => {
-        if (!map || !hoveredPlumeId || !plumeId ) return;
-
-        const polygonLayerId = getLayerId("polygon"+plumeId);
-        const rasterLayerId = getLayerId("raster"+plumeId);
-
-        if (hoveredPlumeId !== plumeId) {
-            // when the plume is not hovered
-            if (layerExists(map, polygonLayerId)) {
-                map.setPaintProperty(polygonLayerId, 'fill-outline-color', '#20B2AA');
-            }
-            if (layerExists(map, rasterLayerId)) {
-                map.setLayoutProperty(rasterLayerId, 'visibility', 'none');
-            }
-        }
-
-        if (hoveredPlumeId === plumeId) {
-            // when the plume is hovered
-            if (layerExists(map, rasterLayerId)) {
-                map.moveLayer(rasterLayerId);
-            }
-            if (layerExists(map, polygonLayerId)) {
-                map.setPaintProperty(polygonLayerId, 'fill-outline-color', '#0000ff');
-            }
-        }
-    }, [hoveredPlumeId, map, plumeId]);
+    }, [dataProductItem, map, dataItemId]);
 
     return null;
 }
 
-const MapAllVectorLayer = (dataProducts, handleLayerClick, hoveredPlumeId, setHoveredPlumeId) => {
-    const { plumeId } = dataProducts;
+const MapAllVectorLayer = (dataProducts, dataProductId) => {
+// const MapAllVectorLayer = ({ dataProducts, dataProductId }) => { // TODO: this doesnot work. But why??
     return (
-        <>
+        <div>
         {
-            dataProducts.dataProducts && dataProducts.dataProducts.length && dataProducts.dataProducts.map((dataProductItem, idx) =>
-            <MapLayerVector
-                key={plumeId+dataProductItem.id+idx}
-                noRaster={true}
-                plumeId={plumeId+"_"+dataProductItem.id}
-                dataProduct={dataProductItem}
-                handleLayerClick={handleLayerClick}
-                hoveredPlumeId={hoveredPlumeId}
-                setHoveredPlumeId={setHoveredPlumeId}
-            >
-            </MapLayerVector>
-            )
+            dataProducts.dataProducts && dataProducts.dataProducts.length && dataProducts.dataProducts.map((dataProductItem, idx) => {
+                return (<MapLayerVector
+                    key={dataProductId+dataProductItem.collection+dataProductItem.id+idx}
+                    uniqueId={dataProductId+dataProductItem.collection+dataProductItem.id+idx}
+                    dataItemId={dataProductItem.id}
+                    dataProductItem={dataProductItem}
+                >
+                </MapLayerVector>)
+            })
         }
-        </>
+        </div>
     )
 }
 
@@ -218,15 +188,12 @@ export const MapLayers = ({ dataTreeCyclone, startDate, hoveredPlumeId, handleLa
             >
             </MapLayerRaster>
         )}
-        {vectorDataProducts && vectorDataProducts.length && vectorDataProducts.map((dataProduct) =>
+        {vectorDataProducts && vectorDataProducts.length && vectorDataProducts.map((dataProduct, idx) =>
             <MapAllVectorLayer
-                key={dataProduct.dataset.id}
+                key={dataProduct.dataset.id+idx}
                 dataProducts={dataProduct.dataset.subDailyAssets}
-                handleLayerClick={handleLayerClick}
-                hoveredPlumeId={hoveredPlumeId}
-                setHoveredPlumeId={setHoveredPlumeId}
-            >
-            </MapAllVectorLayer>
+                dataProductId={dataProduct.dataset.id}
+            />
         )}
         </>
     );
