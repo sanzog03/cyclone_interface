@@ -43,12 +43,12 @@ export const addSourcePolygonToMap = (map, feature, polygonSourceId, polygonLaye
 
     map.addLayer({
         id: polygonLayerId,
-        type: "fill",
+        type: "line",
         source: polygonSourceId,
         layout: {},
         paint: {
-            "fill-outline-color": "#20B2AA",
-            "fill-color": "transparent",
+            "line-color": "#20B2AA",
+            "line-width": 2
         }
     });
 }
