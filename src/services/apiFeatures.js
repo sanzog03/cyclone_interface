@@ -14,12 +14,12 @@ export const fetchAllFromFeaturesAPI = async (featureApiUrl) => {
       const jsonResult = await response.json();
       requiredResult.push(...getResultArray(jsonResult));
 
-      // need to pull in remaining data based on the pagination information
-      const { numberMatched, numberReturned } = jsonResult;
-      if (numberMatched > numberReturned) {
-        let remainingData = await fetchRemainingData(featureApiUrl, numberMatched, numberReturned, pageLimit);
-        requiredResult.push(...remainingData);
-      }
+      // // need to pull in remaining data based on the pagination information
+      // const { numberMatched, numberReturned } = jsonResult;
+      // if (numberMatched > numberReturned) {
+      //   let remainingData = await fetchRemainingData(featureApiUrl, numberMatched, numberReturned, pageLimit);
+      //   requiredResult.push(...remainingData);
+      // }
       return requiredResult;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -66,6 +66,7 @@ const addOffsetsToURL = (url, offset, limit) => {
 }
 
 const getMaxLimitPerPage = (url) => {
+  return 100;
   // Note: as of current features api deployment, the max limit is 1000 for collection result and 10,000 for colleciton item result
   if (url.includes('items')) {
       // https://<url>/api/features/collections/<collection_id>/items
