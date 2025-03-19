@@ -1,5 +1,5 @@
 import moment from "moment";
-import { STACItem, STACCollection, FeatureCollection, FeatureItem, CycloneShapeDataset } from "../../../dataModel";
+import { STACItem, STACCollection, FeatureCollection, FeatureItem, CycloneShapeDataset, DateTime } from "../../../dataModel";
 
 import { CycloneRasterDataset, RasterDataProduct, VectorDataProduct, Cyclone, CycloneMap, VisualizationType, ShapeType, PolygonAsset, LineStringAsset, PointAsset } from "../../../dataModel"
 
@@ -124,6 +124,8 @@ export function dataTransformationCyclone(STACCollections: STACCollection[][], S
 
         let type: ShapeType = ShapeType.Point;
         let dateTimeSensitive: Boolean = false;
+        let sortedItems = items;
+        let datetimes: string[] = [];
 
         if (collectionName.includes("point")) {
             type = ShapeType.Point;
@@ -134,9 +136,21 @@ export function dataTransformationCyclone(STACCollections: STACCollection[][], S
         } else if (collectionName.includes("wind_vectors")) {
             type = ShapeType.Line;
             dateTimeSensitive = true;
+            sortedItems = items.sort((prev: PolygonAsset | LineStringAsset | PointAsset, next: PolygonAsset | LineStringAsset | PointAsset): number => {
+                const prev_date = new Date(prev.properties.datetime).getTime();
+                const next_date = new Date(next.properties.datetime).getTime();
+                return prev_date - next_date;
+            });
+            datetimes = sortedItems.map(item => item.properties.datetime);
         } else if (collectionName.includes("swath")) {
             type = ShapeType.Polygon;
             dateTimeSensitive = true;
+            sortedItems = items.sort((prev: PolygonAsset | LineStringAsset | PointAsset, next: PolygonAsset | LineStringAsset | PointAsset): number => {
+                const prev_date = new Date(prev.properties.time_start).getTime();
+                const next_date = new Date(next.properties.time_start).getTime();
+                return prev_date - next_date;
+            });
+            datetimes = sortedItems.map(item => item.properties.time_start);
         }
         // create CycloneShapeDataset
         const cycloneShapeDataset: CycloneShapeDataset = {
@@ -144,12 +158,14 @@ export function dataTransformationCyclone(STACCollections: STACCollection[][], S
             type: type,
             dateTimeSensitive: dateTimeSensitive,
             representationalAsset: items[0],
-            subDailyAssets: [...items],
+            subDailyAssets: [...sortedItems],
+            datetimes: datetimes,
             getAsset: (dateTime: string) => {
-                if (!dateTime) return cycloneShapeDataset.subDailyAssets;
+                if (!dateTime || !cycloneShapeDataset.datetimes.length) return cycloneShapeDataset.subDailyAssets;
                 const dateTimeNoTimezone = moment(dateTime).format('YYYY-MM-DD HH:mm:ss'); // remove the timezone information that might
                 // be attached with the target datetime
-                const [ startIndex, endIndex ] = findWindowIndex(cycloneShapeDataset.subDailyAssets, dateTimeNoTimezone)
+                const [ startIndex, endIndex ] = findWindowIndex(cycloneShapeDataset.datetimes, dateTimeNoTimezone)
+                if (startIndex === -1 || endIndex === -1) return [];
                 const assetsForDateTime: PolygonAsset[] | LineStringAsset[] | PointAsset[] = cycloneShapeDataset.subDailyAssets.slice(startIndex, endIndex+1);
                 return assetsForDateTime;
             }
@@ -160,6 +176,7 @@ export function dataTransformationCyclone(STACCollections: STACCollection[][], S
             id: dataProductName+"_cyclone_"+cycloneName,
             type: VisualizationType.Vector,
             name: dataProductName,
+            datetimes: datetimes,
             dataset: cycloneShapeDataset,
             description: vectorCollectionDictionary[collectionName].id,
         }
@@ -226,9 +243,23 @@ export function findNearestDatetimeIndex(sortedStacItems: STACItem[], targetDate
     return nearestNeighborIdx;
 }
 
-export function findWindowIndex(sortedFeatureItems: PolygonAsset[] | LineStringAsset[] | PointAsset[], targetDatetime: string ): [number, number] {
-    // TODO: find the start-index and end-index that contains all the featureItems within the selected date
-    return [0, sortedFeatureItems.length - 1]
-}
+export function findWindowIndex(sortedDatetime: DateTime[], targetDatetime: string ): [number, number] {
+    if (!sortedDatetime.length || !targetDatetime) {
+        return [-1, -1];
+    }
 
-// export function
+    let left = 0;
+    let right = sortedDatetime.length - 1;
+
+    if (moment(targetDatetime).isBefore(sortedDatetime[left], "day") || moment(targetDatetime).isAfter(sortedDatetime[right], "day")) {
+        return [-1, -1];
+    }
+
+    while (moment(sortedDatetime[left]).isBefore(targetDatetime, "day")) {
+        left += 1;
+    }
+    while (moment(sortedDatetime[right]).isAfter(moment(targetDatetime).add(1, "day"), "day")) {
+        right -= 1;
+    }
+    return [left, right];
+}
