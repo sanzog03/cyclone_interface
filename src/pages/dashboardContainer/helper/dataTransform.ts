@@ -1,7 +1,7 @@
 import moment from "moment";
 import { STACItem, STACCollection, FeatureCollection, FeatureItem, CycloneShapeDataset } from "../../../dataModel";
 
-import { CycloneRasterDataset, RasterDataProduct, VectorDataProduct, Cyclone, CycloneMap, VisualizationType } from "../../../dataModel"
+import { CycloneRasterDataset, RasterDataProduct, VectorDataProduct, Cyclone, CycloneMap, VisualizationType, ShapeType, PolygonAsset, LineStringAsset, PointAsset } from "../../../dataModel"
 
 // NEW!!!
 
@@ -122,10 +122,37 @@ export function dataTransformationCyclone(STACCollections: STACCollection[][], S
         const cycloneName = acc[lenAcc-1];
         const dataProductName = dataProductNameArr.join("_");
 
+        let type: ShapeType = ShapeType.Point;
+        let dateTimeSensitive: Boolean = false;
+
+        if (collectionName.includes("point")) {
+            type = ShapeType.Point;
+        } else if (collectionName.includes("line")) {
+            type = ShapeType.Line;
+        } else if (collectionName.includes("polygon")) {
+            type = ShapeType.Polygon;
+        } else if (collectionName.includes("wind_vectors")) {
+            type = ShapeType.Line;
+            dateTimeSensitive = true;
+        } else if (collectionName.includes("swath")) {
+            type = ShapeType.Polygon;
+            dateTimeSensitive = true;
+        }
         // create CycloneShapeDataset
         const cycloneShapeDataset: CycloneShapeDataset = {
             id: dataProductName+"_cyclone_"+cycloneName,
+            type: type,
+            dateTimeSensitive: dateTimeSensitive,
+            representationalAsset: items[0],
             subDailyAssets: [...items],
+            getAsset: (dateTime: string) => {
+                if (!dateTime) return cycloneShapeDataset.subDailyAssets;
+                const dateTimeNoTimezone = moment(dateTime).format('YYYY-MM-DD HH:mm:ss'); // remove the timezone information that might
+                // be attached with the target datetime
+                const [ startIndex, endIndex ] = findWindowIndex(cycloneShapeDataset.subDailyAssets, dateTimeNoTimezone)
+                const assetsForDateTime: PolygonAsset[] | LineStringAsset[] | PointAsset[] = cycloneShapeDataset.subDailyAssets.slice(startIndex, endIndex+1);
+                return assetsForDateTime;
+            }
         };
 
         // create VectorDataProduct
@@ -197,6 +224,11 @@ export function findNearestDatetimeIndex(sortedStacItems: STACItem[], targetDate
     }
     // if no exact match found
     return nearestNeighborIdx;
+}
+
+export function findWindowIndex(sortedFeatureItems: PolygonAsset[] | LineStringAsset[] | PointAsset[], targetDatetime: string ): [number, number] {
+    // TODO: find the start-index and end-index that contains all the featureItems within the selected date
+    return [0, sortedFeatureItems.length - 1]
 }
 
 // export function

@@ -18,3 +18,4 @@ export type { STACItem } from "./cyclone";
 export type { FeatureItem } from "./cyclone";
 
 export { VisualizationType } from "./cyclone";
+export { ShapeType } from "./cyclone";
