@@ -33,7 +33,30 @@ export const addSourceLayerToMap = (map, feature, sourceId, layerId, VMIN=250, V
     });
 }
 
-export const addSourcePolygonToMap = (map, feature, polygonSourceId, polygonLayerId) => {
+export const addSourcePointToMap = (map, feature, polygonSourceId, polygonLayerId) => {
+    if (!map || (sourceExists(map, polygonSourceId) && layerExists(map, polygonLayerId))) return;
+
+    map.addSource(polygonSourceId, {
+        type: "geojson",
+        data: feature
+    });
+
+    map.addLayer({
+        id: polygonLayerId,
+        type: "circle",
+        source: polygonSourceId,
+        layout: {},
+        paint: {
+            "circle-color": "#20B2AA",
+            "circle-opacity": 0.3,
+            "circle-stroke-color": "#20B2AA",
+            "circle-stroke-opacity": 1,
+            "circle-stroke-width": 2,
+        }
+    });
+}
+
+export const addSourceLineToMap = (map, feature, polygonSourceId, polygonLayerId) => {
     if (!map || (sourceExists(map, polygonSourceId) && layerExists(map, polygonLayerId))) return;
 
     map.addSource(polygonSourceId, {
@@ -53,6 +76,27 @@ export const addSourcePolygonToMap = (map, feature, polygonSourceId, polygonLaye
     });
 }
 
+export const addSourcePolygonToMap = (map, feature, polygonSourceId, polygonLayerId) => {
+    if (!map || (sourceExists(map, polygonSourceId) && layerExists(map, polygonLayerId))) return;
+
+    map.addSource(polygonSourceId, {
+        type: "geojson",
+        data: feature
+    });
+
+    map.addLayer({
+        id: polygonLayerId,
+        type: "fill",
+        source: polygonSourceId,
+        layout: {},
+        paint: {
+            "fill-antialias": true,
+            "fill-opacity": 0.5,
+            "fill-color": "#20B2AA",
+            "fill-outline-color": "#20B2AA"
+        }
+    });
+}
 
 export const getSourceId = (idx) => {
     return "raster-source-" + idx;

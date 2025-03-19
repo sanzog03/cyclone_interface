@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMapbox } from "../../context/mapContext";
-import { addSourceLayerToMap, addSourcePolygonToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
+import { addSourceLayerToMap, addSourcePointToMap, addSourceLineToMap, addSourcePolygonToMap, getSourceId, getLayerId, layerExists, sourceExists } from "../../utils";
 
 export const MapLayerRaster = ({ dataProduct, rescale, colormap, handleLayerClick, plumeId, hoveredPlumeId, setHoveredPlumeId, startDate, opacity }) => {
     const { map } = useMapbox();
@@ -73,17 +73,27 @@ export const MapLayerRaster = ({ dataProduct, rescale, colormap, handleLayerClic
     return null;
 }
 
-export const MapLayerVector = ({ dataProductItem, dataItemId, uniqueId }) => {
+const MapAllVectorLayer = ({ dataProducts, dataProductId, datasetType }) => {
     const { map } = useMapbox();
 
     useEffect(() => {
-        if (!map || !dataProductItem || !dataItemId) return;
+        if (!map || !dataProducts || !dataProducts.length || !datasetType) return;
 
-        const feature = dataProductItem;
-        const polygonSourceId = getSourceId("polygon"+dataItemId+uniqueId);
-        const polygonLayerId = getLayerId("polygon"+dataItemId+uniqueId);
+        const featureCollection = {
+            "type": "FeatureCollection",
+            "features": dataProducts
+        }
 
-        addSourcePolygonToMap(map, feature, polygonSourceId, polygonLayerId)
+        const polygonSourceId = getSourceId("polygon"+dataProductId);
+        const polygonLayerId = getLayerId("polygon"+dataProductId);
+
+        if (datasetType === "Point") {
+            addSourcePointToMap(map, featureCollection, polygonSourceId, polygonLayerId)
+        } else if (datasetType === "Line") {
+            addSourceLineToMap(map, featureCollection, polygonSourceId, polygonLayerId)
+        } else if (datasetType === "Polygon") {
+            addSourcePolygonToMap(map, featureCollection, polygonSourceId, polygonLayerId)
+        }
 
         const onClickHandler = (e) => {
             // handleLayerClick(plumeId);
@@ -105,27 +115,9 @@ export const MapLayerVector = ({ dataProductItem, dataItemId, uniqueId }) => {
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dataProductItem, map, dataItemId]);
+    }, [map, dataProducts, dataProductId, datasetType]);
 
     return null;
-}
-
-const MapAllVectorLayer = ({ dataProducts, dataProductId }) => {
-    return (
-        <div>
-        {
-            dataProducts?.length && dataProducts.map((dataProductItem, idx) => {
-                return (<MapLayerVector
-                    key={dataProductId+dataProductItem.collection+dataProductItem.id+idx}
-                    uniqueId={dataProductId+dataProductItem.collection+dataProductItem.id+idx}
-                    dataItemId={dataProductItem.id}
-                    dataProductItem={dataProductItem}
-                >
-                </MapLayerVector>)
-            })
-        }
-        </div>
-    )
 }
 
 export const MapLayers = ({ dataTreeCyclone, startDate, hoveredPlumeId, handleLayerClick, setHoveredPlumeId, selectedCycloneId, selectedDataProductIds, selectedDataProductIdsOpacity }) => {
@@ -189,9 +181,10 @@ export const MapLayers = ({ dataTreeCyclone, startDate, hoveredPlumeId, handleLa
         )}
         {vectorDataProducts?.length && vectorDataProducts.map((dataProduct, idx) =>
             <MapAllVectorLayer
-                key={dataProduct.dataset.id+idx}
-                dataProducts={dataProduct.dataset.subDailyAssets}
-                dataProductId={dataProduct.dataset.id}
+                key={ dataProduct.dataset.id+idx }
+                dataProducts={ dataProduct.dataset.dateTimeSensitive ? dataProduct.dataset.getAsset(startDate) : dataProduct.dataset.subDailyAssets }
+                dataProductId={ dataProduct.dataset.id }
+                datasetType={ dataProduct.dataset.type }
             />
         )}
         </>
