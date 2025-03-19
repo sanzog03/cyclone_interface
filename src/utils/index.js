@@ -90,8 +90,7 @@ export const addSourceLineToMap = (map, feature, polygonSourceId, polygonLayerId
         source: polygonSourceId,
         layout: {},
         paint: {
-            // "line-color": ,
-            "line-width": 2,
+            "line-width": getLineStrokeWidth(dataProductId),
             "line-color": getLineColor(dataProductId)
         }
     });
@@ -107,8 +106,18 @@ function getLineColor(dataProductId) {
             10, '#FFFF00',   // Yellow for moderate
             20, '#FF0000'    // Red for strong winds
         ]
+    } else if (dataProductId.includes("public.path_line")) {
+        return "#000000"
     } else {
         return "#20B2AA"
+    }
+}
+
+function getLineStrokeWidth(dataProductId) {
+    if (dataProductId.includes("public.path_line")) {
+        return 6
+    } else {
+        return 2
     }
 }
 
@@ -127,11 +136,26 @@ export const addSourcePolygonToMap = (map, feature, polygonSourceId, polygonLaye
         layout: {},
         paint: {
             "fill-antialias": true,
-            "fill-opacity": 0.5,
-            "fill-color": "#20B2AA",
-            "fill-outline-color": "#20B2AA"
+            "fill-opacity": 1,
+            "fill-color": getPolygonColor(dataProductId),
+            "fill-outline-color": getPolygonColor(dataProductId)
         }
     });
+}
+
+function getPolygonColor(dataProductId) {
+    if (dataProductId.includes("public.wind_polygon")) {
+        return [
+            'interpolate',
+            ['linear'],
+            ['get', 'radii'],
+            34, "#FFFF73",
+            50, "#FFAA00",
+            64, "#E60000",
+        ]
+    } else {
+        return "#20B2AA"
+    }
 }
 
 export const getSourceId = (idx) => {
