@@ -47,13 +47,33 @@ export const addSourcePointToMap = (map, feature, polygonSourceId, polygonLayerI
         source: polygonSourceId,
         layout: {},
         paint: {
-            "circle-color": "#20B2AA",
+            "circle-color": getPointColor(dataProductId),
             "circle-opacity": 0.3,
-            "circle-stroke-color": "#20B2AA",
+            "circle-stroke-color": getPointColor(dataProductId),
             "circle-stroke-opacity": 1,
             "circle-stroke-width": 2,
         }
     });
+}
+
+function getPointColor(dataProductId) {
+    if (dataProductId.includes("public.path_point")) {
+        return [
+            'match',
+            ['get', 'stormtype'],
+            "EX", "#E1E1E1",
+            "TD", "#CCCCCC",
+            "TS", "#00C5FF",
+            "C1", "#55FF00",
+            "C2", "#FFFF73",
+            "C3", "#FFAA00",
+            "C4", "#E60000",
+            "C5", "#FF00C5",
+            '#20B2AA'        // Default - Gray
+        ]
+    } else {
+        return "#20B2AA"
+    }
 }
 
 export const addSourceLineToMap = (map, feature, polygonSourceId, polygonLayerId, dataProductId) => {
