@@ -88,11 +88,11 @@ const MapAllVectorLayer = ({ dataProducts, dataProductId, datasetType }) => {
         const polygonLayerId = getLayerId("polygon"+dataProductId);
 
         if (datasetType === "Point") {
-            addSourcePointToMap(map, featureCollection, polygonSourceId, polygonLayerId)
+            addSourcePointToMap(map, featureCollection, polygonSourceId, polygonLayerId, dataProductId)
         } else if (datasetType === "Line") {
-            addSourceLineToMap(map, featureCollection, polygonSourceId, polygonLayerId)
+            addSourceLineToMap(map, featureCollection, polygonSourceId, polygonLayerId, dataProductId)
         } else if (datasetType === "Polygon") {
-            addSourcePolygonToMap(map, featureCollection, polygonSourceId, polygonLayerId)
+            addSourcePolygonToMap(map, featureCollection, polygonSourceId, polygonLayerId, dataProductId)
         }
 
         const onClickHandler = (e) => {

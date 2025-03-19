@@ -33,7 +33,7 @@ export const addSourceLayerToMap = (map, feature, sourceId, layerId, VMIN=250, V
     });
 }
 
-export const addSourcePointToMap = (map, feature, polygonSourceId, polygonLayerId) => {
+export const addSourcePointToMap = (map, feature, polygonSourceId, polygonLayerId, dataProductId) => {
     if (!map || (sourceExists(map, polygonSourceId) && layerExists(map, polygonLayerId))) return;
 
     map.addSource(polygonSourceId, {
@@ -56,7 +56,7 @@ export const addSourcePointToMap = (map, feature, polygonSourceId, polygonLayerI
     });
 }
 
-export const addSourceLineToMap = (map, feature, polygonSourceId, polygonLayerId) => {
+export const addSourceLineToMap = (map, feature, polygonSourceId, polygonLayerId, dataProductId) => {
     if (!map || (sourceExists(map, polygonSourceId) && layerExists(map, polygonLayerId))) return;
 
     map.addSource(polygonSourceId, {
@@ -70,13 +70,29 @@ export const addSourceLineToMap = (map, feature, polygonSourceId, polygonLayerId
         source: polygonSourceId,
         layout: {},
         paint: {
-            "line-color": "#20B2AA",
-            "line-width": 2
+            // "line-color": ,
+            "line-width": 2,
+            "line-color": getLineColor(dataProductId)
         }
     });
 }
 
-export const addSourcePolygonToMap = (map, feature, polygonSourceId, polygonLayerId) => {
+function getLineColor(dataProductId) {
+    if (dataProductId.includes("public.wind_vectors")) {
+        return [
+            'interpolate',
+            ['linear'],
+            ['get', 'wind_speed_knots'],
+            0, '#00FF00',    // Green for calm
+            10, '#FFFF00',   // Yellow for moderate
+            20, '#FF0000'    // Red for strong winds
+        ]
+    } else {
+        return "#20B2AA"
+    }
+}
+
+export const addSourcePolygonToMap = (map, feature, polygonSourceId, polygonLayerId, dataProductId) => {
     if (!map || (sourceExists(map, polygonSourceId) && layerExists(map, polygonLayerId))) return;
 
     map.addSource(polygonSourceId, {
