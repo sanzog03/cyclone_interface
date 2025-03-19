@@ -19,6 +19,12 @@ export enum VisualizationType {
     Raster = "Raster"
 }
 
+export enum ShapeType {
+    Point = "Point", // Layer type: Symbol, Required Data Format: Point Coordinates, representing: text/labels/icons
+    Line = "Line", // Layer type: Line, Required Data Format: Geojson LineString, representing: stroked path
+    Polygon = "Polygon" // Layer type: Fill, Required Data Format: Geojson Polygon, representing: Solid color area
+}
+
 // End Declarations
 
 export interface CycloneRasterDataset {
@@ -35,7 +41,12 @@ export interface CycloneRasterDataset {
 
 export interface CycloneShapeDataset {
     id: string; // Format: <dataproduct>_hurricane_<hurricane_name>. e.g. path_line_hurricane_beryl
+    type: ShapeType; // type of shape that the dataset represents
+    dateTimeSensitive: Boolean; // if false, simply show all the assets. else get the Asset and show that.
+    datetimes: DateTime[]; // only available if dataset is dateTime Sensitive
+    representationalAsset: PolygonAsset | LineStringAsset | PointAsset;
     subDailyAssets: PolygonAsset[] | LineStringAsset[] | PointAsset[];
+    getAsset: (dateTime: DateTime) => PolygonAsset[] | LineStringAsset[] | PointAsset[];
 }
 
 export interface RasterDataProduct { // ~ Collection
@@ -55,6 +66,7 @@ export interface VectorDataProduct {
     type: VisualizationType;
     name: string; // path_line, path_point, wind_polygon
     dataset: CycloneShapeDataset;
+    datetimes: DateTime[];
     description: string;
 }
 
