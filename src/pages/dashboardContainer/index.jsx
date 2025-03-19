@@ -83,6 +83,18 @@ export function DashboardContainer() {
             fullName: "Cyclone Wind Polygon",
             type: "FEATURES"
         },
+        "public.wind_vectors": {
+            id: "public.wind_vectors",
+            name: "Cyclone Wind Barbs Vector",
+            fullName: "Cyclone Wind Barbs Vector",
+            type: "FEATURES"
+        },
+        "public.modis_swath": {
+            id: "public.modis_swath",
+            name: "Modis Swath",
+            fullName: "Modis Swath",
+            type: "FEATURES"
+        },
     }
 
     const CYCLONES = {
@@ -96,8 +108,9 @@ export function DashboardContainer() {
                 DATAPRODUCTS["viirs_mosaic"],
                 DATAPRODUCTS["public.path_point"],
                 DATAPRODUCTS["public.path_line"],
-                DATAPRODUCTS["public.wind_polygon"]
-
+                DATAPRODUCTS["public.wind_polygon"],
+                DATAPRODUCTS["public.wind_vectors"],
+                DATAPRODUCTS["public.modis_swath"]
             ]
         },
         "MILTON": {
