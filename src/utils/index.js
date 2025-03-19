@@ -136,7 +136,7 @@ export const addSourcePolygonToMap = (map, feature, polygonSourceId, polygonLaye
         layout: {},
         paint: {
             "fill-antialias": true,
-            "fill-opacity": 1,
+            "fill-opacity": getPolygonOpacity(dataProductId),
             "fill-color": getPolygonColor(dataProductId),
             "fill-outline-color": getPolygonColor(dataProductId)
         }
@@ -155,6 +155,17 @@ function getPolygonColor(dataProductId) {
         ]
     } else {
         return "#20B2AA"
+    }
+}
+
+function getPolygonOpacity(dataProductId) {
+    if (dataProductId.includes("public.wind_polygon")) {
+        return 1;
+    } else if (dataProductId.includes("public.modis_swath")) {
+        return 0.25;
+    }
+    else {
+        return 0.5
     }
 }
 
