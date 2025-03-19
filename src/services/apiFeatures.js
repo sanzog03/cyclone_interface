@@ -66,7 +66,7 @@ const addOffsetsToURL = (url, offset, limit) => {
 }
 
 const getMaxLimitPerPage = (url) => {
-  return 100;
+  // return 10000;
   // Note: as of current features api deployment, the max limit is 1000 for collection result and 10,000 for colleciton item result
   if (url.includes('items')) {
       // https://<url>/api/features/collections/<collection_id>/items
