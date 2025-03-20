@@ -60,7 +60,7 @@ function getPointColor(dataProductId) {
     if (dataProductId.includes("public.path_point")) {
         return [
             'match',
-            ['get', 'stormtype'],
+            ['get', 'category'],
             "EX", "#E1E1E1",
             "TD", "#CCCCCC",
             "TS", "#00C5FF",
@@ -69,7 +69,7 @@ function getPointColor(dataProductId) {
             "C3", "#FFAA00",
             "C4", "#E60000",
             "C5", "#FF00C5",
-            '#20B2AA'        // Default - Gray
+            '#20B2AA' // Default - Gray
         ]
     } else {
         return "#20B2AA"
@@ -102,9 +102,17 @@ function getLineColor(dataProductId) {
             'interpolate',
             ['linear'],
             ['get', 'wind_speed_knots'],
-            0, '#00FF00',    // Green for calm
-            10, '#FFFF00',   // Yellow for moderate
-            20, '#FF0000'    // Red for strong winds
+            0,	"#808080", // (Gray)
+            5,	"#00BFFF", // (Light Blue)
+            10,	"#0000FF", // (Blue)
+            15,	"#00FF00", // (Green)
+            20,	"#FFFF00", // (Yellow)
+            25,	"#FFA500", // (Orange)
+            30,	"#FF0000", // (Red)
+            35,	"#A52A2A", // (Brown)
+            40,	"#FF00FF", // (Magenta)
+            45,	"#800080", // (Purple)
+            50, "#4B0082", // (Dark // Purple)
         ]
     } else if (dataProductId.includes("public.path_line")) {
         return "#000000"
