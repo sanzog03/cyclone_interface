@@ -89,3 +89,53 @@ export function PlumeCard({ id, title, description, VMIN, VMAX, colorMap, skipCo
 
   );
 }
+
+export function DetailedPlumeCard({ id, title, description, citation, atbd, references, VMIN, VMAX, colorMap, skipColorBar=false }) {
+    return (
+        <HighlightableCard
+            sx={{ display: 'flex', flex: '0 0 auto', margin: '15px' }}
+        >
+            <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <CardContent sx={{ flex: '1 0 auto' }}>
+                <HorizontalLayout>
+                    <CaptionValue
+                        caption = {String(title)}
+                        value = {description}
+                    />
+                </HorizontalLayout>
+                <HorizontalLayout>
+                    <CaptionValue
+                        caption = {String("Data Product Citation")}
+                        value = {<div>{citation.description}: <a href={citation?.link?.link} target="_blank" rel="noreferrer">{citation?.link?.description}</a></div>}
+                    />
+                </HorizontalLayout>
+                <HorizontalLayout>
+                    <CaptionValue
+                        caption = {String("ATBD Document")}
+                        value = {<div>{atbd.description}: <a href={atbd?.link?.link} target="_blank" rel="noreferrer">{atbd?.link?.description}</a></div>}
+                    />
+                </HorizontalLayout>
+                <HorizontalLayout>
+                    <CaptionValue
+                        caption = {String("References")}
+                    />
+                </HorizontalLayout>
+                {
+                    references?.length && references.map((reference, index) => {
+                        return (
+                                <Typography variant="body2" gutterBottom sx={{ display: 'block', color: "rgba(0, 0, 0, 0.6)" }}>
+                                    {index+1}. {reference?.description}
+                                </Typography>
+                        )
+                    })
+                }
+                 <HorizontalLayout/>
+                {(!skipColorBar) &&<HorizontalLayout>
+                    <ColorBar VMIN={VMIN} VMAX={VMAX} STEP={(VMAX-VMIN)/5} colorMap={colorMap}/>
+                </HorizontalLayout>
+                }
+            </CardContent>
+            </Box>
+        </HighlightableCard>
+  );
+}
