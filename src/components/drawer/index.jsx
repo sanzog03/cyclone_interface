@@ -4,10 +4,12 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
-import { PlumeCard } from '../card';
+import { PlumeCard, DetailedPlumeCard } from '../card';
 import { useEffect, useState } from 'react';
 
 import "./index.css";
+
+import { CycloneMetas as cycloneMetasOverride } from "../../assets/dataset/metadata";
 
 const drawerWidth = "30rem";
 
@@ -71,12 +73,20 @@ export function PersistentDrawerRight({open, selectedCycloneId, dataTree, select
     const metas = Object.keys(dataProducts).map((key) => {
       if (!selectedDataProductIdsSet.has(key)) return null;
       const dp = dataProducts[key]
-      if (dp.type === "Vector") return null;
 
       const mapRev = {}; // todo: handle this in data transformation, i.e. putting fullName to dataTree
       Object.keys(dataProductsTemp).map(key => {
         mapRev[`${dataProductsTemp[key].id}`]= dataProductsTemp[key]
       });
+
+      if (dp.type === "Vector") return {
+        title: mapRev[dp.name].fullName, // todo: handle this in data transformation, i.e. putting fullName to dataTree
+        description: dp.description,
+        id: dp.id,
+        colorMap: "rdylgn",
+        rescale: [0, 5],
+        key: key // TODO: remove later if not needed
+      };
 
       return {
         // title: dp.name,
@@ -84,7 +94,8 @@ export function PersistentDrawerRight({open, selectedCycloneId, dataTree, select
         description: dp.description,
         id: dp.id,
         colorMap: dp.colormap,
-        rescale: dp.rescale[0]
+        rescale: dp.rescale[0],
+        key: key // TODO: remove later if not needed
       }
     }).filter(el => el);
     setCycloneMetas(metas)
@@ -130,14 +141,25 @@ export function PersistentDrawerRight({open, selectedCycloneId, dataTree, select
         </DrawerHeader>
           { !!cycloneMetas.length &&
             cycloneMetas.map(cycloneMeta => (
-              <PlumeCard
+              <DetailedPlumeCard
                 key={cycloneMeta.id}
                 title={cycloneMeta.title}
-                description={cycloneMeta.description}
+                description={cycloneMetasOverride[cycloneMeta["key"]].description}
+                citation={cycloneMetasOverride[cycloneMeta["key"]].citation}
+                atbd={cycloneMetasOverride[cycloneMeta["key"]].atbd}
+                references={cycloneMetasOverride[cycloneMeta["key"]].references}
                 colorMap={cycloneMeta.colorMap}
                 VMIN={cycloneMeta.rescale[0]}
                 VMAX={cycloneMeta.rescale[1]}
               />
+              // <PlumeCard
+              //   key={cycloneMeta.id}
+              //   title={cycloneMeta.title}
+              //   description={cycloneMeta.description}
+              //   colorMap={cycloneMeta.colorMap}
+              //   VMIN={cycloneMeta.rescale[0]}
+              //   VMAX={cycloneMeta.rescale[1]}
+              // />
             ))
           }
           <PlumeCard
