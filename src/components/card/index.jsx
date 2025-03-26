@@ -9,6 +9,7 @@ import styled from "styled-components";
 import Divider from '@mui/material/Divider';
 import DownloadIcon from '@mui/icons-material/Download';
 import { ColorBar } from '../colorBar';
+import { ScatterometerLegend } from './helper';
 
 import "./index.css";
 
@@ -131,7 +132,7 @@ export function DetailedPlumeCard({ id, title, description, citation, atbd, refe
                     })
                 }
                  <HorizontalLayout/>
-                {!isVector && <HorizontalLayout>
+                {isVector ? <GetVectorColorBar id={id}/> : <HorizontalLayout>
                     <ColorBar VMIN={VMIN} VMAX={VMAX} STEP={(VMAX-VMIN)/5} colorMap={colorMap}/>
                 </HorizontalLayout>
                 }
@@ -139,4 +140,23 @@ export function DetailedPlumeCard({ id, title, description, citation, atbd, refe
             </Box>
         </HighlightableCard>
   );
+}
+
+function GetVectorColorBar({id}) {
+    // TODO: later handle this based on data model of the dataTree.
+    if (id === "public.path_point_cyclone_beryl") {
+
+    }
+    if (id === "public.path_line_cyclone_beryl") {
+
+    }
+    if (id === "public.wind_polygon_cyclone_beryl") {
+
+    }
+    if (id === "public.wind_vectors_cyclone_beryl") {
+        // 
+        return <ScatterometerLegend/>
+
+    }
+    return <></>
 }
