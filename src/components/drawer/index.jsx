@@ -142,6 +142,7 @@ export function PersistentDrawerRight({open, selectedCycloneId, dataTree, select
           { !!cycloneMetas.length &&
             cycloneMetas.map(cycloneMeta => (
               <DetailedPlumeCard
+                id={cycloneMeta.id}
                 key={cycloneMeta.id}
                 title={cycloneMeta.title}
                 description={cycloneMetasOverride[cycloneMeta["key"]].description}

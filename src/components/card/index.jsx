@@ -91,6 +91,7 @@ export function PlumeCard({ id, title, description, VMIN, VMAX, colorMap, skipCo
 }
 
 export function DetailedPlumeCard({ id, title, description, citation, atbd, references, VMIN, VMAX, colorMap, skipColorBar=false }) {
+    const isVector = String(id).includes("public.")
     return (
         <HighlightableCard
             sx={{ display: 'flex', flex: '0 0 auto', margin: '15px' }}
@@ -130,7 +131,7 @@ export function DetailedPlumeCard({ id, title, description, citation, atbd, refe
                     })
                 }
                  <HorizontalLayout/>
-                {(!skipColorBar) &&<HorizontalLayout>
+                {!isVector && <HorizontalLayout>
                     <ColorBar VMIN={VMIN} VMAX={VMAX} STEP={(VMAX-VMIN)/5} colorMap={colorMap}/>
                 </HorizontalLayout>
                 }
