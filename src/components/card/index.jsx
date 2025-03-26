@@ -9,6 +9,7 @@ import styled from "styled-components";
 import Divider from '@mui/material/Divider';
 import DownloadIcon from '@mui/icons-material/Download';
 import { ColorBar } from '../colorBar';
+import { ScatterometerLegend, BestTrackPointLegend, BestTrackLineLegend, WindSwathLegend } from './helper';
 
 import "./index.css";
 
@@ -91,6 +92,7 @@ export function PlumeCard({ id, title, description, VMIN, VMAX, colorMap, skipCo
 }
 
 export function DetailedPlumeCard({ id, title, description, citation, atbd, references, VMIN, VMAX, colorMap, skipColorBar=false }) {
+    const isVector = String(id).includes("public.")
     return (
         <HighlightableCard
             sx={{ display: 'flex', flex: '0 0 auto', margin: '15px' }}
@@ -130,7 +132,7 @@ export function DetailedPlumeCard({ id, title, description, citation, atbd, refe
                     })
                 }
                  <HorizontalLayout/>
-                {(!skipColorBar) &&<HorizontalLayout>
+                {isVector ? <GetVectorColorBar id={id}/> : <HorizontalLayout>
                     <ColorBar VMIN={VMIN} VMAX={VMAX} STEP={(VMAX-VMIN)/5} colorMap={colorMap}/>
                 </HorizontalLayout>
                 }
@@ -138,4 +140,23 @@ export function DetailedPlumeCard({ id, title, description, citation, atbd, refe
             </Box>
         </HighlightableCard>
   );
+}
+
+function GetVectorColorBar({id}) {
+    // TODO: later handle this based on data model of the dataTree.
+    if (id === "public.path_point_cyclone_beryl") {
+        return <BestTrackPointLegend/>
+    }
+    if (id === "public.path_line_cyclone_beryl") {
+        return <BestTrackLineLegend/>
+    }
+    if (id === "public.wind_polygon_cyclone_beryl") {
+        return <WindSwathLegend/>
+    }
+    if (id === "public.wind_vectors_cyclone_beryl") {
+        // 
+        return <ScatterometerLegend/>
+
+    }
+    return <></>
 }
