@@ -67,20 +67,20 @@ export function DashboardContainer() {
         },
         "public.path_point": {
             id: "public.path_point",
-            name: "NHS Best Track (Point)",
-            fullName: "NHS Best Track (Point)",
+            name: "NHC Best Track (Point)",
+            fullName: "NHC Best Track (Point)",
             type: "FEATURES"
         },
         "public.path_line": {
             id: "public.path_line",
-            name: "NHS Best Track (Line)",
-            fullName: "NHS Best Track (Line)",
+            name: "NHC Best Track (Line)",
+            fullName: "NHC Best Track (Line)",
             type: "FEATURES"
         },
         "public.wind_polygon": {
             id: "public.wind_polygon",
-            name: "NHS Wind Swath (Polygon)",
-            fullName: "NHS Wind Swath (Polygon)",
+            name: "NHC Wind Swath (Polygon)",
+            fullName: "NHC Wind Swath (Polygon)",
             type: "FEATURES"
         },
         "public.wind_vectors": {
