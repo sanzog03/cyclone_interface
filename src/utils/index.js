@@ -56,6 +56,8 @@ export const addSourcePointToMap = (map, feature, polygonSourceId, polygonLayerI
     });
 }
 
+// TODO change to get it from datatree or atleast a single point
+
 function getPointColor(dataProductId) {
     if (dataProductId.includes("public.path_point")) {
         return [
