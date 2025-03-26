@@ -66,7 +66,7 @@ const DiscreteColorBarMapper = ({colorValueMapArray}) => {
               <Box
                 sx={{
                   width: 34,
-                  height: 34,
+                  height: 15,
                   backgroundColor: item.color,
                   borderRadius: 1,
                   marginBottom: 1,
