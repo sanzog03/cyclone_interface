@@ -85,8 +85,8 @@ export function DashboardContainer() {
         },
         "public.wind_vectors": {
             id: "public.wind_vectors",
-            name: "Cyclone Wind Barbs Vector",
-            fullName: "Cyclone Wind Barbs Vector",
+            name: "Advanced Scatterometer (ASCAT METOP-C)",
+            fullName: "Advanced Scatterometer (ASCAT METOP-C)",
             type: "FEATURES"
         },
         "public.modis_swath": {
