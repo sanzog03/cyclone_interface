@@ -91,8 +91,8 @@ export function DashboardContainer() {
         },
         "public.modis_swath": {
             id: "public.modis_swath",
-            name: "Modis Swath",
-            fullName: "Modis Swath",
+            name: "MODIS Swath",
+            fullName: "MODIS Swath",
             type: "FEATURES"
         },
     }
