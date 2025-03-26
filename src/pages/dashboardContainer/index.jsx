@@ -67,32 +67,32 @@ export function DashboardContainer() {
         },
         "public.path_point": {
             id: "public.path_point",
-            name: "Cyclone Point Path",
-            fullName: "Cyclone Point Path",
+            name: "NHS Best Track (Point)",
+            fullName: "NHS Best Track (Point)",
             type: "FEATURES"
         },
         "public.path_line": {
             id: "public.path_line",
-            name: "Cyclone Line Path",
-            fullName: "Cyclone Line Path",
+            name: "NHS Best Track (Line)",
+            fullName: "NHS Best Track (Line)",
             type: "FEATURES"
         },
         "public.wind_polygon": {
             id: "public.wind_polygon",
-            name: "Cyclone Wind Polygon",
-            fullName: "Cyclone Wind Polygon",
+            name: "NHS Wind Swath (Polygon)",
+            fullName: "NHS Wind Swath (Polygon)",
             type: "FEATURES"
         },
         "public.wind_vectors": {
             id: "public.wind_vectors",
-            name: "Cyclone Wind Barbs Vector",
-            fullName: "Cyclone Wind Barbs Vector",
+            name: "Advanced Scatterometer (ASCAT METOP-C)",
+            fullName: "Advanced Scatterometer (ASCAT METOP-C)",
             type: "FEATURES"
         },
         "public.modis_swath": {
             id: "public.modis_swath",
-            name: "Modis Swath",
-            fullName: "Modis Swath",
+            name: "MODIS Swath",
+            fullName: "MODIS Swath",
             type: "FEATURES"
         },
     }
@@ -107,30 +107,30 @@ export function DashboardContainer() {
                 DATAPRODUCTS["viirs_mosaic"],
                 DATAPRODUCTS["modis_mosaic"],
                 DATAPRODUCTS["public.modis_swath"],
+                DATAPRODUCTS["public.wind_vectors"],
                 DATAPRODUCTS["public.path_point"],
                 DATAPRODUCTS["public.path_line"],
                 DATAPRODUCTS["public.wind_polygon"],
-                DATAPRODUCTS["public.wind_vectors"],
             ]
         },
         "MILTON": {
             id: "milton",
-            name: "Milton (2024)",
+            name: "(TBD) Milton (2024)",
             dataProducts: []
         },
         "IAN": {
             id: "ian",
-            name: "Ian (2022)",
+            name: "(TBD) Ian (2022)",
             dataProducts: []
         },
         "NICOLE": {
             id: "nicole",
-            name: "Nicole (2022)",
+            name: "(TBD) Nicole (2022)",
             dataProducts: []
         },
         "IDA": {
             id: "ida",
-            name: "Ida (2021)",
+            name: "(TBD) Ida (2021)",
             dataProducts: []
         }
     }
