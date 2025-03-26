@@ -7,7 +7,7 @@ const COLOR_MAP = {
     viridis: d3.interpolateViridis, //cygnss // todo: review
     greys: d3.interpolateGreys, // goes 8
     greys_r: (t) => d3.interpolateGreys(1-t), //goes02 (reversed)
-    cubehelix: (t) => d3.interpolateCubehelixDefault(1-t), //goes13 // todo: review
+    cubehelix: (t) => d3.interpolateCubehelixDefault(t), //goes13 // todo: review
     magma: d3.interpolateMagma,
     reds: d3.interpolateReds,
     gist_earth: (t) => d3.interpolateGreys(1-t), // (reversed)
